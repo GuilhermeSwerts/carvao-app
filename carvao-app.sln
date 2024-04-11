@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34322.80
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "carvao-app.Application", "carvao-app\carvao-app.Application.csproj", "{F157ADBA-334E-439B-AB90-026554507187}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "01 Application", "01 Application", "{C67CB292-44E5-43B0-BE4F-C85CAD22D6A2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "02 Domain", "02 Domain", "{F07F10C8-8DF6-400C-A9BA-4D9C980D067D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "03 Infra", "03 Infra", "{BC8E54FB-F3F9-4A29-A649-DD7BA205A564}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "carvao-app.Repository", "carvao-app.Repository\carvao-app.Repository.csproj", "{0AB08A5A-739E-46D3-9FC9-82E90B5E98FA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "carvao-app.Business", "carvao-app.Business\carvao-app.Business.csproj", "{726A9937-A155-4335-AF45-6EE0D540EE9F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "carvao-app.Models", "carvao-app.Models\carvao-app.Models.csproj", "{80FCEF24-EB75-42BC-AEC1-29F4286ADAB2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F157ADBA-334E-439B-AB90-026554507187}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F157ADBA-334E-439B-AB90-026554507187}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F157ADBA-334E-439B-AB90-026554507187}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F157ADBA-334E-439B-AB90-026554507187}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0AB08A5A-739E-46D3-9FC9-82E90B5E98FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0AB08A5A-739E-46D3-9FC9-82E90B5E98FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0AB08A5A-739E-46D3-9FC9-82E90B5E98FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0AB08A5A-739E-46D3-9FC9-82E90B5E98FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{726A9937-A155-4335-AF45-6EE0D540EE9F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{726A9937-A155-4335-AF45-6EE0D540EE9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{726A9937-A155-4335-AF45-6EE0D540EE9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{726A9937-A155-4335-AF45-6EE0D540EE9F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80FCEF24-EB75-42BC-AEC1-29F4286ADAB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80FCEF24-EB75-42BC-AEC1-29F4286ADAB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80FCEF24-EB75-42BC-AEC1-29F4286ADAB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80FCEF24-EB75-42BC-AEC1-29F4286ADAB2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F157ADBA-334E-439B-AB90-026554507187} = {C67CB292-44E5-43B0-BE4F-C85CAD22D6A2}
+		{0AB08A5A-739E-46D3-9FC9-82E90B5E98FA} = {BC8E54FB-F3F9-4A29-A649-DD7BA205A564}
+		{726A9937-A155-4335-AF45-6EE0D540EE9F} = {F07F10C8-8DF6-400C-A9BA-4D9C980D067D}
+		{80FCEF24-EB75-42BC-AEC1-29F4286ADAB2} = {F07F10C8-8DF6-400C-A9BA-4D9C980D067D}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7A67B4AB-D1A6-4353-BADE-BE2327884B5E}
+	EndGlobalSection
+EndGlobal

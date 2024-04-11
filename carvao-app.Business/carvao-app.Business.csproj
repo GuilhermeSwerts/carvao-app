@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <RootNamespace>carvao_app.Business</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\carvao-app.Models\carvao-app.Models.csproj" />
+    <ProjectReference Include="..\carvao-app.Repository\carvao-app.Repository.csproj" />
+  </ItemGroup>
+
+</Project>

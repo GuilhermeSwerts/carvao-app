@@ -1,0 +1,147 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+.container-table {
+  box-shadow: 5px 0px 20px 0px #888888;
+}
+
+.custom-table-wrapper {
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  margin-bottom: 1rem;
+  width: 100%;
+  /* Ensures the wrapper takes full width */
+  overflow-x: auto;
+  /* Enables horizontal scroll on small devices */
+
+}
+
+.custom-table {
+  background-color: white;
+  width: 100%;
+  /* Ensures table takes full width of its container */
+  min-width: 600px;
+  /* Minimum width before scrolling starts */
+  width: auto;
+  /* tabela tamanho*/
+
+}
+
+.table td,
+.table th {
+  padding: .75rem;
+  /* Aumente ou diminua o preenchimento conforme necessário */
+  vertical-align: middle;
+  /* Isso mantém o conteúdo da célula alinhado ao meio verticalmente */
+}
+
+.custom-table thead th {
+  background-color: #007bff;
+  color: white;
+}
+
+.table td {
+  vertical-align: middle;
+  /* Vertically centers the content */
+}
+
+/* CSS for the sidebar */
+.sidebar {
+  width: 250px;
+  /* Default width */
+  transition: all 0.3s;
+  /* Smooth transition for collapsing */
+}
+
+.sidebar.collapsed {
+  width: 0;
+  /* Collapses the sidebar */
+  overflow: hidden;
+  /* Hides content when collapsed */
+}
+
+.menu-toggle {
+  cursor: pointer;
+  /* Changes cursor to indicate it's clickable */
+  padding: 0.5rem 1rem;
+  /* Padding for the menu toggle */
+}
+
+/* Hide less important table columns on small screens */
+@media (max-width: 576px) {
+  .hide-on-mobile {
+    display: none;
+    /* Esconde colunas não críticas em telas pequenas */
+  }
+}
+
+/* Adjust the sidebar for mobile screens */
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    /* Makes sidebar fixed position on small screens */
+    left: 0;
+    top: 0;
+    height: 100vh;
+    /* Full height */
+    z-index: 1000;
+    /* Ensures it's above other content */
+  }
+}
+
+@media (max-width: 768px) {
+  .custom-table-responsive {
+    overflow-x: auto;
+    /* Allows horizontal scrolling on small devices */
+  }
+
+  .custom-table-hide-on-mobile {
+    display: none;
+    /* Hides non-critical columns on small screens */
+  }
+}
+
+@media (width <=767px) {
+  thead {
+    display: none;
+  }
+
+  table {
+    width: 100% !important;
+  }
+
+  td {
+    display: block !important;
+  }
+
+  td::before {
+    content: attr(data-label) ": ";
+  }
+
+  .content {
+    width: 100% !important;
+    margin: 0 !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 10px;
+    margin-left: 1.5rem !important;
+  }
+
+  .row {
+    margin: 0;
+  }
+
+  .action-buttons {
+    display: flex !important;
+    width: 100%;
+    justify-content: flex-start;
+  }
+}
