@@ -64,6 +64,26 @@ function DetalhesDoCliente(props) {
                             {clienteSelecionado.responsavelCompraTelefoneFixo}
                         </p>
                         <p>
+                            <strong>CEP:</strong>{" "}
+                            {clienteSelecionado.cep}
+                        </p>
+                        <p>
+                            <strong>Logradouro:</strong>{" "}
+                            {clienteSelecionado.logradouro}
+                        </p>
+                        <p>
+                            <strong>N°:</strong>{" "}
+                            {clienteSelecionado.numero}
+                        </p>
+                        <p>
+                            <strong>Bairro:</strong>{" "}
+                            {clienteSelecionado.bairro}
+                        </p>
+                        <p>
+                            <strong>Localidade / UF:</strong>{" "}
+                            {clienteSelecionado.localidade}/{clienteSelecionado.uf}
+                        </p>
+                        <p>
                             <strong>Observação:</strong> {clienteSelecionado.observacao}
                         </p>
                     </div>

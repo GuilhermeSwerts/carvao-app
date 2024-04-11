@@ -35,10 +35,10 @@ function GestaoTable(props) {
                         </tr>
                     </thead>
                     <tbody>
-                        {pedidos.map((produto) => {
+                        {pedidos.map((produto, index) => {
                             return (
                                 <tr key={produto.pedido_id}>
-                                    <td data-label="Id">{produto.pedido_id}</td>
+                                    <td data-label="Id">{index + 1}</td>
                                     <td data-label="Nome Cliente">{produto.nomeCliente}</td>
                                     <td data-label="Nome Vendedor">{produto.nomeVendedor}</td>
                                     <td data-label="Localidade">{produto.localidade}</td>
@@ -46,7 +46,7 @@ function GestaoTable(props) {
                                     <td data-label="Valor Total Pedidos (R$)">R$ {produto.valor_total.toFixed(2)}</td>
                                     <td data-label="Saldo Devedor (R$)">R$ {produto.saldo_devedor.toFixed(2)}</td>
                                     <td data-label="Status Pedido">{statusPedido.filter(x => x.status_pedido_id === produto.status_pedido_id)[0].nome}</td>
-                                    <td data-label="Status Pagameto">{statusPagamento.filter(x => x.status_pagamemto_id === produto.status_pagamemto_id)[0].nome}</td>
+                                    <td data-label="Status Pagameto">{statusPagamento.filter(x => x.status_pagamento_id === produto.status_pagamento_id)[0].nome}</td>
                                     <td data-label="Ação" style={{ display: 'flex', gap: 10 }}>
                                         <DetalhesPedido produtos={produtos} historico={produto.produtos} />
                                         <ButtonTooltip
@@ -56,13 +56,13 @@ function GestaoTable(props) {
                                             top={true}
                                             onClick={() => () => { }}
                                         />
-                                        <ButtonTooltip
-                                            text="Gerar Recibo"
+                                        {produto.saldo_devedor == 0 && <ButtonTooltip
+                                            text={"Gerar Recibo"}
                                             textButton={<LiaReceiptSolid size={23} color='#fff' />}
                                             className='btn btn-primary'
                                             top={true}
                                             onClick={() => window.location.href = `/recibo?pedidoId=${produto.pedido_id}`}
-                                        />
+                                        />}
                                         <ButtonTooltip
                                             text="Histórico de Recibo"
                                             textButton={<FaReceipt size={20} color='#fff' />}

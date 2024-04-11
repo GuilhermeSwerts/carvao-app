@@ -46,11 +46,11 @@ namespace carvao_app.Controllers
 
         [HttpGet]
         [Route("/api/pedidos/BuscarTodos")]
-        public ActionResult BuscarTodosPedidos([FromQuery] string dtInicio = "", string dtFim = "")
+        public ActionResult BuscarTodosPedidos([FromQuery] string q = "", string dtInicio = "", string dtFim = "")
         {
             try
             {
-                var pedidos = _service.BuscarTodosPedidos(dtInicio, dtFim);
+                var pedidos = _service.BuscarTodosPedidos(q,dtInicio, dtFim);
                 return Ok(pedidos);
             }
             catch (System.Exception)

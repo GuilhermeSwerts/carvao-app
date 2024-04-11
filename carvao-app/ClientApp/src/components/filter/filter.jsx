@@ -11,7 +11,7 @@ function ClienteListHeader({
     dataInicio,
     dataFim,
     showNovoCliente = false,
-    showFiltroNome = false
+    showFiltroNome = true
 }) {
 
     return (

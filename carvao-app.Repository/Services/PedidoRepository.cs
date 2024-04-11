@@ -46,15 +46,16 @@ namespace carvao_app.Repository.Services
             };
         }
 
-        public List<PedidoMap> BuscarTodosPedidos(string dtInicio, string dtFim)
+        public List<PedidoMap> BuscarTodosPedidos(string q, string dtInicio, string dtFim)
         {
             var parameters = new DynamicParameters();
+            parameters.Add("@Nome", $"%{q}%");
 
-            var query = "select c.nome as NomeCliente,u.nome as NomeVendedor,p.pedido_id,p.vendedorusuarioid, p.atendenteusuarioid,\r\np.cliente_id, p.valor_total, \r\np.valor_desconto, p.percentual_desconto, p.status_pedido_id, p.data_pedido, \r\np.data_atendimento, p.data_atualizacao, p.observacao, p.status_pagamento_id, concat(e.localidade,' - ',e.uf) as Localidade,p.saldo_devedor\r\nfrom pedido p \r\nJOIN cliente c \r\n\ton p.cliente_id = c.cliente_id\r\njoin usuario u \r\n\ton p.vendedorusuarioid  = u.usuario_id \r\njoin endereco e \r\n\ton c.cliente_id  = e.cliente_id ";
+            var query = "select c.nome as NomeCliente,u.nome as NomeVendedor,p.pedido_id,p.vendedorusuarioid, p.atendenteusuarioid,\r\np.cliente_id, p.valor_total, \r\np.valor_desconto, p.percentual_desconto, p.status_pedido_id, p.data_pedido, \r\np.data_atendimento, p.data_atualizacao, p.observacao, p.status_pagamento_id, concat(e.localidade,' - ',e.uf) as Localidade,p.saldo_devedor\r\nfrom pedido p \r\nJOIN cliente c \r\n\ton p.cliente_id = c.cliente_id\r\njoin usuario u \r\n\ton p.vendedorusuarioid  = u.usuario_id \r\njoin endereco e \r\n\ton c.cliente_id  = e.cliente_id WHERE c.nome like @Nome";
 
             if (!string.IsNullOrEmpty(dtInicio) && !string.IsNullOrEmpty(dtFim))
             {
-                query += " WHERE p.data_cadastro BETWEEN @DataInicio AND @DataFim";
+                query += " AND p.data_pedido BETWEEN @DataInicio AND @DataFim";
                 parameters.Add("@DataInicio", dtInicio + " 00:00:00");
                 parameters.Add("@DataFim", dtFim + " 23:59:59");
             }
@@ -62,7 +63,7 @@ namespace carvao_app.Repository.Services
             var pedidos = DataBase.Execute<PedidoMap>(_configuration, query, parameters).ToList();
             foreach (var pedido in pedidos)
             {
-                pedido.Produtos = _produtoRepository.BuscarProdutosByClienteId(pedido.Pedido_id);
+                pedido.Produtos = _produtoRepository.BuscarProdutosByClienteId(pedido.Cliente_id);
             }
             return pedidos;
         }
@@ -122,7 +123,7 @@ namespace carvao_app.Repository.Services
                 newParam.Add("@PedidoId", pedidoId);
                 newParam.Add("@ProdutoId", item.Produto_id);
                 newParam.Add("@Quantidade", item.Quantidade);
-                newParam.Add("@ValorUnitario", item.Valor / item.Quantidade);
+                newParam.Add("@ValorUnitario", item.Valor);
                 newParam.Add("@ValorTotal", map.ValorTotal);
                 newParam.Add("@ValorDesconto", map.ValorDesconto);
 

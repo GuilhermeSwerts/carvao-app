@@ -109,7 +109,8 @@ function Recibo() {
             lineHeight: 1.5,
         },
         header: {
-            backgroundColor: "#e4e4e4",
+            backgroundColor: "#28d",
+            color: "#fff",
             padding: 10,
             marginBottom: 15,
         },
@@ -139,14 +140,16 @@ function Recibo() {
             marginBottom: 5, // Space below the date line
         },
         detailsSection: {
-            display: "flex",
-            flexDirection: "row",
-            flexWrap: "wrap",
-            justifyContent: "space-between",
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            flexDirection: 'row',
+            gap: '1rem'
         },
         detailItem: {
             marginBottom: 10,
-            width: "50%", // Ajuste de acordo com o layout necessário
+            width: 300,
         },
         detailTitle: {
             fontWeight: "bold",
@@ -200,19 +203,19 @@ function Recibo() {
                             R$ {pedido?.valor_total.toFixed(2)}
                         </Text>
                     </View>
-                    {/* Continuação da coluna esquerda com espaçamento extra */}
-                    <View style={{ ...styles.detailItem, width: "100%" }}>
-                        <Text style={styles.detailTitle}>Saldo Devedor:</Text>
-                        <Text style={styles.detailValue}>
-                            {pedido &&
-                                pedido.saldo_devedor.toLocaleString("pt-BR", {
-                                    style: "currency",
-                                    currency: "BRL",
-                                })}
-                        </Text>
-                        <Text style={styles.detailTitle}>Observações:</Text>
-                        <Text style={styles.detailValue}>{data.Observacao}</Text>
-                    </View>
+                </View>
+                {/* Continuação da coluna esquerda com espaçamento extra */}
+                <View style={{ ...styles.detailItem, width: "100%" }}>
+                    <Text style={styles.detailTitle}>Saldo Devedor:</Text>
+                    <Text style={styles.detailValue}>
+                        {pedido &&
+                            pedido.saldo_devedor.toLocaleString("pt-BR", {
+                                style: "currency",
+                                currency: "BRL",
+                            })}
+                    </Text>
+                    <Text style={styles.detailTitle}>Observações:</Text>
+                    <Text style={styles.detailValue}>{data.Observacao}</Text>
                 </View>
             </Page>
         </Document>
@@ -225,7 +228,7 @@ function Recibo() {
                 background: '#28d',
                 color: '#fff',
                 width: '100%',
-                margin: '0'
+                margin: '0',
             }}>
                 <h1>Recibo</h1>
                 <h3>Kompleto Carvão e Assesoria LTDA</h3>

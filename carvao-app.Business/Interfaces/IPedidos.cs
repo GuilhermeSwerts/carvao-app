@@ -11,7 +11,7 @@ namespace carvao_app.Business.Interfaces
     public interface IPedidos
     {
         object BuscarPedidoId(int pedidoId);
-        PedidoDto BuscarTodosPedidos(string dtInicio, string dtFim);
+        PedidoDto BuscarTodosPedidos(string q ,string dtInicio, string dtFim);
         List<HistoricoDto> HistoricoPedidosCliente(int id);
         void NovoPedido(NovoProdutoRequest request);
     }
