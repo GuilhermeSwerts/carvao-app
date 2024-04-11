@@ -27,6 +27,14 @@ function ModalNovoPedido({
 
     const getValue = () => produtoSelecionado && (quantidade * produtoSelecionado.valor).toFixed(2);
 
+    const onChangeProdutoSelecionado = (e) => {
+        const produtoId = parseInt(e.target.value);
+        const produtoSelecionado = produtos.find(
+            (p) => p.id === produtoId
+        );
+        setProdutoSelecionado(produtoSelecionado);
+    }
+
     return (
         <Modal
             show={modalAberto}
@@ -46,13 +54,7 @@ function ModalNovoPedido({
                             <label>Produto</label>
                             <select
                                 className="form-control"
-                                onChange={(e) => {
-                                    const produtoId = parseInt(e.target.value);
-                                    const produtoSelecionado = produtos.find(
-                                        (p) => p.id === produtoId
-                                    );
-                                    setProdutoSelecionado(produtoSelecionado);
-                                }}
+                                onChange={onChangeProdutoSelecionado}
                             >
                                 <option value="">Selecione um Produto</option>
                                 {produtos.map((produto) => (
@@ -109,38 +111,40 @@ function ModalNovoPedido({
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {produtosAdicionados.map((produto, index) => (
-                                        <tr key={index}>
-                                            <td>{produto.nome}</td>
-                                            <td>{produto.quantidade}</td>
-                                            <td>
-                                                <input
-                                                    type="number"
-                                                    style={{ width: '50%' }}
-                                                    value={produto.valorDesconto || 0}
-                                                    onChange={(e) =>
-                                                        handleDescontoReaisChange(produto.produtoId, e)
-                                                    }
-                                                    step="0.01" // Permite inserir valores decimais
-                                                />
-                                            </td>
-                                            <td>
-                                                R${" "}
-                                                {(
-                                                    produto.valor * produto.quantidade -
-                                                    (produto.valorDesconto || 0)
-                                                ).toFixed(2)}
-                                            </td>
-                                            <td>
-                                                <button
-                                                    onClick={() => removerProduto(produto)}
-                                                    className='btn btn-danger'
-                                                >
-                                                    -
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    ))}
+                                    {produtosAdicionados.map((produto, index) => {
+                                        return (
+                                            <tr key={index}>
+                                                <td>{produto.nome}</td>
+                                                <td>{produto.quantidade}</td>
+                                                <td>
+                                                    <input
+                                                        type="number"
+                                                        style={{ width: '50%' }}
+                                                        value={produto.valorDesconto || 0}
+                                                        onChange={(e) =>
+                                                            handleDescontoReaisChange(produto.id, e)
+                                                        }
+                                                        step="0.01" // Permite inserir valores decimais
+                                                    />
+                                                </td>
+                                                <td>
+                                                    R${" "}
+                                                    {(
+                                                        produto.valor * produto.quantidade -
+                                                        (produto.valorDesconto || 0)
+                                                    ).toFixed(2)}
+                                                </td>
+                                                <td>
+                                                    <button
+                                                        onClick={() => removerProduto(produto)}
+                                                        className='btn btn-danger'
+                                                    >
+                                                        -
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        )
+                                    })}
                                 </tbody>
                             </table>
                         </Col>

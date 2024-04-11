@@ -98,12 +98,12 @@ function ListaRecibo() {
                         </tr>
                     </thead>
                     <tbody>
-                        {recibos.map(recibo => {
+                        {recibos.map((recibo, index) => {
                             var pagamento = tipoPagamento.filter(x => x.tipo_pagamento_id === recibo.forma_pagamento);
                             pagamento = pagamento.length > 0 ? pagamento[0].nome : "n/i";
                             return (
                                 <tr>
-                                    <td data-label="Id">{recibo.recibo_id}</td>
+                                    <td data-label="Id">{index + 1}</td>
                                     <td data-label="Data Do Recibo">{format(recibo.data_recibo, "dd/MM/yyyy")}</td>
                                     <td data-label="Valor Pago">R$ {recibo.valor_pago.toFixed(2)}</td>
                                     <td data-label="Forma De Pagamento">{pagamento}</td>

@@ -8,9 +8,9 @@ function Gestao() {
     const [pedidos, setPedidos] = useState([]);
     const [statusPagamento, setStatusPagamento] = useState([]);
     const [statusPedido, setStatusPedido] = useState([]);
-
     const [dtInicio, setDtInicio] = useState('');
     const [dtFim, setDtFim] = useState('');
+    const [produtos, setProdutos] = useState([]);
 
     const BuscarTodosPedidos = () => {
         api.get(`api/Pedidos/BuscarTodos?dtInicio=${dtInicio}&dtFim=${dtFim}`, res => {
@@ -22,7 +22,16 @@ function Gestao() {
         })
     }
 
-    useEffect(() => BuscarTodosPedidos(), []);
+    const BuscarTodosProdutos = () => {
+        api.get("/api/Produto/BuscarTodos", res => {
+            setProdutos(res.data);
+        }, erro => {
+            alert(erro.mensage)
+        })
+    }
+
+
+    useEffect(() => { BuscarTodosPedidos(); BuscarTodosProdutos(); }, []);
 
     return (
         <section className='app'>
@@ -38,6 +47,7 @@ function Gestao() {
                     showFiltroNome={false}
                 />
                 <GestaoTable
+                    produtos={produtos}
                     pedidos={pedidos}
                     statusPedido={statusPedido}
                     statusPagamento={statusPagamento}

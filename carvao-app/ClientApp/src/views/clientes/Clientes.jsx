@@ -84,9 +84,6 @@ function ClienteListView() {
                     {}, res => {
                         fetchClientes();
                         window.alert("Cliente atualizado com sucesso!");
-                    }, erro => {
-                        const msg = erro.response ? erro.response.data : erro.message;
-                        window.alert(msg);
                     });
             } catch (error) {
                 console.error("Erro ao alterar o status do cliente:", error);

@@ -172,13 +172,13 @@ function TelaPedido() {
     const adicionarProduto = () => {
         if (produtoSelecionado) {
             const produtoExistente = produtosAdicionados.find(
-                (p) => p.produtoId === produtoSelecionado.produtoId
+                (p) => p.id === produtoSelecionado.id
             );
             const novaQuantidade = parseInt(quantidade);
 
             if (produtoExistente) {
                 const updatedProdutosAdicionados = produtosAdicionados.map((p) =>
-                    p.produtoId === produtoExistente.produtoId
+                    p.id === produtoExistente.id
                         ? { ...p, quantidade: p.quantidade + novaQuantidade }
                         : p
                 );
@@ -240,11 +240,12 @@ function TelaPedido() {
     };
 
     const handleDescontoReaisChange = (produtoId, event) => {
+        debugger;
         const valorDescontoReais = parseFloat(event.target.value);
         if (!isNaN(valorDescontoReais)) {
             // Atualiza o desconto em reais do produto específico
             const updatedProdutosAdicionados = produtosAdicionados.map((produto) => {
-                if (produto.produtoId === produtoId) {
+                if (produto.id === produtoId) {
                     return { ...produto, valorDesconto: valorDescontoReais };
                 }
                 return produto;
