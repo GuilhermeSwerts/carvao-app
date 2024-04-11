@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<RootNamespace>carvao_app.Models</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Folder Include="Modelos\" />
+		<Folder Include="Response\" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\carvao-app.Repository\carvao-app.Repository.csproj" />
+	</ItemGroup>
+
+</Project>
