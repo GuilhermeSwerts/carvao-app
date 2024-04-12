@@ -1,11 +1,20 @@
-import React, { useState } from 'react';
-import { Modal } from 'react-bootstrap';
+import React, { useEffect, useState } from 'react';
+import { Modal, Row, Col } from 'react-bootstrap';
 import ButtonTooltip from '../../Inputs/ButtonTooltip';
 import { CgDetailsMore } from 'react-icons/cg';
 
-
-function DetalhesPedido({ historico, produtos }) {
+function DetalhesPedido({ historico, produtos, observacao }) {
     const [show, SetShow] = useState(false);
+    const [valorTotal, SetValorTotal] = useState(0);
+    const [valorDesconto, setValorDesconto] = useState(0);
+
+    useEffect(() => {
+        if (historico.length > 0) {
+            SetValorTotal(historico[0].valor_total);
+            setValorDesconto(historico[0].valor_desconto);
+        }
+    }, []);
+
     return (
         <>
             <ButtonTooltip
@@ -20,15 +29,28 @@ function DetalhesPedido({ historico, produtos }) {
                     <h2>Detalhes Do Pedido</h2>
                 </Modal.Header>
                 <Modal.Body>
+                    <h4>Valores:</h4>
+                    <table style={{ width: '100%' }} className='table table-striped'>
+                        <thead>
+                            <tr>
+                                <td>Valor Total Do Pedido</td>
+                                <td>Valor Total Desconto</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td data-label="Valor Total Do Pedido">R$ {valorTotal.toFixed(2)}</td>
+                                <td data-label="Valor Total Desconto">R$ {valorDesconto.toFixed(2)}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <h4>Produtos:</h4>
                     <table style={{ width: '100%' }} className='table table-striped'>
                         <thead>
                             <tr>
                                 <th>Id</th>
                                 <th>Produto</th>
                                 <th>Quantidade</th>
-                                <th>Valor Bruto</th>
-                                <th>Valor Desconto</th>
-                                <th>Valor Liquído</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -38,14 +60,14 @@ function DetalhesPedido({ historico, produtos }) {
                                         <td data-label="Id">{index + 1}</td>
                                         <td data-label="Produto">{produtos.filter(x => x.id === produto.produto_id)[0].nome}</td>
                                         <td data-label="Quantidade">{produto.quantidade}</td>
-                                        <td data-label="Valor Bruto">R$ {(produto.valor_unitario * produto.quantidade).toFixed(2)}</td>
-                                        <td data-label="Valor Desconto">R$ {produto.valor_desconto.toFixed(2)}</td>
-                                        <td data-label="Valor Liquído">R$ {(produto.valor_total).toFixed(2)}</td>
                                     </tr>
                                 )
                             })}
                         </tbody>
                     </table>
+                    <h4>Observação:</h4>
+                    {!observacao || observacao === "" && <p>{"Nenhuma..."}</p>}
+                    {observacao || observacao !== "" && <p>{observacao}</p>}
                 </Modal.Body>
                 <Modal.Footer>
                     <button className='btn btn-danger' onClick={() => SetShow(false)}>

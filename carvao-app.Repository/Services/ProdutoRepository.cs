@@ -26,7 +26,7 @@ namespace carvao_app.Repository.Services
 
         public List<PedidoProdutoMap> BuscarProdutosByClienteId(int id)
         {
-            var retorno = DataBase.Execute<PedidoProdutoMap>(_configuration, "select pp.* from produto p join pedido_produto pp on p.produto_id  = pp.produto_id join pedido p2 on pp.pedido_id = p2.pedido_id where p2.cliente_id  = @Id", new { Id = id });
+            var retorno = DataBase.Execute<PedidoProdutoMap>(_configuration, "select DISTINCT pp.* from produto p join pedido_produto pp on p.produto_id  = pp.produto_id join pedido p2 on pp.pedido_id = p2.pedido_id where p2.cliente_id  = @Id", new { Id = id });
 
             return retorno.OrderBy(c => c.Pedido_id).ToList();
         }

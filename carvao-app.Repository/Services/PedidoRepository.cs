@@ -63,7 +63,8 @@ namespace carvao_app.Repository.Services
             var pedidos = DataBase.Execute<PedidoMap>(_configuration, query, parameters).ToList();
             foreach (var pedido in pedidos)
             {
-                pedido.Produtos = _produtoRepository.BuscarProdutosByClienteId(pedido.Cliente_id);
+                pedido.Produtos = (_produtoRepository.BuscarProdutosByClienteId(pedido.Cliente_id))
+                    .Where(x=> x.Pedido_id == pedido.Pedido_id).ToList();
             }
             return pedidos;
         }
