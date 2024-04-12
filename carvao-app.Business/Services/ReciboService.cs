@@ -24,6 +24,12 @@ namespace carvao_app.Business.Services
             return _repository.BuscarRecibosId(pedidoId);
         }
 
+        public int CancelarReciboPorId(int reciboId, string menssagem)
+        {
+            var result = _repository.CancelarReciboPorId(reciboId, menssagem);
+            return 1;
+        }
+
         public int GerarRecibo(GerarReciboRequest recibo)
         {
             try

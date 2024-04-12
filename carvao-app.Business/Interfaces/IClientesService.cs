@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace carvao_app.Business.Interfaces
 {
-    public interface IClientes
+    public interface IClientesService
     {
         List<ClienteDto> BuscarClientes(string q, string dtInicio, string dtFim, bool valores);
         ClienteDto BuscarClientesId(int id);

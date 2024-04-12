@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace carvao_app.Business.Interfaces
 {
-    public interface IPedidos
+    public interface IPedidosService
     {
         object BuscarPedidoId(int pedidoId);
         PedidoDto BuscarTodosPedidos(string dtInicio, string dtFim);

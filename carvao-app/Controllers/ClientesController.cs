@@ -8,8 +8,8 @@ namespace carvao_app.Controllers
 {
     public class ClientesController : Controller
     {
-        private readonly IClientes _service;
-        public ClientesController(IClientes service)
+        private readonly IClientesService _service;
+        public ClientesController(IClientesService service)
         {
             _service = service;
         }

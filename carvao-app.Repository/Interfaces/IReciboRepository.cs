@@ -11,5 +11,7 @@ namespace carvao_app.Repository.Interfaces
     {
         object BuscarRecibosId(int pedidoId);
         int GerarRecibo(GerarReciboRequestRepository recibo);
+
+        object CancelarReciboPorId(int reciboId, string menssagem);
     }
 }

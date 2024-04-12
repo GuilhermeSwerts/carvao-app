@@ -26,7 +26,17 @@ namespace carvao_app.Repository.Services
 
         public object BuscarRecibosId(int pedidoId)
         {
-            return DataBase.Execute<ReciboMap>(_configuration, "SELECT * FROM recibo WHERE pedido_id = @Id", new {Id = pedidoId }).ToList();
+            return DataBase.Execute<ReciboMap>(_configuration, "SELECT * FROM recibo WHERE pedido_id = @Id And ativo = 1", new {Id = pedidoId }).ToList();
+        }
+
+        public object CancelarReciboPorId(int reciboId, string mensagem)
+        {
+            string QueryUpdate = "Update recibo Set justificativa = @justificativa, ativo = 0 where recibo_id = @Id";
+            var param = new DynamicParameters();
+            param.Add("@justificativa", mensagem);
+            param.Add("@Id", reciboId);
+            DataBase.Execute(_configuration, QueryUpdate, param);
+            return 0;
         }
 
         public int GerarRecibo(GerarReciboRequestRepository recibo)

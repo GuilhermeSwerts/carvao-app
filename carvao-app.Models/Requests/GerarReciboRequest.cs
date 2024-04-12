@@ -13,5 +13,6 @@ namespace carvao_app.Models.Requests
         public string NomePagador { get; set; }
         public string Observacao { get; set; }
         public int Id { get; set; }
+        
     }
 }

@@ -15,5 +15,8 @@ namespace carvao_app.Repository.Maps
         public int Forma_pagamento { get; set; }
         public string Observacoes { get; set; }
         public string Nome_pagador { get; set; }
+        public bool Ativo { get; set; }
+
+        public string justificativa { get; set; }
     }
 }

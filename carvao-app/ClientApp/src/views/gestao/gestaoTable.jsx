@@ -34,7 +34,6 @@ function GestaoTable(props) {
                     </thead>
                     <tbody>
                         {pedidos.map((produto) => {
-                            debugger
                             return (
                                 <tr key={produto.pedido_id}>
                                     <td data-label="Id">{produto.pedido_id}</td>
@@ -47,13 +46,13 @@ function GestaoTable(props) {
                                     <td data-label="Status Pedido">{statusPedido.filter(x => x.status_pedido_id === produto.status_pedido_id)[0].nome}</td>
                                     <td data-label="Status Pagameto">{statusPagamento.filter(x => x.status_pagamemto_id === produto.status_pagamemto_id)[0].nome}</td>
                                     <td data-label="Ação" style={{ display: 'flex', gap: 10 }}>
-                                        {/* <ButtonTooltip
+                                        <ButtonTooltip
                                             text="Detalhes do Pedido"
                                             textButton={<CgDetailsMore size={20} color='#fff' />}
                                             className='btn btn-warning'
                                             top={true}
                                             onClick={() => () => { }}
-                                        /> */}
+                                        />
                                         <ButtonTooltip
                                             text="Editar Pedido"
                                             textButton={<FaPencil size={20} color='#fff' />}

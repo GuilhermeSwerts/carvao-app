@@ -1,4 +1,5 @@
 ﻿using carvao_app.Business.Interfaces;
+using carvao_app.Business.Services;
 using carvao_app.Models.Requests;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -7,11 +8,11 @@ namespace carvao_app.Controllers
 {
     public class ReciboController : Controller
     {
-        private readonly IRecibo _service;
+        private readonly IRecibo _recibosService;
 
         public ReciboController(IRecibo service)
         {
-            _service = service;
+            _recibosService = service;
         }
 
         [HttpPost]
@@ -21,8 +22,26 @@ namespace carvao_app.Controllers
             try
             {
                 var recibo = JsonConvert.DeserializeObject<GerarReciboRequest>(data);
-                var reciboId = _service.GerarRecibo(recibo);
+                var reciboId = _recibosService.GerarRecibo(recibo);
                 return Ok(reciboId);
+            }
+            catch (System.Exception)
+            {
+                return BadRequest("Houve um erro, por favor tente novamente mais tarde!");
+            }
+        }
+
+        [HttpPost]
+        [Route("/api/Recibo/CancelarReciboPorId")]
+        public ActionResult CancelarReciboPorId([FromForm] string data)
+        {
+            try
+            {
+                var recibo = JsonConvert.DeserializeObject<CancelarReciboRequest>(data);
+
+
+                var result = _recibosService.CancelarReciboPorId(recibo.Id, recibo.justificativa );
+                return Ok(result);
             }
             catch (System.Exception)
             {
@@ -36,7 +55,7 @@ namespace carvao_app.Controllers
         {
             try
             {
-                var recibos = _service.BuscarRecibosId(pedidoId);
+                var recibos = _recibosService.BuscarRecibosId(pedidoId);
                 return Ok(recibos);
             }
             catch (System.Exception)
@@ -47,3 +66,5 @@ namespace carvao_app.Controllers
 
     }
 }
+
+ 

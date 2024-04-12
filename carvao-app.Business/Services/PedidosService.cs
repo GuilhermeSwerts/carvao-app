@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace carvao_app.Business.Services
 {
-    public class PedidosService : IPedidos
+    public class PedidosService : IPedidosService
     {
         private readonly IPedidoRepository _repository;
         public PedidosService(IPedidoRepository repository)

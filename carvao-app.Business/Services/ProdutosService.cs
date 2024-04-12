@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace carvao_app.Business.Services
 {
-    public class ProdutosService : IProdutos
+    public class ProdutosService : IProdutosService
     {
         private readonly IProdutoRepository _repository;
 

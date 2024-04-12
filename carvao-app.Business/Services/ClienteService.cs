@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace carvao_app.Business.Services
 {
-    public class ClienteService : IClientes
+    public class ClienteService : IClientesService
     {
         private readonly IClienteRepository _repository;
 

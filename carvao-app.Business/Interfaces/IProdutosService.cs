@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace carvao_app.Business.Interfaces
 {
-    public interface IProdutos
+    public interface IProdutosService
     {
         object BuscarTiposPagamento();
         object BuscarTodosProdutos();

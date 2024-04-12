@@ -33,9 +33,9 @@ namespace carvao_app
             });
 
             // Services
-            services.AddScoped<IClientes, ClienteService>();
-            services.AddScoped<IProdutos, ProdutosService>();
-            services.AddScoped<IPedidos, PedidosService>();
+            services.AddScoped<IClientesService, ClienteService>();
+            services.AddScoped<IProdutosService, ProdutosService>();
+            services.AddScoped<IPedidosService, PedidosService>();
             services.AddScoped<IRecibo, ReciboService>();
 
             // Repository

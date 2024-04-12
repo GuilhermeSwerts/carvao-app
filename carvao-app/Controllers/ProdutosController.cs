@@ -5,8 +5,8 @@ namespace carvao_app.Controllers
 {
     public class ProdutosController : Controller
     {
-        private readonly IProdutos _service;
-        public ProdutosController(IProdutos service)
+        private readonly IProdutosService _service;
+        public ProdutosController(IProdutosService service)
         {
             _service = service;
         }
