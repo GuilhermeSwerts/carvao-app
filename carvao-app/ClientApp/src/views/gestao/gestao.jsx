@@ -8,12 +8,13 @@ function Gestao() {
     const [pedidos, setPedidos] = useState([]);
     const [statusPagamento, setStatusPagamento] = useState([]);
     const [statusPedido, setStatusPedido] = useState([]);
-
     const [dtInicio, setDtInicio] = useState('');
     const [dtFim, setDtFim] = useState('');
+    const [produtos, setProdutos] = useState([]);
+    const [nome, setNome] = useState('');
 
     const BuscarTodosPedidos = () => {
-        api.get(`api/Pedidos/BuscarTodos?dtInicio=${dtInicio}&dtFim=${dtFim}`, res => {
+        api.get(`api/Pedidos/BuscarTodos?q=${nome}&dtInicio=${dtInicio}&dtFim=${dtFim}`, res => {
             setStatusPagamento(res.data.statusPagamento);
             setStatusPedido(res.data.statusPedido);
             setPedidos(res.data.pedidos);
@@ -22,7 +23,16 @@ function Gestao() {
         })
     }
 
-    useEffect(() => BuscarTodosPedidos(), []);
+    const BuscarTodosProdutos = () => {
+        api.get("/api/Produto/BuscarTodos", res => {
+            setProdutos(res.data);
+        }, erro => {
+            alert(erro.mensage)
+        })
+    }
+
+
+    useEffect(() => { BuscarTodosPedidos(); BuscarTodosProdutos(); }, []);
 
     return (
         <section className='app'>
@@ -35,9 +45,12 @@ function Gestao() {
                     dataInicio={dtInicio}
                     dataFim={dtFim}
                     showNovoCliente={false}
-                    showFiltroNome={false}
+                    showFiltroNome={true}
+                    filtroNome={nome}
+                    handleInputChange={e => { setNome(e.target.value); BuscarTodosPedidos() }}
                 />
                 <GestaoTable
+                    produtos={produtos}
                     pedidos={pedidos}
                     statusPedido={statusPedido}
                     statusPagamento={statusPagamento}

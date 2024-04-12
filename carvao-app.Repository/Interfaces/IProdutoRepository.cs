@@ -10,7 +10,7 @@ namespace carvao_app.Repository.Interfaces
     public interface IProdutoRepository
     {
         List<ProdutoMap> BuscarTodosProdutos();
-        List<ProdutoMap> BuscarProdutosByClienteId(int id);
+        List<PedidoProdutoMap> BuscarProdutosByClienteId(int id);
         object BuscarTiposPagamento();
     }
 }

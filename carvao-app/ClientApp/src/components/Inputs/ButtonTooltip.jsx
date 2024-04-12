@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const ButtonTooltip = ({ text, textButton, className, onClick,top = false }) => {
+const ButtonTooltip = ({ text, textButton, className, onClick, top = false, disabled = false }) => {
     const [show, setShow] = useState(false);
 
     const handleMouseEnter = () => {
@@ -14,6 +14,7 @@ const ButtonTooltip = ({ text, textButton, className, onClick,top = false }) => 
     return (
         <div style={{ position: 'relative', display: 'inline-block' }}>
             <button
+                disabled={disabled}
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
                 style={{ cursor: 'pointer' }}
