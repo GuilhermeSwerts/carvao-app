@@ -2,14 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import { api } from '../../components/api/api';
 import { format } from 'date-fns';
-import {
-    PDFDownloadLink,
-    Document,
-    Page,
-    Text,
-    View,
-    StyleSheet,
-} from "@react-pdf/renderer";
+import { ReciboPDF } from '../../components/pdf/pdf';
+import { PDFDownloadLink } from "@react-pdf/renderer";
 
 function Recibo() {
     const [pedido, setPedido] = useState(null);
@@ -99,127 +93,7 @@ function Recibo() {
 
     }
 
-    const styles = StyleSheet.create({
-        page: {
-            padding: 30,
-            flexDirection: "column",
-            backgroundColor: "#fff",
-            fontFamily: "Helvetica",
-            fontSize: 12,
-            lineHeight: 1.5,
-        },
-        header: {
-            backgroundColor: "#28d",
-            color: "#fff",
-            padding: 10,
-            marginBottom: 15,
-        },
-        title: {
-            fontSize: 18,
-            fontWeight: "bold",
-            textAlign: "center",
-        },
-        companyName: {
-            fontSize: 15,
-            textAlign: "center",
-            marginBottom: 3,
-        },
-        content: {
-            paddingHorizontal: 35,
-            marginBottom: 15,
-        },
-        section: {
-            margin: 10,
-            padding: 10,
-        },
-        signatureSpace: {
-            marginTop: 20, // Space above signature line
-            marginBottom: 5, // Space below signature line
-        },
-        dateSpace: {
-            marginBottom: 5, // Space below the date line
-        },
-        detailsSection: {
-            width: '100%',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            flexDirection: 'row',
-            gap: '1rem'
-        },
-        detailItem: {
-            marginBottom: 10,
-            width: 300,
-        },
-        detailTitle: {
-            fontWeight: "bold",
-            marginBottom: 3,
-        },
-        detailValue: {
-            fontSize: 12,
-            marginBottom: 5,
-        },
-    });
 
-    const ReciboPDF = ({ cliente, pedido, reciboId }) => (
-        <Document>
-            <Page style={styles.page}>
-                <View style={styles.header}>
-                    <Text style={styles.companyName}>
-                        Kompleto Carvao e Assesoria LTDA
-                    </Text>
-                    <Text style={styles.companyCNPJ}>CNPJ: 52.808.774/0001-47</Text>
-                    <Text style={styles.title}>Recibo {reciboId}</Text>
-                </View>
-
-                <View style={styles.detailsSection}>
-                    {/* Coluna Esquerda */}
-                    <View style={styles.detailItem}>
-                        <Text style={styles.detailTitle}>Nome Cliente:</Text>
-                        <Text style={styles.detailValue}>{cliente?.nome}</Text>
-
-                        <Text style={styles.detailTitle}>{cliente?.pessoaFisica ? "CPF" : "CNPJ:"}</Text>
-                        <Text style={styles.detailValue}>{cliente?.pessoaFisica ? cliente?.cpf : cliente.cnpj}</Text>
-
-                        <Text style={styles.detailTitle}>Forma de Pagamento:</Text>
-                        <Text style={styles.detailValue}>{tipoPagamento.filter(x => x.tipo_pagamento_id === data.FormaPagamento).length > 0 ? tipoPagamento.filter(x => x.tipo_pagamento_id === data.FormaPagamento)[0].nome : ""}</Text>
-                    </View>
-
-                    {/* Coluna Direita */}
-                    <View style={styles.detailItem}>
-                        <Text style={styles.detailTitle}>Data do Pedido:</Text>
-                        <Text style={styles.detailValue}>
-                            {pedido && format(pedido.data_pedido, "dd/MM/yyyy")}
-                        </Text>
-
-                        <Text style={styles.detailTitle}>Nome do Pagador:</Text>
-                        <Text style={styles.detailValue}>{data.NomePagador}</Text>
-
-                        <Text style={styles.detailTitle}>Código Do Pedido:</Text>
-                        <Text style={styles.detailValue}>{pedidoId}</Text>
-
-                        <Text style={styles.detailTitle}>Valor Total:</Text>
-                        <Text style={styles.detailValue}>
-                            R$ {pedido?.valor_total.toFixed(2)}
-                        </Text>
-                    </View>
-                </View>
-                {/* Continuação da coluna esquerda com espaçamento extra */}
-                <View style={{ ...styles.detailItem, width: "100%" }}>
-                    <Text style={styles.detailTitle}>Saldo Devedor:</Text>
-                    <Text style={styles.detailValue}>
-                        {pedido &&
-                            pedido.saldo_devedor.toLocaleString("pt-BR", {
-                                style: "currency",
-                                currency: "BRL",
-                            })}
-                    </Text>
-                    <Text style={styles.detailTitle}>Observações:</Text>
-                    <Text style={styles.detailValue}>{data.Observacao}</Text>
-                </View>
-            </Page>
-        </Document>
-    );
 
     return (<section className='content'>
         {cliente && pedido && <form className="container" onSubmit={e => { e.preventDefault(); handdleEnviar() }}>
@@ -312,7 +186,7 @@ function Recibo() {
                     <PDFDownloadLink
                         style={{ color: '#fff', textDecoration: 'none', fontWeight: '700' }}
                         document={
-                            <ReciboPDF cliente={cliente} pedido={pedido} reciboId={reciboId} />
+                            <ReciboPDF pedidoId={pedidoId} data={data} tipoPagamento={tipoPagamento} cliente={cliente} pedido={pedido} reciboId={reciboId} />
                         }
                         fileName={`recibo-${reciboId}.pdf`}
                     >

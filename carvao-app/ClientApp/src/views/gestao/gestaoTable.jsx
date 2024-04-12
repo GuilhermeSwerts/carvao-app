@@ -50,13 +50,13 @@ function GestaoTable(props) {
                                     <td data-label="Status Pagameto">{statusPagamento.filter(x => x.status_pagamento_id === produto.status_pagamento_id)[0].nome}</td>
                                     <td data-label="Ações" style={{ display: 'flex', gap: 10 }}>
                                         <DetalhesPedido observacao={produto.observacao} produtos={produtos} historico={produto.produtos} />
-                                        <ButtonTooltip
+                                        {/* <ButtonTooltip
                                             text="Editar Pedido"
                                             textButton={<FaPencil size={20} color='#fff' />}
                                             className='btn btn-success'
                                             top={true}
                                             onClick={() => () => { }}
-                                        />
+                                        /> */}
                                         <ButtonTooltip
                                             text="Histórico de Recibo"
                                             textButton={<FaReceipt size={20} color='#fff' />}
