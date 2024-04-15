@@ -3,6 +3,7 @@ using carvao_app.Repository.Conexao;
 using carvao_app.Repository.Interfaces;
 using carvao_app.Repository.Maps;
 using Dapper;
+using System.Security.Cryptography;
 using Microsoft.Extensions.Configuration;
 using Mysqlx.Crud;
 using System;
@@ -26,8 +27,14 @@ namespace carvao_app.Repository.Services
 
         public object BuscarRecibosId(int pedidoId)
         {
-            return DataBase.Execute<ReciboMap>(_configuration, "SELECT * FROM recibo WHERE pedido_id = @Id And ativo = 1", new {Id = pedidoId }).ToList();
+            return DataBase.Execute<ReciboMap>(_configuration, "SELECT * FROM recibo WHERE pedido_id = @Id And ativo = 1", new { Id = pedidoId }).ToList();
         }
+
+        public object BuscarReciboPorId(int reciboId)
+        {
+            return DataBase.Execute<ReciboMap>(_configuration, "SELECT * FROM recibo WHERE recibo_id = @Id", new { Id = reciboId }).FirstOrDefault();
+        }
+
 
         public object CancelarReciboPorId(int reciboId, string mensagem)
         {
@@ -41,41 +48,58 @@ namespace carvao_app.Repository.Services
 
         public int GerarRecibo(GerarReciboRequestRepository recibo)
         {
-            var reciboMap = new ReciboMap
+            try
             {
-                Data_recibo = DateTime.Now,
-                Forma_pagamento = recibo.FormaPagamento,
-                Nome_pagador = recibo.NomePagador,
-                Observacoes = recibo.Observacao,
-                Pedido_id = recibo.Id,
-                Valor_pago = recibo.ValorPagar
-            };
-            var param = new DynamicParameters();
-            param.Add("@PedidoId", reciboMap.Pedido_id);
-            param.Add("@DataRecibo", reciboMap.Data_recibo);
-            param.Add("@ValorPago", reciboMap.Valor_pago);
-            param.Add("@FormaPag", reciboMap.Forma_pagamento);
-            param.Add("@Obs", reciboMap.Observacoes);
-            param.Add("@Nome", reciboMap.Nome_pagador);
-            var sql = @"INSERT INTO recibo
-            (pedido_id, data_recibo, valor_pago, forma_pagamento, observacoes, nome_pagador)
-            VALUES(@PedidoId, @DataRecibo, @ValorPago, @FormaPag, @Obs, @Nome); SELECT LAST_INSERT_ID();";
+                string codigohash = $"{recibo.FormaPagamento}-{recibo.Id}-{recibo.NomePagador}-{recibo.Observacao}-{recibo.ValorPagar}";
+                codigohash += $"-Aleatorio-{Guid.NewGuid()}";
+                string hashRecibo;
+                using (SHA256 sha256Hash = SHA256.Create())
+                {
+                    byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(codigohash));
 
-            var id = DataBase.Execute<int>(_configuration, sql, param).FirstOrDefault();
+                    StringBuilder builder = new StringBuilder();
+                    for (int i = 0; i < bytes.Length; i++)
+                    {
+                        builder.Append(bytes[i].ToString("x2")); 
+                    }
+                    hashRecibo = builder.ToString();
+                }
+                var reciboMap = new ReciboMap
+                {
+                    Data_recibo = DateTime.Now,
+                    Forma_pagamento = recibo.FormaPagamento,
+                    Nome_pagador = recibo.NomePagador,
+                    Observacoes = recibo.Observacao,
+                    Pedido_id = recibo.Id,
+                    Valor_pago = recibo.ValorPagar,
+                    hash_recibo = hashRecibo,
+                };
 
-            var pedido = _pedidoRepository.BuscarPedidoId(recibo.Id);
+                string QueryInsert = @"INSERT INTO recibo (pedido_id, data_recibo, valor_pago, forma_pagamento, nome_pagador, observacoes, hash_recibo)
+                                     VALUES (@PedidoId, @DataRecibo, @ValorPago, @FormaPagamento, @NomePagador, @Observacoes, @HashRecibo);
+                                     SELECT LAST_INSERT_ID();";
+                var param = new DynamicParameters();
+                param.Add("@PedidoId", reciboMap.Pedido_id);
+                param.Add("@DataRecibo", reciboMap.Data_recibo);
+                param.Add("@ValorPago", reciboMap.Valor_pago);
+                param.Add("@FormaPagamento", reciboMap.Forma_pagamento);
+                param.Add("@NomePagador",  reciboMap.Nome_pagador);
+                param.Add("@Observacoes", reciboMap.Observacoes);
+                param.Add("@HashRecibo", reciboMap.hash_recibo);
+                DataBase.Execute(_configuration, QueryInsert, param);
 
-            var saldoDevedor = pedido.Pedido.Saldo_devedor - recibo.ValorPagar;
-            var idStatus = saldoDevedor == 0 ? (int)StatusPagamentoEnum.Concluido : (int)StatusPagamentoEnum.Parcial;
 
-            param = new DynamicParameters();
-            param.Add("@SaldoDevedor", saldoDevedor);
-            param.Add("@StatusPedido", idStatus);
-            param.Add("@Id", recibo.Id);
-            sql = "update pedido set saldo_devedor = @SaldoDevedor,status_pagamento_id = @StatusPedido where pedido_id = @Id";
-            DataBase.Execute(_configuration, sql, param);
+                int id = DataBase.Execute<int>(_configuration, QueryInsert, param).FirstOrDefault();
+                return id;
 
-            return id;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+
         }
+
     }
 }

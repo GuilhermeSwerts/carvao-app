@@ -18,7 +18,8 @@ namespace carvao_app.Controllers
         [HttpPost]
         [Route("/api/Recibo/GerarRecibo")]
         public ActionResult BuscarPedidoId([FromForm] string data)
-        {
+        { 
+
             try
             {
                 var recibo = JsonConvert.DeserializeObject<GerarReciboRequest>(data);
@@ -40,7 +41,7 @@ namespace carvao_app.Controllers
                 var recibo = JsonConvert.DeserializeObject<CancelarReciboRequest>(data);
 
 
-                var result = _recibosService.CancelarReciboPorId(recibo.Id, recibo.justificativa );
+                var result = _recibosService.CancelarReciboPorId(recibo.Id, recibo.justificativa);
                 return Ok(result);
             }
             catch (System.Exception)
@@ -62,9 +63,28 @@ namespace carvao_app.Controllers
             {
                 return BadRequest("Houve um erro, por favor tente novamente mais tarde!");
             }
+
+
+
+        }
+
+        [HttpGet]
+        [Route("/api/Recibo/BuscarReciboPorId")]
+        public ActionResult BuscarReciboPorId([FromQuery] int reciboId)
+        {
+            try
+            {
+                var recibos = _recibosService.BuscarReciboPorId(reciboId);
+                return Ok(recibos);
+            }
+            catch (System.Exception)
+            {
+                return BadRequest("Houve um erro, por favor tente novamente mais tarde!");
+            }
         }
 
     }
+
 }
 
  

@@ -10,6 +10,8 @@ namespace carvao_app.Repository.Interfaces
     public interface IReciboRepository
     {
         object BuscarRecibosId(int pedidoId);
+        
+        object BuscarReciboPorId(int recibo);
         int GerarRecibo(GerarReciboRequestRepository recibo);
 
         object CancelarReciboPorId(int reciboId, string menssagem);

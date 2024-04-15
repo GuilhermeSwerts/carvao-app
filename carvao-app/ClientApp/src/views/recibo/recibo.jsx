@@ -24,8 +24,11 @@ function Recibo() {
         FormaPagamento: 1,
         NomePagador: '',
         Observacao: '',
-        Id: 0
+        Id: 0,
+        HashRecibo: '',
+
     });
+
 
     const GetParametro = (parametro) => {
         const params = new URLSearchParams(window.location.search);
@@ -40,9 +43,11 @@ function Recibo() {
         api.get(`api/Pedidos/BuscarPedidoId?PedidoId=${id}`, res => {
             setPedido(res.data.pedido);
             setCliente(res.data.cliente);
+            setReciboId(res.data.reciboId)
             console.clear();
             console.log(res.data.pedido);
             console.log(res.data.cliente);
+            console.log(res.data.reciboId);
         }, erro => {
             alert('Houve um erro na solicitação');
         });
@@ -85,16 +90,28 @@ function Recibo() {
             formData.append("data", JSON.stringify(data));
 
             api.post("api/Recibo/GerarRecibo", formData, res => {
+
                 setShowPdf(true);
                 setReciboId(res.data);
+                console.log(res.data)
+
                 api.get(`api/Pedidos/BuscarPedidoId?PedidoId=${pedidoId}`, res => {
+                    console.log(res.data.pedido);
                     setPedido(res.data.pedido);
+                }, erro => {
+                    alert('Houve um erro na solicitação');
+                });
+
+                api.get(`/api/Recibo/BuscarReciboPorId?reciboId=${res.data}`, res => {
+                    console.log(res.data);
+                    setData(res.data);
                 }, erro => {
                     alert('Houve um erro na solicitação');
                 });
             }, erro => {
                 alert('Houve um erro na solicitação');
             })
+
         }
 
     }
@@ -161,7 +178,7 @@ function Recibo() {
         },
     });
 
-    const ReciboPDF = ({ cliente, pedido, reciboId }) => (
+    const ReciboPDF = ({ cliente, pedido, reciboId, hashRecibo }) => (
         <Document>
             <Page style={styles.page}>
                 <View style={styles.header}>
@@ -170,6 +187,7 @@ function Recibo() {
                     </Text>
                     <Text style={styles.companyCNPJ}>CNPJ: 52.808.774/0001-47</Text>
                     <Text style={styles.title}>Recibo {reciboId}</Text>
+                    <Text style={styles.title}>Data Recibo {data.data_recibo && format(pedido.data_pedido, "dd/MM/yyyy")}</Text>
                 </View>
 
                 <View style={styles.detailsSection}>
@@ -182,7 +200,7 @@ function Recibo() {
                         <Text style={styles.detailValue}>{cliente?.pessoaFisica ? cliente?.cpf : cliente.cnpj}</Text>
 
                         <Text style={styles.detailTitle}>Forma de Pagamento:</Text>
-                        <Text style={styles.detailValue}>{tipoPagamento.filter(x => x.tipo_pagamento_id === data.FormaPagamento).length > 0 ? tipoPagamento.filter(x => x.tipo_pagamento_id === data.FormaPagamento)[0].nome : ""}</Text>
+                        <Text style={styles.detailValue}>{tipoPagamento.filter(x => x.tipo_pagamento_id === data.forma_pagamento).length > 0 ? tipoPagamento.filter(x => x.tipo_pagamento_id === data.forma_pagamento)[0].nome : ""}</Text>
                     </View>
 
                     {/* Coluna Direita */}
@@ -192,8 +210,6 @@ function Recibo() {
                             {pedido && format(pedido.data_pedido, "dd/MM/yyyy")}
                         </Text>
 
-                        <Text style={styles.detailTitle}>Nome do Pagador:</Text>
-                        <Text style={styles.detailValue}>{data.NomePagador}</Text>
 
                         <Text style={styles.detailTitle}>Código Do Pedido:</Text>
                         <Text style={styles.detailValue}>{pedidoId}</Text>
@@ -202,21 +218,33 @@ function Recibo() {
                         <Text style={styles.detailValue}>
                             R$ {pedido?.valor_total.toFixed(2)}
                         </Text>
+
+                        <Text style={styles.detailTitle}>Saldo Devedor:</Text>
+                        <Text style={styles.detailValue}>
+                            {pedido &&
+                                pedido.saldo_devedor.toLocaleString("pt-BR", {
+                                    style: "currency",
+                                    currency: "BRL",
+                                })}
+                        </Text>
+
                     </View>
                 </View>
                 {/* Continuação da coluna esquerda com espaçamento extra */}
                 <View style={{ ...styles.detailItem, width: "100%" }}>
-                    <Text style={styles.detailTitle}>Saldo Devedor:</Text>
-                    <Text style={styles.detailValue}>
-                        {pedido &&
-                            pedido.saldo_devedor.toLocaleString("pt-BR", {
-                                style: "currency",
-                                currency: "BRL",
-                            })}
-                    </Text>
+
+                    <Text style={styles.detailTitle}>Nome do Pagador:</Text>
+                    <Text style={styles.detailValue}>{data.nome_pagador}</Text>
+
                     <Text style={styles.detailTitle}>Observações:</Text>
                     <Text style={styles.detailValue}>{data.Observacao}</Text>
                 </View>
+                <View>
+                    <Text style={styles.detailTitle}>Hash:</Text>
+                    <Text style={styles.detailValue}>{data.hash_recibo}</Text>
+                </View>
+
+
             </Page>
         </Document>
     );
@@ -312,7 +340,7 @@ function Recibo() {
                     <PDFDownloadLink
                         style={{ color: '#fff', textDecoration: 'none', fontWeight: '700' }}
                         document={
-                            <ReciboPDF cliente={cliente} pedido={pedido} reciboId={reciboId} />
+                            <ReciboPDF cliente={cliente} pedido={pedido} reciboId={reciboId} hashRecibo={data.HashRecibo} />
                         }
                         fileName={`recibo-${reciboId}.pdf`}
                     >

@@ -3,10 +3,8 @@ using carvao_app.Models.Requests;
 using carvao_app.Repository.Interfaces;
 using carvao_app.Repository.Services;
 using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace carvao_app.Business.Services
 {
@@ -17,6 +15,11 @@ namespace carvao_app.Business.Services
         public ReciboService(IReciboRepository repository)
         {
             _repository = repository;
+        }
+
+        public object BuscarReciboPorId(int reciboId)
+        {
+           return _repository.BuscarReciboPorId(reciboId);
         }
 
         public object BuscarRecibosId(int pedidoId)
@@ -32,22 +35,44 @@ namespace carvao_app.Business.Services
 
         public int GerarRecibo(GerarReciboRequest recibo)
         {
+
             try
             {
+                string hashRecibo = GenerarHash(recibo);
                 var map = new GerarReciboRequestRepository
                 {
                     FormaPagamento = recibo.FormaPagamento,
                     Id = recibo.Id,
                     NomePagador = recibo.NomePagador,
                     Observacao = recibo.Observacao,
-                    ValorPagar = recibo.ValorPagar
+                    ValorPagar = recibo.ValorPagar,
+                    HashRecibo = hashRecibo,
                 };
 
-                return _repository.GerarRecibo(map);
+                recibo.HashRecibo = hashRecibo;
+                int reciboId = _repository.GerarRecibo(map);
+
+                return reciboId;
             }
             catch (Exception)
             {
                 throw;
+            }
+
+        }
+
+        private string GenerarHash(GerarReciboRequest recibo)
+        {
+            using (SHA256 sha256Hash = SHA256.Create())
+            {
+                string hashInput = $"{recibo.FormaPagamento}-{recibo.Id}-{recibo.NomePagador}-{recibo.Observacao}-{recibo.ValorPagar}";
+                byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(hashInput));
+                StringBuilder builder = new StringBuilder();
+                for (int i = 0; i < bytes.Length; i++)
+                {
+                    builder.Append(bytes[i].ToString("x2"));
+                }
+                return builder.ToString();
             }
         }
     }

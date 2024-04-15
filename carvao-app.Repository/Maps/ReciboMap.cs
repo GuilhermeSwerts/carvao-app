@@ -18,5 +18,7 @@ namespace carvao_app.Repository.Maps
         public bool Ativo { get; set; }
 
         public string justificativa { get; set; }
+
+        public string hash_recibo { get; set; }
     }
 }

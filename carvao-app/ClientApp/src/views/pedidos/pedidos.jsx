@@ -240,7 +240,7 @@ function TelaPedido() {
     };
 
     const handleDescontoReaisChange = (produtoId, event) => {
-        debugger;
+       
         const valorDescontoReais = parseFloat(event.target.value);
         if (!isNaN(valorDescontoReais)) {
             // Atualiza o desconto em reais do produto específico

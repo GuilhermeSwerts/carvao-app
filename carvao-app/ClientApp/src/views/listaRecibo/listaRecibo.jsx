@@ -118,7 +118,7 @@ function ListaRecibo() {
                                 <th>Valor Pago</th>
                                 <th>Forma De Pagamento</th>
                                 <th>Nome Do Pagador</th>
-                                <th>Ação</th>
+                                <th>Ações</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -133,9 +133,14 @@ function ListaRecibo() {
                                         <td data-label="Forma De Pagamento">{nomePagamento}</td>
                                         <td data-label="Nome Do Pagador">{recibo.nome_pagador}</td>
                                         <td>
-                                          
-                                         <button onClick={() => handleShowCancelarModal(recibo)} className='btn btn-danger'>Cancelar Recibo</button>
-                                           
+
+                                            <button onClick={() => handleShowCancelarModal(recibo)} className='btn btn-danger'>Cancelar Recibo</button>
+
+                                        </td>
+                                        <td>
+
+                                            <button onClick={() => handleShowCancelarModal(recibo)} className='btn btn-primary'>Dowload Recibo</button>
+
                                         </td>
                                     </tr>
                                 )
