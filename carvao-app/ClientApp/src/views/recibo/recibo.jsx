@@ -2,14 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import { api } from '../../components/api/api';
 import { format } from 'date-fns';
-import {
-    PDFDownloadLink,
-    Document,
-    Page,
-    Text,
-    View,
-    StyleSheet,
-} from "@react-pdf/renderer";
+import { ReciboPDF } from '../../components/pdf/pdf';
+import { PDFDownloadLink } from "@react-pdf/renderer";
 
 function Recibo() {
     const [pedido, setPedido] = useState(null);
@@ -116,68 +110,8 @@ function Recibo() {
 
     }
 
-    const styles = StyleSheet.create({
-        page: {
-            padding: 30,
-            flexDirection: "column",
-            backgroundColor: "#fff",
-            fontFamily: "Helvetica",
-            fontSize: 12,
-            lineHeight: 1.5,
-        },
-        header: {
-            backgroundColor: "#28d",
-            color: "#fff",
-            padding: 10,
-            marginBottom: 15,
-        },
-        title: {
-            fontSize: 18,
-            fontWeight: "bold",
-            textAlign: "center",
-        },
-        companyName: {
-            fontSize: 15,
-            textAlign: "center",
-            marginBottom: 3,
-        },
-        content: {
-            paddingHorizontal: 35,
-            marginBottom: 15,
-        },
-        section: {
-            margin: 10,
-            padding: 10,
-        },
-        signatureSpace: {
-            marginTop: 20, // Space above signature line
-            marginBottom: 5, // Space below signature line
-        },
-        dateSpace: {
-            marginBottom: 5, // Space below the date line
-        },
-        detailsSection: {
-            width: '100%',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            flexDirection: 'row',
-            gap: '1rem'
-        },
-        detailItem: {
-            marginBottom: 10,
-            width: 300,
-        },
-        detailTitle: {
-            fontWeight: "bold",
-            marginBottom: 3,
-        },
-        detailValue: {
-            fontSize: 12,
-            marginBottom: 5,
-        },
-    });
 
+<<<<<<< HEAD
     const ReciboPDF = ({ cliente, pedido, reciboId, hashRecibo }) => (
         <Document>
             <Page style={styles.page}>
@@ -248,6 +182,8 @@ function Recibo() {
             </Page>
         </Document>
     );
+=======
+>>>>>>> 3da1f209515417a6b63906e637dc9f804a79da56
 
     return (<section className='content'>
         {cliente && pedido && <form className="container" onSubmit={e => { e.preventDefault(); handdleEnviar() }}>
@@ -340,7 +276,11 @@ function Recibo() {
                     <PDFDownloadLink
                         style={{ color: '#fff', textDecoration: 'none', fontWeight: '700' }}
                         document={
+<<<<<<< HEAD
                             <ReciboPDF cliente={cliente} pedido={pedido} reciboId={reciboId} hashRecibo={data.HashRecibo} />
+=======
+                            <ReciboPDF pedidoId={pedidoId} data={data} tipoPagamento={tipoPagamento} cliente={cliente} pedido={pedido} reciboId={reciboId} />
+>>>>>>> 3da1f209515417a6b63906e637dc9f804a79da56
                         }
                         fileName={`recibo-${reciboId}.pdf`}
                     >

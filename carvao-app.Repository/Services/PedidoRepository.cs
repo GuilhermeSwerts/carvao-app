@@ -64,7 +64,7 @@ namespace carvao_app.Repository.Services
             foreach (var pedido in pedidos)
             {
                 pedido.Produtos = (_produtoRepository.BuscarProdutosByClienteId(pedido.Cliente_id))
-                    .Where(x=> x.Pedido_id == pedido.Pedido_id).ToList();
+                    .Where(x => x.Pedido_id == pedido.Pedido_id).ToList();
             }
             return pedidos;
         }
@@ -74,6 +74,59 @@ namespace carvao_app.Repository.Services
 
         public List<StatusPedidoMap> BuscarTodosStatusPedido()
             => DataBase.Execute<StatusPedidoMap>(_configuration, "SELECT * FROM status_pedido", new { }).ToList();
+
+        public void EditarPedido(EditarPedidoRequestDb map)
+        {
+            decimal valorPago = DataBase.Execute<decimal>(_configuration, "select COALESCE(SUM(valor_pago), 0) from recibo where pedido_id = @Id", new { Id = map.PedidoId }).FirstOrDefault();
+            var valorTotal = RecuperarValorCom2CasaDecimais(map.ValorTotal);
+            decimal novoSaldoDevedor = valorTotal - valorPago;
+
+            var valorDesconto = RecuperarValorCom2CasaDecimais(map.ValorDesconto);
+
+            var param = new DynamicParameters();
+            param.Add("@Id", map.PedidoId);
+            param.Add("@ValorTotal", valorTotal);
+            param.Add("@ValorDesconto", valorDesconto);
+            param.Add("@PercentualDesconto", map.PercentualDesconto);
+            param.Add("@Observacao", map.Observacao);
+            param.Add("@SaldoDevedor", novoSaldoDevedor);
+
+            var query = @"
+                        UPDATE pedido
+                        SET
+                            valor_total = @ValorTotal,
+                            valor_desconto = @ValorDesconto,
+                            percentual_desconto = @PercentualDesconto,
+                            data_atualizacao = NOW(),
+                            observacao = @Observacao,
+                            saldo_devedor = @SaldoDevedor
+                        WHERE pedido_id = @Id;
+                        ";
+
+            DataBase.Execute(_configuration, query, param);
+            query = "delete from pedido_produto where pedido_id = @Id";
+            param = new DynamicParameters();
+            param.Add("@Id", map.PedidoId);
+            DataBase.Execute(_configuration, query, param);
+
+            foreach (var item in map.ProdutosAdicionado)
+            {
+                var newParam = new DynamicParameters();
+                newParam.Add("@PedidoId", map.PedidoId);
+                newParam.Add("@ProdutoId", item.Produto_id);
+                newParam.Add("@Quantidade", item.Quantidade);
+                newParam.Add("@ValorUnitario", item.Valor);
+                newParam.Add("@ValorTotal", map.ValorTotal);
+                newParam.Add("@ValorDesconto", map.ValorDesconto);
+                newParam.Add("@DescontoUn", item.desconto_unitario);
+
+                query = @"INSERT INTO pedido_produto
+                (pedido_id, produto_id, quantidade, valor_unitario, valor_total, valor_desconto,desconto_unitario)
+                VALUES(@PedidoId, @ProdutoId, @Quantidade, @ValorUnitario, @ValorTotal, @ValorDesconto,@DescontoUn);";
+
+                DataBase.Execute(_configuration, query, newParam);
+            }
+        }
 
         public List<HistoricoMap> HistoricoPedidosCliente(int id)
         {
@@ -127,14 +180,29 @@ namespace carvao_app.Repository.Services
                 newParam.Add("@ValorUnitario", item.Valor);
                 newParam.Add("@ValorTotal", map.ValorTotal);
                 newParam.Add("@ValorDesconto", map.ValorDesconto);
+                newParam.Add("@DescontoUn", item.desconto_unitario);
 
                 query = @"INSERT INTO pedido_produto
-                (pedido_id, produto_id, quantidade, valor_unitario, valor_total, valor_desconto)
-                VALUES(@PedidoId, @ProdutoId, @Quantidade, @ValorUnitario, @ValorTotal, @ValorDesconto);";
+                (pedido_id, produto_id, quantidade, valor_unitario, valor_total, valor_desconto,desconto_unitario)
+                VALUES(@PedidoId, @ProdutoId, @Quantidade, @ValorUnitario, @ValorTotal, @ValorDesconto,@DescontoUn);";
 
                 DataBase.Execute(_configuration, query, newParam);
             }
 
+        }
+
+        private decimal RecuperarValorCom2CasaDecimais(string valor)
+        {
+            if (valor.Contains('.')) valor = valor.Replace(".", ",");
+            else if (!valor.Contains(".") && !valor.Contains(",")) valor = valor + ",00";
+
+
+            var numerosDepois = valor.Split(',')[0];
+            var numerosAntes = valor.Split(',')[1];
+
+            var novoValor = numerosDepois + "," + numerosAntes[..2];
+
+            return decimal.Parse(novoValor);
         }
     }
 }

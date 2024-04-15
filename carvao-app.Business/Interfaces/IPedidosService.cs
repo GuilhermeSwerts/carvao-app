@@ -12,6 +12,7 @@ namespace carvao_app.Business.Interfaces
     {
         object BuscarPedidoId(int pedidoId);
         PedidoDto BuscarTodosPedidos(string q ,string dtInicio, string dtFim);
+        void EditarPedido(EditarProdutoRequest request);
         List<HistoricoDto> HistoricoPedidosCliente(int id);
         void NovoPedido(NovoProdutoRequest request);
     }

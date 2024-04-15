@@ -13,6 +13,7 @@ namespace carvao_app.Models.Dtos
         public string Nome { get; set; }
         public decimal Valor { get; set; }
         public decimal ValorMinimo { get; set; }
+        public decimal ValorDescontoUnitario { get; set; }
         public int Quantidade { get; set; }
 
         public List<ProdutoDto> ToDtoList(List<ProdutoMap> list)
@@ -25,7 +26,9 @@ namespace carvao_app.Models.Dtos
                     Id = map.Produto_id,
                     Valor = map.Valor,
                     ValorMinimo = map.Valor_desconto_maximo,
-                    Nome = map.Nome
+                    Nome = map.Nome,
+                    Quantidade = map.Quantidade,
+                    ValorDescontoUnitario = map.desconto_unitario
                 });
             }
             return dto;

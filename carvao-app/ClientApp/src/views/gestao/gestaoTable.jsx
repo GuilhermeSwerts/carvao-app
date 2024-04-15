@@ -6,6 +6,7 @@ import { FaReceipt } from "react-icons/fa";
 import { LiaReceiptSolid } from "react-icons/lia";
 import { CgDetailsMore } from "react-icons/cg";
 import DetalhesPedido from '../../components/Modals/Clients/DetalhesPedido';
+import ModalEditarPedido from '../../components/Modals/Pedido/EditarPedido';
 
 function GestaoTable(props) {
 
@@ -13,7 +14,8 @@ function GestaoTable(props) {
         pedidos,
         statusPedido,
         statusPagamento,
-        produtos
+        produtos,
+        ReloadPage
     } = props;
 
     return (
@@ -49,14 +51,8 @@ function GestaoTable(props) {
                                     <td data-label="Status Pedido">{statusPedido.filter(x => x.status_pedido_id === produto.status_pedido_id)[0].nome}</td>
                                     <td data-label="Status Pagameto">{statusPagamento.filter(x => x.status_pagamento_id === produto.status_pagamento_id)[0].nome}</td>
                                     <td data-label="Ações" style={{ display: 'flex', gap: 10 }}>
-                                        <DetalhesPedido observacao={produto.observacao} produtos={produtos} historico={produto.produtos} />
-                                        <ButtonTooltip
-                                            text="Editar Pedido"
-                                            textButton={<FaPencil size={20} color='#fff' />}
-                                            className='btn btn-success'
-                                            top={true}
-                                            onClick={() => () => { }}
-                                        />
+                                        <DetalhesPedido observacao={produto.observacao} Pedido={produto} produtos={produtos} historico={produto.produtos} />
+                                        <ModalEditarPedido reloadPage={ReloadPage} PedidoId={produto.pedido_id} Pedido={produto} Produtos={produtos} Historico={produto.produtos}/>
                                         <ButtonTooltip
                                             text="Histórico de Recibo"
                                             textButton={<FaReceipt size={20} color='#fff' />}

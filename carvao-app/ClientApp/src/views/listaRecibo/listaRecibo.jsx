@@ -3,6 +3,8 @@ import { format } from 'date-fns';
 import { Row, Col, Button } from 'react-bootstrap';
 import { api } from '../../components/api/api';
 import CancelarReciboModal from '../../components/Modals/Clients/CancelarRecibo';
+import { ReciboPDF } from '../../components/pdf/pdf';
+import { PDFDownloadLink } from "@react-pdf/renderer";
 
 function ListaRecibo() {
     const [pedidoId, setPedidoId] = useState(0);
@@ -62,7 +64,7 @@ function ListaRecibo() {
     const handleCancelarRecibo = (justificativa) => {
         console.log('Recibo cancelado com a justificativa:', justificativa);
         setShowCancelarModal(false);
-        setReciboParaCancelar(null); 
+        setReciboParaCancelar(null);
     };
 
     return (
@@ -132,6 +134,7 @@ function ListaRecibo() {
                                         <td data-label="Valor Pago">R$ {recibo.valor_pago.toFixed(2)}</td>
                                         <td data-label="Forma De Pagamento">{nomePagamento}</td>
                                         <td data-label="Nome Do Pagador">{recibo.nome_pagador}</td>
+<<<<<<< HEAD
                                         <td>
 
                                             <button onClick={() => handleShowCancelarModal(recibo)} className='btn btn-danger'>Cancelar Recibo</button>
@@ -142,6 +145,28 @@ function ListaRecibo() {
                                             <button onClick={() => handleShowCancelarModal(recibo)} className='btn btn-primary'>Dowload Recibo</button>
 
                                         </td>
+=======
+                                        <td data-label="Ações" style={{ display: 'flex', gap: 20 }}>
+                                            <button onClick={() => handleShowCancelarModal(recibo)} className='btn btn-danger'>Cancelar Recibo</button>
+                                            <button type='button' className='btn btn-primary'>
+                                                <PDFDownloadLink
+                                                    style={{ color: '#fff', textDecoration: 'none', fontWeight: '700' }}
+                                                    document={
+                                                        <ReciboPDF pedidoId={pedidoId} data={{
+                                                            FormaPagamento: recibo.forma_pagamento,
+                                                            NomePagador: recibo.nome_pagador,
+                                                            Observacao: recibo.observacoes,
+                                                            ValorPagar: recibo.valor_pago.toFixed(2)
+                                                        }} tipoPagamento={tipoPagamento} cliente={cliente} pedido={pedido} reciboId={recibo.recibo_id} />
+                                                    }
+                                                    fileName={`recibo-${recibo.recibo_id}.pdf`}
+                                                >
+                                                    {({ blob, url, loading, error }) =>
+                                                        loading ? "Carregando documento..." : "Baixar PDF"
+                                                    }
+                                                </PDFDownloadLink>
+                                            </button></td>
+>>>>>>> 3da1f209515417a6b63906e637dc9f804a79da56
                                     </tr>
                                 )
                             })}
@@ -164,7 +189,7 @@ function ListaRecibo() {
             {showCancelarModal && (
                 <CancelarReciboModal
                     onReload={onReload}
-                    recibo={reciboParaCancelar} 
+                    recibo={reciboParaCancelar}
                     show={showCancelarModal}
                     onHide={() => setShowCancelarModal(false)}
                     onCancel={handleCancelarRecibo}

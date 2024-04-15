@@ -38,11 +38,18 @@ namespace carvao_app.Repository.Services
 
         public object CancelarReciboPorId(int reciboId, string mensagem)
         {
+            var recibo = DataBase.Execute<ReciboMap>(_configuration, "SELECT * FROM recibo WHERE recibo_id = @Id And ativo = 1", new { Id = reciboId }).FirstOrDefault();
+
             string QueryUpdate = "Update recibo Set justificativa = @justificativa, ativo = 0 where recibo_id = @Id";
             var param = new DynamicParameters();
             param.Add("@justificativa", mensagem);
             param.Add("@Id", reciboId);
             DataBase.Execute(_configuration, QueryUpdate, param);
+
+            param = new DynamicParameters();
+            param.Add("@Saldo", recibo.Valor_pago);
+            DataBase.Execute(_configuration, "UPDATE pedido set saldo_devedor = saldo_devedor + @Saldo", param);
+
             return 0;
         }
 

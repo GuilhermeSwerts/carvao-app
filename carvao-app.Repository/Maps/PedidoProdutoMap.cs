@@ -15,6 +15,7 @@ namespace carvao_app.Repository.Maps
         public decimal Valor_unitario { get; set; }
         public decimal Valor_total { get; set; }
         public decimal Valor_desconto { get; set; }
+        public decimal Desconto_unitario { get; set; }
 
     }
 }

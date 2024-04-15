@@ -53,6 +53,7 @@ function ModalNovoPedido({
                         <Col md={6}>
                             <label>Produto</label>
                             <select
+                                id="produtos"
                                 className="form-control"
                                 onChange={onChangeProdutoSelecionado}
                             >

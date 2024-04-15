@@ -34,6 +34,26 @@ namespace carvao_app.Business.Services
             return new PedidoDto().ToDto(pedidos, stPagamento, stPedido);
         }
 
+        public void EditarPedido(EditarProdutoRequest request)
+        {
+            var map = new EditarPedidoRequestDb
+            {
+                PedidoId = request.PedidoId,
+                ClienteId = request.ClienteId,
+                DataPedido = DateTime.Now,
+                Observacao = request.Observacao,
+                StatusPedidoId = 1,
+                ValorDesconto = request.ValorDesconto,
+                ValorTotal = request.ValorTotal,
+                VendedorUsuarioId = request.VendedorUsuarioId,
+                StatusPagamentoId = 1,
+                PercentualDesconto = request.PercentualDesconto,
+                ProdutosAdicionado = MapProdutosAdicionado(request.ProdutosAdicionado)
+            };
+
+            _repository.EditarPedido(map);
+        }
+
         public List<HistoricoDto> HistoricoPedidosCliente(int id)
         {
             var historico = _repository.HistoricoPedidosCliente(id);
@@ -70,7 +90,8 @@ namespace carvao_app.Business.Services
                     Nome = item.Nome,
                     Valor = item.Valor,
                     Valor_desconto_maximo = item.ValorMinimo,
-                    Quantidade = item.Quantidade
+                    Quantidade = item.Quantidade,
+                    desconto_unitario = item.ValorDescontoUnitario
                 });
             }
             return retorno;

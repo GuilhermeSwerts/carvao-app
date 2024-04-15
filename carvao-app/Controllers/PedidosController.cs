@@ -29,6 +29,22 @@ namespace carvao_app.Controllers
             }
         }
 
+        [HttpPost]
+        [Route("/api/Pedido/EditarPedido")]
+        public ActionResult EditarPedido([FromForm] string obj)
+        {
+            try
+            {
+                var request = JsonConvert.DeserializeObject<EditarProdutoRequest>(obj);
+                _service.EditarPedido(request);
+                return Ok();
+            }
+            catch (System.Exception)
+            {
+                return BadRequest("Houve um erro, por favor tente novamente mais tarde!");
+            }
+        }
+
         [HttpGet]
         [Route("/api/pedidos/cliente/{id}")]
         public ActionResult HistoricoPedidosCliente([FromRoute] int id)

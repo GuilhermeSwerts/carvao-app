@@ -17,5 +17,6 @@ namespace carvao_app.Repository.Maps
         public string Codigo_barra { get; set; }
         public int Quantidade { get; set; }
         public decimal Valor_desconto_maximo { get; set; }
+        public decimal desconto_unitario { get; set; }
     }
 }

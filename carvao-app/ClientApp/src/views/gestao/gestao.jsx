@@ -50,6 +50,7 @@ function Gestao() {
                     handleInputChange={e => { setNome(e.target.value); BuscarTodosPedidos() }}
                 />
                 <GestaoTable
+                    ReloadPage={BuscarTodosPedidos}
                     produtos={produtos}
                     pedidos={pedidos}
                     statusPedido={statusPedido}

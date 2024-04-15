@@ -14,6 +14,7 @@ namespace carvao_app.Repository.Interfaces
         List<PedidoMap> BuscarTodosPedidos(string q, string dtInicio, string dtFim);
         List<StatusPagamentoMap> BuscarTodosStatusPagamento();
         List<StatusPedidoMap> BuscarTodosStatusPedido();
+        void EditarPedido(EditarPedidoRequestDb map);
         List<HistoricoMap> HistoricoPedidosCliente(int id);
         void NovoPedido(NovoPedidoRequestDb map);
     }
