@@ -186,10 +186,12 @@ function TelaPedido() {
             } else {
                 setProdutosAdicionados([
                     ...produtosAdicionados,
-                    { ...produtoSelecionado, quantidade: novaQuantidade },
+                    { ...produtoSelecionado, quantidade: novaQuantidade, valorDescontoUnitario: 0 },
                 ]);
             }
 
+            const e = document.getElementById('produtos');
+            e.value = "";
             setProdutoSelecionado(null);
             setQuantidade(1);
         }
@@ -197,7 +199,7 @@ function TelaPedido() {
 
     const removerProduto = (produtoRemovido) => {
         const novosProdutosAdicionados = produtosAdicionados.filter(
-            (produto) => produto.produtoId !== produtoRemovido.produtoId
+            (produto) => produto.id !== produtoRemovido.id
         );
         setProdutosAdicionados(novosProdutosAdicionados);
     };
@@ -240,13 +242,12 @@ function TelaPedido() {
     };
 
     const handleDescontoReaisChange = (produtoId, event) => {
-        debugger;
         const valorDescontoReais = parseFloat(event.target.value);
         if (!isNaN(valorDescontoReais)) {
             // Atualiza o desconto em reais do produto específico
             const updatedProdutosAdicionados = produtosAdicionados.map((produto) => {
                 if (produto.id === produtoId) {
-                    return { ...produto, valorDesconto: valorDescontoReais };
+                    return { ...produto, valorDesconto: valorDescontoReais, valorDescontoUnitario: valorDescontoReais };
                 }
                 return produto;
             });

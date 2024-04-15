@@ -3,13 +3,15 @@ import { Modal, Row, Col } from 'react-bootstrap';
 import ButtonTooltip from '../../Inputs/ButtonTooltip';
 import { CgDetailsMore } from 'react-icons/cg';
 
-function DetalhesPedido({ historico, produtos, observacao }) {
+function DetalhesPedido({ historico, produtos, observacao,Pedido }) {
     const [show, SetShow] = useState(false);
     const [valorTotal, SetValorTotal] = useState(0);
     const [valorDesconto, setValorDesconto] = useState(0);
+    const [porcentagemDesconto, setPorcentagemDesconto] = useState(0);
 
     useEffect(() => {
         if (historico.length > 0) {
+            setPorcentagemDesconto(Pedido.percentual_desconto);
             SetValorTotal(historico[0].valor_total);
             setValorDesconto(historico[0].valor_desconto);
         }
@@ -33,14 +35,16 @@ function DetalhesPedido({ historico, produtos, observacao }) {
                     <table style={{ width: '100%' }} className='table table-striped'>
                         <thead>
                             <tr>
-                                <td>Valor Total Do Pedido</td>
-                                <td>Valor Total Desconto</td>
+                                <td>Valor Total Do Pedido (R$)</td>
+                                <td>Valor Total Desconto (R$)</td>
+                                <td>Porcentagem Desconto (%)</td>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
                                 <td data-label="Valor Total Do Pedido">R$ {valorTotal.toFixed(2)}</td>
                                 <td data-label="Valor Total Desconto">R$ {valorDesconto.toFixed(2)}</td>
+                                <td data-label="Porcentagem Desconto Adcional">{porcentagemDesconto}%</td>
                             </tr>
                         </tbody>
                     </table>
@@ -51,6 +55,8 @@ function DetalhesPedido({ historico, produtos, observacao }) {
                                 <th>Id</th>
                                 <th>Produto</th>
                                 <th>Quantidade</th>
+                                <th>Valor Unitário</th>
+                                <th>Desconto Unitário</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -60,6 +66,8 @@ function DetalhesPedido({ historico, produtos, observacao }) {
                                         <td data-label="Id">{index + 1}</td>
                                         <td data-label="Produto">{produtos.filter(x => x.id === produto.produto_id)[0].nome}</td>
                                         <td data-label="Quantidade">{produto.quantidade}</td>
+                                        <td data-label="Valor Unitário">R$ {produto.valor_unitario.toFixed(2)}</td>
+                                        <td data-label="Desconto Unitário">R$ {produto.desconto_unitario.toFixed(2)}</td>
                                     </tr>
                                 )
                             })}
