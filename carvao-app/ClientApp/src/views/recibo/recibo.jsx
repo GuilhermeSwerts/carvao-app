@@ -12,17 +12,16 @@ function Recibo() {
     const [tipoPagamento, setTipoPagamento] = useState([]);
     const [showPdf, setShowPdf] = useState(false);
     const [reciboId, setReciboId] = useState(0);
+    const [reciboCorrente, setReciboCorrente] = useState(null);
 
     const [data, setData] = useState({
-        ValorPagar: 0,
-        FormaPagamento: 1,
-        NomePagador: '',
-        Observacao: '',
+        valor_pago: 0,
+        forma_pagamento: 1,
+        nome_pagador: '',
+        observacoes: '',
         Id: 0,
-        HashRecibo: '',
-
+        hash_recibo : '',
     });
-
 
     const GetParametro = (parametro) => {
         const params = new URLSearchParams(window.location.search);
@@ -34,17 +33,18 @@ function Recibo() {
         var id = GetParametro("pedidoId");
         setpedidoId(parseInt(id));
         setData({ ...data, ["Id"]: parseInt(id) });
+
         api.get(`api/Pedidos/BuscarPedidoId?PedidoId=${id}`, res => {
             setPedido(res.data.pedido);
             setCliente(res.data.cliente);
-            setReciboId(res.data.reciboId)
             console.clear();
             console.log(res.data.pedido);
             console.log(res.data.cliente);
-            console.log(res.data.reciboId);
         }, erro => {
             alert('Houve um erro na solicitação');
         });
+
+      
 
         api.get(`api/Pedidos/BuscarTipoPagamento`, res => {
             setTipoPagamento(res.data);
@@ -55,7 +55,7 @@ function Recibo() {
 
     const onChangeValue = e => setData({ ...data, [e.target.name]: e.target.value });
 
-    const onChangeValorPagar = e => {
+    const onChangevalor_pago = e => {
 
         let valorRestante = (pedido.valor_total - (pedido.valor_total - pedido.saldo_devedor));
         if (e.target.value > valorRestante) {
@@ -63,7 +63,7 @@ function Recibo() {
             return;
         }
 
-        setData({ ...data, ["ValorPagar"]: e.target.value });
+        setData({ ...data, ["valor_pago"]: e.target.value });
     }
 
     const handdleEnviar = () => {
@@ -73,7 +73,7 @@ function Recibo() {
         }
 
         let valorRestante = (pedido.valor_total - (pedido.valor_total - pedido.saldo_devedor));
-        if (data.ValorPagar > valorRestante) {
+        if (data.valor_pago > valorRestante) {
             alert(`Valor acima do valor total a serem pagos\nValor máximo: R$ ${valorRestante.toFixed(2)}.`);
             return;
         }
@@ -81,109 +81,38 @@ function Recibo() {
         if (window.confirm("Deseja realmente gerar um recibo?")) {
 
             const formData = new FormData();
+
             formData.append("data", JSON.stringify(data));
+            console.log(data);
 
-            api.post("api/Recibo/GerarRecibo", formData, res => {
-
+            api.post("api/Recibo/GerarRecibo", formData, resGerarRecibo => {
+                
+                setReciboId("resGerarRecibo.data");
+                setReciboId(resGerarRecibo.data);
+                console.log(resGerarRecibo.data);
                 setShowPdf(true);
-                setReciboId(res.data);
-                console.log(res.data)
+                api.get(`api/Pedidos/BuscarPedidoId?PedidoId=${pedidoId}`, resPedido => {
+                    setPedido(resPedido.data.pedido);
 
-                api.get(`api/Pedidos/BuscarPedidoId?PedidoId=${pedidoId}`, res => {
-                    console.log(res.data.pedido);
-                    setPedido(res.data.pedido);
                 }, erro => {
                     alert('Houve um erro na solicitação');
                 });
 
-                api.get(`/api/Recibo/BuscarReciboPorId?reciboId=${res.data}`, res => {
-                    console.log(res.data);
-                    setData(res.data);
+                api.get(`/api/Recibo/BuscarReciboPorId?reciboId=${resGerarRecibo.data}`, resRecibo => {
+                    console.log('BuscarReciboPorId');
+                    console.log(resRecibo.data);
+                    setReciboCorrente(resRecibo.data);
                 }, erro => {
                     alert('Houve um erro na solicitação');
                 });
             }, erro => {
                 alert('Houve um erro na solicitação');
             })
-
         }
 
     }
 
 
-<<<<<<< HEAD
-    const ReciboPDF = ({ cliente, pedido, reciboId, hashRecibo }) => (
-        <Document>
-            <Page style={styles.page}>
-                <View style={styles.header}>
-                    <Text style={styles.companyName}>
-                        Kompleto Carvao e Assesoria LTDA
-                    </Text>
-                    <Text style={styles.companyCNPJ}>CNPJ: 52.808.774/0001-47</Text>
-                    <Text style={styles.title}>Recibo {reciboId}</Text>
-                    <Text style={styles.title}>Data Recibo {data.data_recibo && format(pedido.data_pedido, "dd/MM/yyyy")}</Text>
-                </View>
-
-                <View style={styles.detailsSection}>
-                    {/* Coluna Esquerda */}
-                    <View style={styles.detailItem}>
-                        <Text style={styles.detailTitle}>Nome Cliente:</Text>
-                        <Text style={styles.detailValue}>{cliente?.nome}</Text>
-
-                        <Text style={styles.detailTitle}>{cliente?.pessoaFisica ? "CPF" : "CNPJ:"}</Text>
-                        <Text style={styles.detailValue}>{cliente?.pessoaFisica ? cliente?.cpf : cliente.cnpj}</Text>
-
-                        <Text style={styles.detailTitle}>Forma de Pagamento:</Text>
-                        <Text style={styles.detailValue}>{tipoPagamento.filter(x => x.tipo_pagamento_id === data.forma_pagamento).length > 0 ? tipoPagamento.filter(x => x.tipo_pagamento_id === data.forma_pagamento)[0].nome : ""}</Text>
-                    </View>
-
-                    {/* Coluna Direita */}
-                    <View style={styles.detailItem}>
-                        <Text style={styles.detailTitle}>Data do Pedido:</Text>
-                        <Text style={styles.detailValue}>
-                            {pedido && format(pedido.data_pedido, "dd/MM/yyyy")}
-                        </Text>
-
-
-                        <Text style={styles.detailTitle}>Código Do Pedido:</Text>
-                        <Text style={styles.detailValue}>{pedidoId}</Text>
-
-                        <Text style={styles.detailTitle}>Valor Total:</Text>
-                        <Text style={styles.detailValue}>
-                            R$ {pedido?.valor_total.toFixed(2)}
-                        </Text>
-
-                        <Text style={styles.detailTitle}>Saldo Devedor:</Text>
-                        <Text style={styles.detailValue}>
-                            {pedido &&
-                                pedido.saldo_devedor.toLocaleString("pt-BR", {
-                                    style: "currency",
-                                    currency: "BRL",
-                                })}
-                        </Text>
-
-                    </View>
-                </View>
-                {/* Continuação da coluna esquerda com espaçamento extra */}
-                <View style={{ ...styles.detailItem, width: "100%" }}>
-
-                    <Text style={styles.detailTitle}>Nome do Pagador:</Text>
-                    <Text style={styles.detailValue}>{data.nome_pagador}</Text>
-
-                    <Text style={styles.detailTitle}>Observações:</Text>
-                    <Text style={styles.detailValue}>{data.Observacao}</Text>
-                </View>
-                <View>
-                    <Text style={styles.detailTitle}>Hash:</Text>
-                    <Text style={styles.detailValue}>{data.hash_recibo}</Text>
-                </View>
-
-
-            </Page>
-        </Document>
-    );
-=======
->>>>>>> 3da1f209515417a6b63906e637dc9f804a79da56
 
     return (<section className='content'>
         {cliente && pedido && <form className="container" onSubmit={e => { e.preventDefault(); handdleEnviar() }}>
@@ -241,11 +170,11 @@ function Recibo() {
             <Row>
                 <Col md={3}>
                     <label>*Valor a Pagar:</label>
-                    <input disabled={showPdf} name='ValorPagar' value={data.ValorPagar} onChange={onChangeValorPagar} required min={1} className='form-control' type="number" />
+                    <input disabled={showPdf} name='valor_pago' value={data.valor_pago} onChange={onChangevalor_pago} required min={1} className='form-control' type="number" />
                 </Col>
                 <Col md={4}>
                     <label>*Forma de Pagamento:</label>
-                    <select disabled={showPdf} name='FormaPagamento' onChange={onChangeValue} required className='form-control'>
+                    <select disabled={showPdf} name='forma_pagamento' onChange={onChangeValue} required className='form-control'>
                         {tipoPagamento.map(tipo => (
                             <option value={tipo.tipo_pagamento_id}>{tipo.nome}</option>
                         ))}
@@ -253,13 +182,13 @@ function Recibo() {
                 </Col>
                 <Col md={5}>
                     <label>*Nome Do Pagador:</label>
-                    <input disabled={showPdf} value={data.NomePagador} name='NomePagador' onChange={onChangeValue} required className='form-control' type="text" />
+                    <input disabled={showPdf} value={data.nome_pagador} name='nome_pagador' onChange={onChangeValue} required className='form-control' type="text" />
                 </Col>
             </Row>
             <Row>
                 <Col md={12}>
                     <label>Observação:</label>
-                    <textarea disabled={showPdf} value={data.Observacao} name='Observacao' onChange={onChangeValue} style={{ resize: 'none' }} className='form-control'></textarea>
+                    <textarea disabled={showPdf} value={data.observacoes} name='observacoes' onChange={onChangeValue} style={{ resize: 'none' }} className='form-control'></textarea>
                 </Col>
             </Row>
             <br />
@@ -276,11 +205,9 @@ function Recibo() {
                     <PDFDownloadLink
                         style={{ color: '#fff', textDecoration: 'none', fontWeight: '700' }}
                         document={
-<<<<<<< HEAD
-                            <ReciboPDF cliente={cliente} pedido={pedido} reciboId={reciboId} hashRecibo={data.HashRecibo} />
-=======
-                            <ReciboPDF pedidoId={pedidoId} data={data} tipoPagamento={tipoPagamento} cliente={cliente} pedido={pedido} reciboId={reciboId} />
->>>>>>> 3da1f209515417a6b63906e637dc9f804a79da56
+                            <ReciboPDF pedidoId={pedidoId} data={reciboCorrente}
+                                tipoPagamento={tipoPagamento} cliente={cliente}
+                                pedido={pedido} reciboId={reciboId} />
                         }
                         fileName={`recibo-${reciboId}.pdf`}
                     >

@@ -8,13 +8,13 @@ namespace carvao_app.Models.Requests
 {
     public class GerarReciboRequest
     {
-        public int ValorPagar { get; set; }
-        public int FormaPagamento { get; set; }
-        public string NomePagador { get; set; }
-        public string Observacao { get; set; }
+        public int valor_pago { get; set; }
+        public int forma_pagamento { get; set; }
+        public string nome_pagador{ get; set; }
+        public string observacoes { get; set; }
         public int Id { get; set; }
 
-        public string HashRecibo { get; set; }
+        public string hash_recibo { get; set; }
 
 
     }

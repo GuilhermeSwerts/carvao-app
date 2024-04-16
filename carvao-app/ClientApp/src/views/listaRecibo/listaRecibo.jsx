@@ -15,6 +15,7 @@ function ListaRecibo() {
     const [showCancelarModal, setShowCancelarModal] = useState(false);
     const [reciboParaCancelar, setReciboParaCancelar] = useState(null);
 
+
     const getParametro = (parametro) => {
         const params = new URLSearchParams(window.location.search);
         return params.get(parametro);
@@ -134,18 +135,6 @@ function ListaRecibo() {
                                         <td data-label="Valor Pago">R$ {recibo.valor_pago.toFixed(2)}</td>
                                         <td data-label="Forma De Pagamento">{nomePagamento}</td>
                                         <td data-label="Nome Do Pagador">{recibo.nome_pagador}</td>
-<<<<<<< HEAD
-                                        <td>
-
-                                            <button onClick={() => handleShowCancelarModal(recibo)} className='btn btn-danger'>Cancelar Recibo</button>
-
-                                        </td>
-                                        <td>
-
-                                            <button onClick={() => handleShowCancelarModal(recibo)} className='btn btn-primary'>Dowload Recibo</button>
-
-                                        </td>
-=======
                                         <td data-label="Ações" style={{ display: 'flex', gap: 20 }}>
                                             <button onClick={() => handleShowCancelarModal(recibo)} className='btn btn-danger'>Cancelar Recibo</button>
                                             <button type='button' className='btn btn-primary'>
@@ -153,10 +142,11 @@ function ListaRecibo() {
                                                     style={{ color: '#fff', textDecoration: 'none', fontWeight: '700' }}
                                                     document={
                                                         <ReciboPDF pedidoId={pedidoId} data={{
-                                                            FormaPagamento: recibo.forma_pagamento,
-                                                            NomePagador: recibo.nome_pagador,
-                                                            Observacao: recibo.observacoes,
-                                                            ValorPagar: recibo.valor_pago.toFixed(2)
+                                                            forma_pagamento: recibo.forma_pagamento,
+                                                            nome_pagador: recibo.nome_pagador,
+                                                            observacoes: recibo.observacoes,
+                                                            valor_pago: recibo.valor_pago.toFixed(2), 
+                                                            hash_recibo: recibo.hash_recibo
                                                         }} tipoPagamento={tipoPagamento} cliente={cliente} pedido={pedido} reciboId={recibo.recibo_id} />
                                                     }
                                                     fileName={`recibo-${recibo.recibo_id}.pdf`}
@@ -166,7 +156,6 @@ function ListaRecibo() {
                                                     }
                                                 </PDFDownloadLink>
                                             </button></td>
->>>>>>> 3da1f209515417a6b63906e637dc9f804a79da56
                                     </tr>
                                 )
                             })}

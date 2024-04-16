@@ -1,14 +1,6 @@
 import React from 'react';
-
 import { format } from 'date-fns';
-import {
-    PDFDownloadLink,
-    Document,
-    Page,
-    Text,
-    View,
-    StyleSheet,
-} from "@react-pdf/renderer";
+import { PDFDownloadLink, Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
 
 const styles = StyleSheet.create({
     page: {
@@ -35,29 +27,6 @@ const styles = StyleSheet.create({
         textAlign: "center",
         marginBottom: 3,
     },
-    content: {
-        paddingHorizontal: 35,
-        marginBottom: 15,
-    },
-    section: {
-        margin: 10,
-        padding: 10,
-    },
-    signatureSpace: {
-        marginTop: 20, // Space above signature line
-        marginBottom: 5, // Space below signature line
-    },
-    dateSpace: {
-        marginBottom: 5, // Space below the date line
-    },
-    detailsSection: {
-        width: '100%',
-        display: 'flex',
-        justifyContent: 'flex-start',
-        alignItems: 'flex-start',
-        flexDirection: 'column',
-        gap: '10px'
-    },
     detailItem: {
         marginBottom: 10,
         width: '100%',
@@ -78,19 +47,22 @@ const styles = StyleSheet.create({
     }
 });
 
-export const ReciboPDF = ({ tipoPagamento, cliente, pedido, reciboId, data, pedidoId }) => (
-    <Document>
-        <Page style={styles.page}>
-            <View style={styles.header}>
-                <Text style={styles.companyName}>
-                    Kompleto Carvao e Assesoria LTDA
-                </Text>
-                <Text style={{ textAlign: "center" }}>CNPJ: 52.808.774/0001-47</Text>
-                <Text style={styles.title}>Recibo {reciboId}</Text>
-            </View>
+export const ReciboPDF = ({ pedidoId, data, tipoPagamento, cliente, pedido, reciboId }) => {
+    if (!data) {
+        return null;
+    }
 
-            <View style={styles.detailsSection}>
-                {/* Coluna Esquerda */}
+    return (
+        <Document>
+            <Page style={styles.page}>
+                <View style={styles.header}>
+                    <Text style={styles.companyName}>
+                        Kompleto Carvao e Assesoria LTDA
+                    </Text>
+                    <Text style={{ textAlign: "center" }}>CNPJ: 52.808.774/0001-47</Text>
+                    <Text style={styles.title}>Recibo {reciboId}</Text>
+                </View>
+
                 <View style={styles.detailItem}>
                     <View style={styles.containerRow}>
                         <Text style={styles.detailTitle}>Nome Cliente:</Text>
@@ -104,16 +76,15 @@ export const ReciboPDF = ({ tipoPagamento, cliente, pedido, reciboId, data, pedi
 
                     <View style={styles.containerRow}>
                         <Text style={styles.detailTitle}>Valor Pago</Text>
-                        <Text style={styles.detailValue}>R$ {data.ValorPagar}</Text>
+                        <Text style={styles.detailValue}>R$ {data.valor_pago}</Text>
                     </View>
 
                     <View style={styles.containerRow}>
                         <Text style={styles.detailTitle}>Forma de Pagamento:</Text>
-                        <Text style={styles.detailValue}>{tipoPagamento.filter(x => x.tipo_pagamento_id === data.FormaPagamento).length > 0 ? tipoPagamento.filter(x => x.tipo_pagamento_id === data.FormaPagamento)[0].nome : ""}</Text>
+                        <Text style={styles.detailValue}>{tipoPagamento.filter(x => x.tipo_pagamento_id === data.forma_pagamento).length > 0 ? tipoPagamento.filter(x => x.tipo_pagamento_id === data.forma_pagamento)[0].nome : ""}</Text>
                     </View>
                 </View>
 
-                {/* Coluna Direita */}
                 <View style={styles.detailItem}>
                     <View style={styles.containerRow}>
                         <Text style={styles.detailTitle}>Data do Pedido:</Text>
@@ -124,7 +95,7 @@ export const ReciboPDF = ({ tipoPagamento, cliente, pedido, reciboId, data, pedi
 
                     <View style={styles.containerRow}>
                         <Text style={styles.detailTitle}>Nome do Pagador:</Text>
-                        <Text style={styles.detailValue}>{data.NomePagador}</Text>
+                        <Text style={styles.detailValue}>{data.nome_pagador}</Text>
                     </View>
                     <View style={styles.containerRow}>
                         <Text style={styles.detailTitle}>Código Do Pedido:</Text>
@@ -137,22 +108,26 @@ export const ReciboPDF = ({ tipoPagamento, cliente, pedido, reciboId, data, pedi
                         </Text>
                     </View>
                 </View>
-            </View>
-            {/* Continuação da coluna esquerda com espaçamento extra */}
-            <View style={{ ...styles.detailItem, width: "100%" }}>
-                <View style={styles.containerRow}>
-                    <Text style={styles.detailTitle}>Saldo Devedor:</Text>
-                    <Text style={styles.detailValue}>
-                        {pedido &&
-                            pedido.saldo_devedor.toLocaleString("pt-BR", {
+
+                <View style={{ ...styles.detailItem, width: "100%" }}>
+                    <View style={styles.containerRow}>
+                        <Text style={styles.detailTitle}>Saldo Devedor:</Text>
+                        <Text style={styles.detailValue}>
+                            {pedido && pedido.saldo_devedor.toLocaleString("pt-BR", {
                                 style: "currency",
                                 currency: "BRL",
                             })}
-                    </Text>
+                        </Text>
+                    </View>
+                    <Text style={styles.detailTitle}>Observações:</Text>
+                    <Text style={styles.detailValue}>{data.observacoes}</Text>
+
+                    <View>
+                        <Text style={styles.detailTitle}>Hash:</Text>
+                        <Text style={styles.detailValue}>{data.hash_recibo}</Text>
+                    </View>
                 </View>
-                <Text style={styles.detailTitle}>Observações:</Text>
-                <Text style={styles.detailValue}>{data.Observacao}</Text>
-            </View>
-        </Page>
-    </Document>
-);
+            </Page>
+        </Document>
+    );
+};

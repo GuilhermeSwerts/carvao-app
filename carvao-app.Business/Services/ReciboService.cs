@@ -41,15 +41,15 @@ namespace carvao_app.Business.Services
                 string hashRecibo = GenerarHash(recibo);
                 var map = new GerarReciboRequestRepository
                 {
-                    FormaPagamento = recibo.FormaPagamento,
+                    FormaPagamento = recibo.forma_pagamento,
                     Id = recibo.Id,
-                    NomePagador = recibo.NomePagador,
-                    Observacao = recibo.Observacao,
-                    ValorPagar = recibo.ValorPagar,
+                    NomePagador = recibo.nome_pagador,
+                    Observacao = recibo.observacoes,
+                    ValorPagar = recibo.valor_pago,
                     HashRecibo = hashRecibo,
                 };
 
-                recibo.HashRecibo = hashRecibo;
+                recibo.hash_recibo = hashRecibo;
                 int reciboId = _repository.GerarRecibo(map);
 
                 return reciboId;
@@ -65,7 +65,7 @@ namespace carvao_app.Business.Services
         {
             using (SHA256 sha256Hash = SHA256.Create())
             {
-                string hashInput = $"{recibo.FormaPagamento}-{recibo.Id}-{recibo.NomePagador}-{recibo.Observacao}-{recibo.ValorPagar}";
+                string hashInput = $"{recibo.forma_pagamento}-{recibo.Id}-{recibo.nome_pagador}-{recibo.observacoes}-{recibo.valor_pago}-{Guid.NewGuid}";
                 byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(hashInput));
                 StringBuilder builder = new StringBuilder();
                 for (int i = 0; i < bytes.Length; i++)
