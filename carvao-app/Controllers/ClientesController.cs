@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace carvao_app.Controllers
 {
-    public class ClientesController : Controller
+    public class ClientesController : PrivateController
     {
         private readonly IClientesService _service;
         public ClientesController(IClientesService service)

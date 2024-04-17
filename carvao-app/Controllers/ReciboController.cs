@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 
 namespace carvao_app.Controllers
 {
-    public class ReciboController : Controller
+    public class ReciboController : PrivateController
     {
         private readonly IRecibo _recibosService;
 

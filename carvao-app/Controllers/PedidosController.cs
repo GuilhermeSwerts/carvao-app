@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace carvao_app.Controllers
 {
-    public class PedidosController : Controller
+    public class PedidosController : PrivateController
     {
         private readonly IPedidosService _service;
         public PedidosController(IPedidosService service)
@@ -66,7 +66,7 @@ namespace carvao_app.Controllers
         {
             try
             {
-                var pedidos = _service.BuscarTodosPedidos(q,dtInicio, dtFim);
+                var pedidos = _service.BuscarTodosPedidos(q,dtInicio, dtFim,GetUser());
                 return Ok(pedidos);
             }
             catch (System.Exception)

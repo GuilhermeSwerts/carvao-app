@@ -12,6 +12,10 @@ function Layout({ children }) {
     document.querySelector('.content').classList.toggle('opening');
   }
 
+  function logout() {
+    window.localStorage.clear();
+    window.location.href = "/login"
+  }
 
   return (<div className='container-header'>
     <div class="menu">
@@ -33,7 +37,7 @@ function Layout({ children }) {
         </a>
       </div>
       <div class="menu-footer">
-        <a class="slider_item" style={{ borderTop: '1px solid #ccc' }} href='logout'>
+        <a class="slider_item" style={{ borderTop: '1px solid #ccc' }} onClick={logout}>
           SAIR
           <FaDoorOpen size={20} className='slider-item-hover' />
         </a>

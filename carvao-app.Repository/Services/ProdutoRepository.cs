@@ -1,4 +1,5 @@
-﻿using carvao_app.Repository.Conexao;
+﻿using carvao_app.Models.Enum;
+using carvao_app.Repository.Conexao;
 using carvao_app.Repository.Interfaces;
 using carvao_app.Repository.Maps;
 using Dapper;
@@ -19,7 +20,10 @@ namespace carvao_app.Repository.Services
 
         public List<ProdutoMap> BuscarTodosProdutos()
         {
-            var retorno = DataBase.Execute<ProdutoMap>(_configuration, "select * from produto", new DynamicParameters());
+    
+            var query = "select * from produto";
+
+            var retorno = DataBase.Execute<ProdutoMap>(_configuration, query, new());
 
             return retorno.OrderBy(c => c.Nome).ToList();
         }

@@ -5,6 +5,7 @@ import { api } from "../../components/api/api";
 import ModalNovoCliente from "../../components/Modals/Clients/NovoCliente";
 import DetalhesDoCliente from '../../components/Modals/Clients/DetalhesCliente';
 import Filter from '../../components/filter/filter';
+import { GetDataUser } from "../../util/GetDataUser";
 
 function ClienteListView() {
     const [clientes, setClientes] = useState([]);
@@ -14,9 +15,9 @@ function ClienteListView() {
     const [clienteData, setClienteData] = useState({});
     const [modalDetalhesAberto, setModalDetalhesAberto] = useState(false);
     const [isPessoaFisica, setIsPessoaFisica] = useState(true);
-
     const [dataInicio, setDataInicio] = useState("");
     const [dataFim, setDataFim] = useState("");
+    const usuario = GetDataUser();
 
     const fetchClientes = (query, dtInicio, dtFim) => {
         try {

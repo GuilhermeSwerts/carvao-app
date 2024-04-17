@@ -2,7 +2,7 @@ import axios from "axios";
 
 export default class Api {
     constructor(urlBase = "") {
-        this.loginPage = "/";
+        this.loginPage = "/login";
         this.urlBase = urlBase;
 
         this.access_token = window.localStorage.getItem("access_token");

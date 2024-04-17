@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace carvao_app.Controllers
 {
-    public class ProdutosController : Controller
+    public class ProdutosController : PrivateController
     {
         private readonly IProdutosService _service;
         public ProdutosController(IProdutosService service)

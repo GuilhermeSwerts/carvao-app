@@ -1,5 +1,6 @@
 ﻿using carvao_app.Business.Interfaces;
 using carvao_app.Models.Dtos;
+using carvao_app.Models.Enum;
 using carvao_app.Repository.Interfaces;
 using System;
 using System.Collections.Generic;
