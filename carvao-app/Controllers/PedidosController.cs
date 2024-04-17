@@ -20,6 +20,9 @@ namespace carvao_app.Controllers
             try
             {
                 var request = JsonConvert.DeserializeObject<NovoProdutoRequest>(obj);
+
+                request.VendedorUsuarioId = GetUser().Usuario_id;
+
                 _service.NovoPedido(request);
                 return Ok();
             }
