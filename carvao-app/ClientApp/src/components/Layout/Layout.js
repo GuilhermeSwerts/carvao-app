@@ -1,11 +1,14 @@
 import React from 'react';
 import './layout.css';
-
-import { FaArrowRight, FaDoorOpen } from 'react-icons/fa';
-import { FaUsers, FaShoppingCart,FaCartPlus  } from "react-icons/fa";
+import { GetDataUser } from "../../util/GetDataUser";
+import { FaArrowRight, FaDoorOpen, FaUserPlus } from 'react-icons/fa';
+import { FaUsers, FaShoppingCart, FaCartPlus } from "react-icons/fa";
 import { FaGears } from "react-icons/fa6";
+import { FaBoxes } from "react-icons/fa";
 
 function Layout({ children }) {
+  const usuario = GetDataUser();
+
   function toggleMenu() {
     document.querySelector('.menu').classList.toggle("open");
     document.querySelector('.arrow').classList.toggle('rotate');
@@ -33,8 +36,16 @@ function Layout({ children }) {
         </a>
         <a class='slider_item' href='gestao'>
           GESTÃO DE PEDIDOS
-          <FaGears  size={20} className='slider-item-hover' />
+          <FaGears size={20} className='slider-item-hover' />
         </a>
+        {usuario.IsMaster && <a class='slider_item' href='novousuario'>
+          NOVO USUÁRIO
+          <FaUserPlus size={20} className='slider-item-hover' />
+        </a>}
+        {usuario.IsMaster && <a class='slider_item' href='produtos'>
+          PRODUTOS
+          <FaBoxes size={20} className='slider-item-hover' />
+        </a>}
       </div>
       <div class="menu-footer">
         <a class="slider_item" style={{ borderTop: '1px solid #ccc' }} onClick={logout}>

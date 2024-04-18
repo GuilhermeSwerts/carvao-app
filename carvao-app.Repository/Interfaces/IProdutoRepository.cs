@@ -12,5 +12,8 @@ namespace carvao_app.Repository.Interfaces
         List<ProdutoMap> BuscarTodosProdutos();
         List<PedidoProdutoMap> BuscarProdutosByClienteId(int id);
         object BuscarTiposPagamento();
+        void NovoProduto(ProdutoMap request);
+        void DeletaProduto(int id);
+        void EditarProduto(ProdutoMap request);
     }
 }

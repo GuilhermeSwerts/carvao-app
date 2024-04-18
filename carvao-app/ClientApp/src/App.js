@@ -9,6 +9,8 @@ import Gestao from './views/gestao/gestao';
 import Recibo from './views/recibo/recibo';
 import ListaRecibo from './views/listaRecibo/listaRecibo';
 import Login from './views/login/login';
+import CadUsuario from './views/cadUsuario/cadUsuario';
+import Produtos from './views/produtos/produtosTable';
 
 export default class App extends Component {
   static displayName = App.name;
@@ -23,6 +25,8 @@ export default class App extends Component {
         <Route exact path='/gestao' component={Gestao} />
         <Route exact path='/recibo' component={Recibo} />
         <Route exact path='/recibos' component={ListaRecibo} />
+        <Route exact path='/novousuario' component={CadUsuario} />
+        <Route exact path='/produtos' component={Produtos} />
       </Layout>
     );
   }

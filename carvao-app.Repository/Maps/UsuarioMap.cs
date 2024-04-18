@@ -9,7 +9,7 @@ namespace carvao_app.Repository.Maps
     public class UsuarioMap
     {
         public int Usuario_id { get; set; }
-        public string Mome { get; set; }
+        public string Nome { get; set; }
         public string Email { get; set; }
         public string Senha { get; set; }
         public DateTime Data_cadastro { get; set; }

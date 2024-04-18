@@ -1,4 +1,5 @@
-﻿using System;
+﻿using carvao_app.Models.Requests;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,5 +11,8 @@ namespace carvao_app.Business.Interfaces
     {
         object BuscarTiposPagamento();
         object BuscarTodosProdutos();
+        void DeletaProduto(int id);
+        void EditarProduto(ProdutoRequest request);
+        void NovoProduto(ProdutoRequest request);
     }
 }
