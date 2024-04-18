@@ -47,6 +47,10 @@ export default class Api {
         this.execute(this.api.get(url), funcResult, funcError);
     }
 
+    getSync = (url) => {
+        return this.api.get(url);
+    }
+
     getForm = (url, form, funcResult, funcError) => {
         if (url.indexOf('?') <= 0) url += "?";
         var first = true;

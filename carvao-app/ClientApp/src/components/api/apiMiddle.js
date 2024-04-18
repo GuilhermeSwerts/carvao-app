@@ -1,10 +1,18 @@
-import api from 'api';
+import Api from './api'; // Importe a classe Api corretamente
+
+const api = new Api(); // Crie uma instância da classe Api
 
 export const buscarClientes = async (query, dtInicio, dtFim) => {
+    
     try {
-        api.get(`api/Cliente/BuscarClientes?q=${query ? query : ""}&dtInicio=${dtInicio ? dtInicio : ""}&dtFim=${dtFim ? dtFim : ""}`, res => {
-            return res.data;
+        const response = await api.getSync(`api/Cliente/BuscarClientes`, {
+            params: {
+                q: query || "",
+                dtInicio: dtInicio || "",
+                dtFim: dtFim || ""
+            }
         });
+        return response;
     } catch (error) {
         throw error;
     }

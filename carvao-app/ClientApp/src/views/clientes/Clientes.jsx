@@ -6,7 +6,7 @@ import ModalNovoCliente from "../../components/Modals/Clients/NovoCliente";
 import DetalhesDoCliente from '../../components/Modals/Clients/DetalhesCliente';
 import Filter from '../../components/filter/filter';
 import { GetDataUser } from "../../util/GetDataUser";
-import { buscarClientes } from "../../api/clienteapi";
+import { buscarClientes } from "../../components/api/apiMiddle";
 
 function ClienteListView() {
     const [clientes, setClientes] = useState([]);
@@ -20,21 +20,13 @@ function ClienteListView() {
     const [dataFim, setDataFim] = useState("");
     const usuario = GetDataUser();
 
-    //const fetchClientes = (query, dtInicio, dtFim) => {
-    //    try {
-    //        api.get(`api/Cliente/BuscarClientes?q=${query ? query : ""}&dtInicio=${dtInicio ? dtInicio : ""}&dtFim=${dtFim ? dtFim : ""}`, res => {
-    //            setClientes(res.data);
-    //        })
-    //    } catch (error) {
-    //        console.error("Erro ao buscar clientes:", error);
-    //    }
-    //};
-
     const fetchClientes = (query, dtInicio, dtFim) => {
         try {
-
-            const result = buscarClientes();
-            setClientes(result);
+            buscarClientes(query, dtInicio, dtFim).then(result => {                
+                setClientes(result.data);
+            }).catch(error => {
+                console.error("Erro ao buscar clientes:", error);
+            });
 
         } catch (error) {
             console.error("Erro ao buscar clientes:", error);
