@@ -106,7 +106,8 @@ function ListaRecibo() {
                                 <label style={{ fontSize: 20 }}>Valor Total: {pedido.valor_total.toFixed(2)}</label>
                             </Col>
                             <Col md={4}>
-                                <label style={{ fontSize: 20 }}>Valor Total Pago: {"R$ " + (pedido.valor_total - pedido.saldo_devedor).toFixed(2)} </label>
+                                <label style={{ fontSize: 20 }}>Valor Total Pago: {"R$ " + (pedido.valor_total - pedido.saldo_devedor + recibos.reduce((total, recibo) => total + recibo.valor_pago, 0)).toFixed(2)} </label>
+
                             </Col>
                             <Col md={4}>
                                 <label style={{ fontSize: 20 }}>Valor Total Devedor: {(pedido.valor_total - (pedido.valor_total - pedido.saldo_devedor)).toFixed(2)}</label>

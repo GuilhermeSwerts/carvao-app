@@ -57,20 +57,7 @@ namespace carvao_app.Repository.Services
         {
             try
             {
-                //string codigohash = $"{recibo.FormaPagamento}-{recibo.Id}-{recibo.NomePagador}-{recibo.Observacao}-{recibo.ValorPagar}";
-                //codigohash += $"-Aleatorio-{Guid.NewGuid()}";
-                //string hashRecibo;
-                //using (SHA256 sha256Hash = SHA256.Create())
-                //{
-                //    byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(codigohash));
-
-                //    StringBuilder builder = new StringBuilder();
-                //    for (int i = 0; i < bytes.Length; i++)
-                //    {
-                //        builder.Append(bytes[i].ToString("x2")); 
-                //    }
-                //    hashRecibo = builder.ToString();
-                //}
+                
                 var reciboMap = new ReciboMap
                 {
                     data_recibo = DateTime.Now,

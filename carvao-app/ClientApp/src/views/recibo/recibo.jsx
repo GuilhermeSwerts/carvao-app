@@ -8,11 +8,13 @@ import { PDFDownloadLink } from "@react-pdf/renderer";
 function Recibo() {
     const [pedido, setPedido] = useState(null);
     const [cliente, setCliente] = useState(null);
-    const [pedidoId, setpedidoId] = useState(0);
+    const [pedidoId, setPedidoId] = useState(0);
     const [tipoPagamento, setTipoPagamento] = useState([]);
     const [showPdf, setShowPdf] = useState(false);
     const [reciboId, setReciboId] = useState(0);
     const [reciboCorrente, setReciboCorrente] = useState(null);
+    const [recibos, setRecibos] = useState([]);
+
 
     const [data, setData] = useState({
         valor_pago: 0,
@@ -31,7 +33,7 @@ function Recibo() {
 
     useEffect(() => {
         var id = GetParametro("pedidoId");
-        setpedidoId(parseInt(id));
+        setPedidoId(parseInt(id));
         setData({ ...data, ["Id"]: parseInt(id) });
 
         api.get(`api/Pedidos/BuscarPedidoId?PedidoId=${id}`, res => {
@@ -51,6 +53,15 @@ function Recibo() {
         }, erro => {
             alert('Houve um erro na solicitação');
         })
+
+        api.get(`api/Recibo/BuscarRecibosPorPedido?PedidoId=${id}`, res => {
+            setRecibos(res.data);
+            console.log(setRecibos)
+            console.log("recibo");
+            console.log(res.data);
+        }, erro => {
+            alert('Houve um erro na solicitação');
+        });
     }, []);
 
     const onChangeValue = e => setData({ ...data, [e.target.name]: e.target.value });
@@ -89,8 +100,8 @@ function Recibo() {
                 
                 setReciboId("resGerarRecibo.data");
                 setReciboId(resGerarRecibo.data);
-                console.log(resGerarRecibo.data);
                 setShowPdf(true);
+
                 api.get(`api/Pedidos/BuscarPedidoId?PedidoId=${pedidoId}`, resPedido => {
                     setPedido(resPedido.data.pedido);
 
@@ -99,8 +110,6 @@ function Recibo() {
                 });
 
                 api.get(`/api/Recibo/BuscarReciboPorId?reciboId=${resGerarRecibo.data}`, resRecibo => {
-                    console.log('BuscarReciboPorId');
-                    console.log(resRecibo.data);
                     setReciboCorrente(resRecibo.data);
                 }, erro => {
                     alert('Houve um erro na solicitação');
@@ -111,7 +120,6 @@ function Recibo() {
         }
 
     }
-
 
 
     return (<section className='content'>
@@ -164,13 +172,14 @@ function Recibo() {
                 </Col>
                 <Col md={6}>
                     <label>Valor Total Pago:</label>
-                    <input value={"R$ " + (pedido.valor_total - pedido.saldo_devedor).toFixed(2)} className='form-control' disabled type="text" />
+                    <input value={"R$ " + (pedido.valor_total - pedido.saldo_devedor + recibos.reduce((total, recibo) =>
+                       total + recibo.valor_pago, 0)).toFixed(2)}className='form-control' disabled type="text" />
                 </Col>
             </Row>
             <Row>
                 <Col md={3}>
                     <label>*Valor a Pagar:</label>
-                    <input disabled={showPdf} name='valor_pago' value={data.valor_pago} onChange={onChangevalor_pago} required min={1} className='form-control' type="number" />
+                    <input disabled={showPdf} name='valor_pago' value={data.valor_pago} onChange={onChangevalor_pago} required min={1} className='form-control' type="text" />
                 </Col>
                 <Col md={4}>
                     <label>*Forma de Pagamento:</label>
