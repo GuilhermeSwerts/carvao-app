@@ -11,6 +11,7 @@ function DetalhesPedido({ historico, produtos, observacao,Pedido }) {
 
     useEffect(() => {
         if (historico.length > 0) {
+            console.log(historico);
             setPorcentagemDesconto(Pedido.percentual_desconto);
             SetValorTotal(historico[0].valor_total);
             setValorDesconto(historico[0].valor_desconto);
@@ -64,7 +65,7 @@ function DetalhesPedido({ historico, produtos, observacao,Pedido }) {
                                 return (
                                     <tr>
                                         <td data-label="Id">{index + 1}</td>
-                                        <td data-label="Produto">{produtos.filter(x => x.id === produto.produto_id)[0].nome}</td>
+                                        <td data-label="Produto">{produtos.filter(x => x.id === produto.produto_id)[0]?.nome}</td>
                                         <td data-label="Quantidade">{produto.quantidade}</td>
                                         <td data-label="Valor Unitário">R$ {produto.valor_unitario.toFixed(2)}</td>
                                         <td data-label="Desconto Unitário">R$ {produto.desconto_unitario.toFixed(2)}</td>

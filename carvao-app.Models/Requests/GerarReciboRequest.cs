@@ -1,4 +1,5 @@
-﻿using System;
+﻿using carvao_app.Models.Dtos;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,7 @@ namespace carvao_app.Models.Requests
 {
     public class GerarReciboRequest
     {
+        public int pedido_id { get; set; }
         public int valor_pago { get; set; }
         public int forma_pagamento { get; set; }
         public string nome_pagador{ get; set; }

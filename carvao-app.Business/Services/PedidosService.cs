@@ -96,5 +96,10 @@ namespace carvao_app.Business.Services
             }
             return retorno;
         }
+
+        public bool AtualizarSaldoDevedor(int pedidoId, decimal valorPago)
+        {
+            return _repository.AtualizarSaldoDevedor(pedidoId, valorPago);
+        }
     }
 }

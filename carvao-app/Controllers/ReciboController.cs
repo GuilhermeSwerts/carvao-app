@@ -17,7 +17,7 @@ namespace carvao_app.Controllers
 
         [HttpPost]
         [Route("/api/Recibo/GerarRecibo")]
-        public ActionResult BuscarPedidoId([FromForm] string data)
+        public ActionResult GerarRecibo([FromForm] string data)
         { 
 
             try
@@ -51,8 +51,8 @@ namespace carvao_app.Controllers
         }
 
         [HttpGet]
-        [Route("/api/Recibo/BuscarRecibos")]
-        public ActionResult BuscarRecibosId([FromQuery] int pedidoId)
+        [Route("/api/Recibo/BuscarRecibosPorPedido")]
+        public ActionResult BuscarRecibosPorPedido([FromQuery] int pedidoId)
         {
             try
             {

@@ -11,10 +11,12 @@ namespace carvao_app.Business.Services
     public class ReciboService : IRecibo
     {
         private readonly IReciboRepository _repository;
+        private readonly IPedidosService _pedidosService;
 
-        public ReciboService(IReciboRepository repository)
+        public ReciboService(IReciboRepository repository, IPedidosService pedidosService)
         {
             _repository = repository;
+            _pedidosService = pedidosService;
         }
 
         public object BuscarReciboPorId(int reciboId)
@@ -38,21 +40,26 @@ namespace carvao_app.Business.Services
 
             try
             {
-                string hashRecibo = GenerarHash(recibo);
-                var map = new GerarReciboRequestRepository
+                if (_pedidosService.AtualizarSaldoDevedor(recibo.Id, recibo.valor_pago))
                 {
-                    FormaPagamento = recibo.forma_pagamento,
-                    Id = recibo.Id,
-                    NomePagador = recibo.nome_pagador,
-                    Observacao = recibo.observacoes,
-                    ValorPagar = recibo.valor_pago,
-                    HashRecibo = hashRecibo,
-                };
 
-                recibo.hash_recibo = hashRecibo;
-                int reciboId = _repository.GerarRecibo(map);
+                    string hashRecibo = GenerarHash(recibo);
+                    var map = new GerarReciboRequestRepository
+                    {
+                        FormaPagamento = recibo.forma_pagamento,
+                        Id = recibo.Id,
+                        NomePagador = recibo.nome_pagador,
+                        Observacao = recibo.observacoes,
+                        ValorPagar = recibo.valor_pago,
+                        HashRecibo = hashRecibo,
+                    };
 
-                return reciboId;
+                    recibo.hash_recibo = hashRecibo;
+                    int reciboId = _repository.GerarRecibo(map);
+
+                    return reciboId;
+                }
+                return 0;
             }
             catch (Exception)
             {

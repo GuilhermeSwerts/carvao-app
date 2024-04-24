@@ -25,9 +25,9 @@ function ListaRecibo() {
         const id = getParametro("pedidoId");
         setPedidoId(id);
 
-        api.get(`api/Recibo/BuscarRecibos?pedidoId=${id}`,
+        api.get(`api/Recibo/BuscarRecibosPorPedido?pedidoId=${id}`,
             res => setRecibos(res.data),
-            erro => alert('Houve um erro na solicitação para buscar recibos')
+            erro => alert('1 Houve um erro na solicitação para buscar recibos' + erro)
         );
 
         setShowCancelarModal(false);
@@ -37,9 +37,9 @@ function ListaRecibo() {
         const id = getParametro("pedidoId");
         setPedidoId(id);
 
-        api.get(`api/Recibo/BuscarRecibos?pedidoId=${id}`,
+        api.get(`api/Recibo/BuscarRecibosPorPedido?pedidoId=${id}`,
             res => setRecibos(res.data),
-            erro => alert('Houve um erro na solicitação para buscar recibos')
+            erro => alert('2 Houve um erro na solicitação para buscar recibos' + erro)
         );
 
         api.get(`api/Pedidos/BuscarPedidoId?PedidoId=${id}`,
@@ -47,12 +47,12 @@ function ListaRecibo() {
                 setCliente(res.data.cliente);
                 setPedido(res.data.pedido);
             },
-            erro => alert('Houve um erro na solicitação para buscar pedido')
+            erro => alert('Houve um erro na solicitação para buscar pedido' + erro)
         );
 
         api.get(`api/Pedidos/BuscarTipoPagamento`,
             res => setTipoPagamento(res.data),
-            erro => alert('Houve um erro na solicitação para buscar tipos de pagamento')
+            erro => alert('Houve um erro na solicitação para buscar tipos de pagamento' + erro)
         );
 
     }, [])
@@ -98,7 +98,7 @@ function ListaRecibo() {
                         </Row>
                         <Row>
                             <Col md={6}>
-                                <label style={{ fontSize: 20 }}>Localidade: {cliente.endereco.localidade + " - " + cliente.endereco.uf}</label>
+                                <label style={{ fontSize: 20 }}>Localidade: {cliente.endereco?.localidade + " - " + cliente.endereco?.uf}</label>
                             </Col>
                         </Row>
                         <Row>

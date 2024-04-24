@@ -6,8 +6,8 @@ import { ReciboPDF } from '../../components/pdf/pdf';
 import { PDFDownloadLink } from "@react-pdf/renderer";
 
 function Recibo() {
-    const [pedido, setPedido] = useState(null);
-    const [cliente, setCliente] = useState(null);
+    const [pedido, setPedido] = useState();
+    const [cliente, setCliente] = useState();
     const [pedidoId, setPedidoId] = useState(0);
     const [tipoPagamento, setTipoPagamento] = useState([]);
     const [showPdf, setShowPdf] = useState(false);
@@ -22,7 +22,8 @@ function Recibo() {
         nome_pagador: '',
         observacoes: '',
         Id: 0,
-        hash_recibo : '',
+        hash_recibo: '',
+        pedido_id: 0
     });
 
     const GetParametro = (parametro) => {
@@ -33,34 +34,40 @@ function Recibo() {
 
     useEffect(() => {
         var id = GetParametro("pedidoId");
-        setPedidoId(parseInt(id));
+        if (id) {
+            setPedidoId(parseInt(id));
+            setData({ ...data, ["pedido_id"]: pedidoId });
+        }
         setData({ ...data, ["Id"]: parseInt(id) });
 
         api.get(`api/Pedidos/BuscarPedidoId?PedidoId=${id}`, res => {
-            setPedido(res.data.pedido);
-            setCliente(res.data.cliente);
-            console.clear();
-            console.log(res.data.pedido);
-            console.log(res.data.cliente);
+            console.log("BuscarPedidoId")
+            console.log(res);
+            debugger;
+            if (res.data && res.data.pedido) {
+                setPedido(res.data.pedido);
+                setCliente(res.data.cliente);
+            }            
         }, erro => {
-            alert('Houve um erro na solicitação');
+            alert('Houve um erro na solicitação BuscarPedidoId' + erro);
         });
 
       
 
         api.get(`api/Pedidos/BuscarTipoPagamento`, res => {
-            setTipoPagamento(res.data);
+            if (res.data) {
+                setTipoPagamento(res.data);
+            }
         }, erro => {
-            alert('Houve um erro na solicitação');
+            alert('Houve um erro na solicitação BuscarTipoPagamento' + erro);
         })
 
         api.get(`api/Recibo/BuscarRecibosPorPedido?PedidoId=${id}`, res => {
-            setRecibos(res.data);
-            console.log(setRecibos)
-            console.log("recibo");
-            console.log(res.data);
+            if (res.data) {
+                setRecibos(res.data);
+            }
         }, erro => {
-            alert('Houve um erro na solicitação');
+            alert('Houve um erro na solicitação BuscarRecibosPorPedido' + erro);
         });
     }, []);
 
@@ -123,7 +130,7 @@ function Recibo() {
 
 
     return (<section className='content'>
-        {cliente && pedido && <form className="container" onSubmit={e => { e.preventDefault(); handdleEnviar() }}>
+        {cliente && pedido && <form className="container" onSubmit={e => { e.preventDefault(); }}>
             <div className="header-recibo" style={{
                 padding: '1rem',
                 background: '#28d',
@@ -158,11 +165,11 @@ function Recibo() {
             <Row>
                 <Col md={4}>
                     <label>Localidade:</label>
-                    <input value={cliente.endereco.localidade} className='form-control' disabled type="text" />
+                    <input value={cliente.endereco?.localidade} className='form-control' disabled type="text" />
                 </Col>
                 <Col md={4}>
                     <label>UF:</label>
-                    <input value={cliente.endereco.uf} className='form-control' disabled type="text" />
+                    <input value={cliente.endereco?.uf} className='form-control' disabled type="text" />
                 </Col>
             </Row>
             <Row>
@@ -203,10 +210,10 @@ function Recibo() {
             <br />
             {!showPdf && <Row style={{ display: 'flex', justifyContent: 'end', alignItems: 'end', gap: 10 }}>
                 <Col md={2}>
-                    <button onClick={() => window.history.back()} style={{ width: '100%' }} className='btn btn-danger'>Cancelar Pedido</button>
+                    <button onClick={() => window.history.back()} style={{ width: '100%' }} className='btn btn-danger'>Cancelar</button>
                 </Col>
                 <Col md={2}>
-                    <button type='submit' style={{ width: '100%' }} className='btn btn-primary'>Enviar Pedido</button>
+                    <button onClick={handdleEnviar} style={{ width: '100%' }} className='btn btn-primary'>Gerar Recibo</button>
                 </Col>
             </Row>}
             {showPdf && (

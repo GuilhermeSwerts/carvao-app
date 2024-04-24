@@ -57,7 +57,7 @@ namespace carvao_app.Repository.Services
         {
             try
             {
-                
+
                 var reciboMap = new ReciboMap
                 {
                     data_recibo = DateTime.Now,
@@ -70,29 +70,26 @@ namespace carvao_app.Repository.Services
                 };
 
                 string QueryInsert = @"INSERT INTO recibo (pedido_id, data_recibo, valor_pago, forma_pagamento, nome_pagador, observacoes, hash_recibo)
-                                     VALUES (@PedidoId, @DataRecibo, @ValorPago, @FormaPagamento, @NomePagador, @Observacoes, @HashRecibo);
-                                     SELECT LAST_INSERT_ID();";
+                                    VALUES (@PedidoId, @DataRecibo, @ValorPago, @FormaPagamento, @NomePagador, @Observacoes, @HashRecibo);
+                                    SELECT LAST_INSERT_ID();";
                 var param = new DynamicParameters();
                 param.Add("@PedidoId", reciboMap.pedido_id);
                 param.Add("@DataRecibo", reciboMap.data_recibo);
                 param.Add("@ValorPago", reciboMap.valor_pago);
                 param.Add("@FormaPagamento", reciboMap.forma_pagamento);
-                param.Add("@NomePagador",  reciboMap.nome_pagador);
+                param.Add("@NomePagador", reciboMap.nome_pagador);
                 param.Add("@Observacoes", reciboMap.observacoes);
                 param.Add("@HashRecibo", reciboMap.hash_recibo);
-                DataBase.Execute(_configuration, QueryInsert, param);
-
 
                 int id = DataBase.Execute<int>(_configuration, QueryInsert, param).FirstOrDefault();
                 return id;
+                
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw ex;
             }
-
-
         }
 
     }

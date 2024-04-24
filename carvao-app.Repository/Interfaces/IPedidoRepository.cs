@@ -17,5 +17,7 @@ namespace carvao_app.Repository.Interfaces
         void EditarPedido(EditarPedidoRequestDb map);
         List<HistoricoMap> HistoricoPedidosCliente(int id);
         void NovoPedido(NovoPedidoRequestDb map);
+
+        bool AtualizarSaldoDevedor(int pedidoId, decimal valorPago);
     }
 }

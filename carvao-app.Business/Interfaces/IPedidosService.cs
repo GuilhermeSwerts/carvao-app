@@ -15,5 +15,6 @@ namespace carvao_app.Business.Interfaces
         void EditarPedido(EditarProdutoRequest request);
         List<HistoricoDto> HistoricoPedidosCliente(int id);
         void NovoPedido(NovoProdutoRequest request);
+        bool AtualizarSaldoDevedor(int pedidoId, decimal valorPago);
     }
 }

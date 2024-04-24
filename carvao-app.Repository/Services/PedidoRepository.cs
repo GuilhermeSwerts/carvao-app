@@ -5,6 +5,7 @@ using carvao_app.Repository.Maps;
 using carvao_app.Repository.Request;
 using Dapper;
 using Microsoft.Extensions.Configuration;
+using MySqlX.XDevAPI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +25,37 @@ namespace carvao_app.Repository.Services
             _configuration = configuration;
             _produtoRepository = produtoRepository;
             _clienteRepository = clienteRepository;
+        }
+
+        public bool AtualizarSaldoDevedor(int pedidoId, decimal valorPago)
+        {
+            var pedido = DataBase.Execute<PedidoMap>(_configuration, "SELECT * FROM pedido WHERE pedido_id = @Id", new { Id = pedidoId }).FirstOrDefault();
+
+            if (pedido != null)
+            {
+                if (valorPago > pedido.Saldo_devedor)
+                {
+                    return false;
+                }
+
+                pedido.Saldo_devedor = pedido.Saldo_devedor - valorPago;
+
+                var param = new DynamicParameters();
+                param.Add("@Id", pedido.Pedido_id);
+                param.Add("@SaldoDevedor", pedido.Saldo_devedor);
+
+                var query = @"
+                        UPDATE pedido
+                        SET
+                            data_atualizacao = NOW(),
+                            saldo_devedor = @SaldoDevedor
+                        WHERE pedido_id = @Id;
+                        ";
+
+                DataBase.Execute(_configuration, query, param);
+            }
+
+            return true;
         }
 
         public BuscarPedidoMap BuscarPedidoId(int pedidoId)
@@ -53,30 +85,30 @@ namespace carvao_app.Repository.Services
             parameters.Add("@Nome", $"%{q}%");
 
             var query = @"
-    SELECT 
-        c.nome AS NomeCliente, 
-        u.nome AS NomeVendedor, 
-        p.pedido_id, 
-        p.vendedorusuarioid, 
-        p.atendenteusuarioid, 
-        p.cliente_id, 
-        p.valor_total, 
-        p.valor_desconto, 
-        p.percentual_desconto, 
-        p.status_pedido_id, 
-        p.data_pedido, 
-        p.data_atendimento, 
-        p.data_atualizacao, 
-        p.observacao, 
-        p.status_pagamento_id, 
-        CONCAT(COALESCE(e.localidade, ''), ' - ', COALESCE(e.uf, '')) AS Localidade, 
-        p.saldo_devedor 
-    FROM pedido p 
-    JOIN cliente c ON p.cliente_id = c.cliente_id 
-    JOIN usuario u ON p.vendedorusuarioid = u.usuario_id 
-    LEFT JOIN endereco e ON c.cliente_id = e.cliente_id 
-    WHERE c.nome LIKE @Nome
-";
+                        SELECT 
+                            c.nome AS NomeCliente, 
+                            u.nome AS NomeVendedor, 
+                            p.pedido_id, 
+                            p.vendedorusuarioid, 
+                            p.atendenteusuarioid, 
+                            p.cliente_id, 
+                            p.valor_total, 
+                            p.valor_desconto, 
+                            p.percentual_desconto, 
+                            p.status_pedido_id, 
+                            p.data_pedido, 
+                            p.data_atendimento, 
+                            p.data_atualizacao, 
+                            p.observacao, 
+                            p.status_pagamento_id, 
+                            CONCAT(COALESCE(e.localidade, ''), ' - ', COALESCE(e.uf, '')) AS Localidade, 
+                            p.saldo_devedor 
+                        FROM pedido p 
+                        JOIN cliente c ON p.cliente_id = c.cliente_id 
+                        JOIN usuario u ON p.vendedorusuarioid = u.usuario_id 
+                        LEFT JOIN endereco e ON c.cliente_id = e.cliente_id 
+                        WHERE c.nome LIKE @Nome
+                    ";
             if (!string.IsNullOrEmpty(dtInicio) && !string.IsNullOrEmpty(dtFim))
             {
                 query += " AND p.data_pedido BETWEEN @DataInicio AND @DataFim";
