@@ -52,8 +52,6 @@ function Recibo() {
             alert('Houve um erro na solicitação BuscarPedidoId' + erro);
         });
 
-      
-
         api.get(`api/Pedidos/BuscarTipoPagamento`, res => {
             if (res.data) {
                 setTipoPagamento(res.data);
