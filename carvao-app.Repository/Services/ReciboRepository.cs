@@ -40,15 +40,20 @@ namespace carvao_app.Repository.Services
         {
             var recibo = DataBase.Execute<ReciboMap>(_configuration, "SELECT * FROM recibo WHERE recibo_id = @Id And ativo = 1", new { Id = reciboId }).FirstOrDefault();
 
+            var pedido = DataBase.Execute<PedidoMap>(_configuration, "SELECT * FROM pedido WHERE pedido_id = @Id", new { Id = recibo.pedido_id }).FirstOrDefault();
+
             string QueryUpdate = "Update recibo Set justificativa = @justificativa, ativo = 0 where recibo_id = @Id";
             var param = new DynamicParameters();
             param.Add("@justificativa", mensagem);
             param.Add("@Id", reciboId);
             DataBase.Execute(_configuration, QueryUpdate, param);
 
-            param = new DynamicParameters();
-            param.Add("@Saldo", recibo.valor_pago);
-            DataBase.Execute(_configuration, "UPDATE pedido set saldo_devedor = saldo_devedor + @Saldo", param);
+            if ((pedido.Saldo_devedor + recibo.valor_pago) <= pedido.Valor_total)
+            {
+                param = new DynamicParameters();
+                param.Add("@Saldo", recibo.valor_pago);
+                DataBase.Execute(_configuration, "UPDATE pedido set saldo_devedor = saldo_devedor + @Saldo", param);
+            }
 
             return 0;
         }
