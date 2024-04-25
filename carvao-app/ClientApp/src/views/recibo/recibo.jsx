@@ -43,7 +43,7 @@ function Recibo() {
         api.get(`api/Pedidos/BuscarPedidoId?PedidoId=${id}`, res => {
             console.log("BuscarPedidoId")
             console.log(res);
-            debugger;
+           
             if (res.data && res.data.pedido) {
                 setPedido(res.data.pedido);
                 setCliente(res.data.cliente);
@@ -183,8 +183,8 @@ function Recibo() {
             </Row>
             <Row>
                 <Col md={3}>
-                    <label>*Valor a Pagar:</label>
-                    <input disabled={showPdf} name='valor_pago' value={data.valor_pago} onChange={onChangevalor_pago} required min={1} className='form-control' type="text" />
+                    <label>*Valor a Pagar 123:</label>
+                    <input disabled={showPdf} name='valor_pago' value={data.valor_pago} onChange={onChangevalor_pago} required min={1} className='form-control' type="number"  />
                 </Col>
                 <Col md={4}>
                     <label>*Forma de Pagamento:</label>

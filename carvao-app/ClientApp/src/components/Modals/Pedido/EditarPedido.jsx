@@ -58,9 +58,23 @@ function ModalEditarPedido({ PedidoId, Produtos, Historico, Pedido, reloadPage }
         setProdutosAdicionados(novosProdutosAdicionados);
     }
 
+    //const onChangeValor = (produtoId, e) => {
+    //    const valorDescontoReais = parseFloat(e.target.value);
+    //    if (!isNaN(valorDescontoReais)) {
+    //        const updatedProdutosAdicionados = produtosAdicionados.map((produto) => {
+    //            if (produto.id === produtoId) {
+    //                return { ...produto, valorDesconto: valorDescontoReais, valorDescontoUnitario: valorDescontoReais };
+    //            }
+    //            return produto;
+    //        });
+    //        setProdutosAdicionados(updatedProdutosAdicionados);
+    //    }
+    //}
     const onChangeValor = (produtoId, e) => {
-        const valorDescontoReais = parseFloat(e.target.value);
-        if (!isNaN(valorDescontoReais)) {
+        const valor = e.target.value;
+     
+        const valorDescontoReais = valor === '' ? 0 : parseFloat(valor);
+        if (!isNaN(valorDescontoReais) || valor === '') {
             const updatedProdutosAdicionados = produtosAdicionados.map((produto) => {
                 if (produto.id === produtoId) {
                     return { ...produto, valorDesconto: valorDescontoReais, valorDescontoUnitario: valorDescontoReais };
@@ -69,7 +83,7 @@ function ModalEditarPedido({ PedidoId, Produtos, Historico, Pedido, reloadPage }
             });
             setProdutosAdicionados(updatedProdutosAdicionados);
         }
-    }
+    };
 
     const onAddProduto = () => {
         if (produtoSelecionado) {
@@ -285,10 +299,8 @@ function ModalEditarPedido({ PedidoId, Produtos, Historico, Pedido, reloadPage }
                                                         <input
                                                             type="number"
                                                             style={{ width: '50%' }}
-                                                            value={produto.valorDesconto || 0}
-                                                            onChange={(e) =>
-                                                                onChangeValor(produto.id, e)
-                                                            }
+                                                            value={produto.valorDesconto === 0 ? '' : produto.valorDesconto}
+                                                            onChange={(e) => onChangeValor(produto.id, e)}
                                                             step="0.01" // Permite inserir valores decimais
                                                         />
                                                     </td>

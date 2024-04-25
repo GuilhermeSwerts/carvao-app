@@ -118,6 +118,7 @@ function ModalNovoPedido(props) {
                                                         handleDescontoReaisChange(produto.produtoId, e)
                                                     }
                                                     step="0.01" // Permite inserir valores decimais
+
                                                 />
                                             </td>
                                             <td>

@@ -204,6 +204,7 @@ function TelaPedido() {
         setProdutosAdicionados(novosProdutosAdicionados);
     };
 
+
     const calcularValorTotalPedido = () => {
         let total = produtosAdicionados.reduce((acc, produto) => {
             const totalProdutoSemDesconto = produto.valor * produto.quantidade;
@@ -242,19 +243,19 @@ function TelaPedido() {
     };
 
     const handleDescontoReaisChange = (produtoId, event) => {
-
-        const valorDescontoReais = parseFloat(event.target.value);
+        const valor = event.target.value;
+        const valorDescontoReais = valor === '' ? 0 : parseFloat(valor);
         if (!isNaN(valorDescontoReais)) {
-            // Atualiza o desconto em reais do produto específico
             const updatedProdutosAdicionados = produtosAdicionados.map((produto) => {
                 if (produto.id === produtoId) {
-                    return { ...produto, valorDesconto: valorDescontoReais, valorDescontoUnitario: valorDescontoReais };
+                    return { ...produto, valorDesconto: valorDescontoReais };
                 }
                 return produto;
             });
             setProdutosAdicionados(updatedProdutosAdicionados);
         }
     };
+
 
     const ShowModalHistoricoPedidos = (cliente) => {
         setClienteSelecionado(cliente);

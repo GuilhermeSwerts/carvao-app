@@ -106,7 +106,7 @@ function ModalNovoPedido({
                                     <tr>
                                         <th>Nome</th>
                                         <th>Quantidade</th>
-                                        <th>Valor Desconto</th>
+                                        <th>Valor Desconto123</th>
                                         <th>Valor Total</th>
                                         <th></th>
                                     </tr>
@@ -121,12 +121,11 @@ function ModalNovoPedido({
                                                     <input
                                                         type="number"
                                                         style={{ width: '50%' }}
-                                                        value={produto.valorDesconto || 0}
-                                                        onChange={(e) =>
-                                                            handleDescontoReaisChange(produto.id, e)
-                                                        }
-                                                        step="0.01" // Permite inserir valores decimais
+                                                        value={produto.valorDesconto === 0 ? '' : produto.valorDesconto} // Isso permite que o campo seja apagado
+                                                        onChange={(e) => handleDescontoReaisChange(produto.id, e)}
+                                                        step="0.01"
                                                     />
+
                                                 </td>
                                                 <td>
                                                     R${" "}

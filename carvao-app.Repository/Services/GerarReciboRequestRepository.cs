@@ -8,7 +8,7 @@ namespace carvao_app.Repository.Services
 {
     public class GerarReciboRequestRepository
     {
-        public int ValorPagar { get; set; }
+        public decimal ValorPagar { get; set; }
         public int FormaPagamento { get; set; }
         public string NomePagador { get; set; }
         public string Observacao { get; set; }
