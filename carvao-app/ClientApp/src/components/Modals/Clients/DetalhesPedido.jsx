@@ -16,7 +16,7 @@ function DetalhesPedido({ historico, produtos, observacao,Pedido }) {
             SetValorTotal(historico[0].valor_total);
             setValorDesconto(historico[0].valor_desconto);
         }
-    }, []);
+    }, [historico, Pedido]);
 
     return (
         <>
