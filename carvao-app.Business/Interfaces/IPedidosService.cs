@@ -1,10 +1,6 @@
 ﻿using carvao_app.Models.Dtos;
 using carvao_app.Models.Requests;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace carvao_app.Business.Interfaces
 {
@@ -16,5 +12,6 @@ namespace carvao_app.Business.Interfaces
         List<HistoricoDto> HistoricoPedidosCliente(int id);
         void NovoPedido(NovoProdutoRequest request);
         bool AtualizarSaldoDevedor(int pedidoId, decimal valorPago);
+       
     }
 }

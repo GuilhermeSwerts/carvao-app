@@ -19,5 +19,7 @@ namespace carvao_app.Repository.Interfaces
         void NovoPedido(NovoPedidoRequestDb map);
 
         bool AtualizarSaldoDevedor(int pedidoId, decimal valorPago);
+
+        //public void AtualizartSatusPagamento(BuscarPedidoMap pedido);
     }
 }

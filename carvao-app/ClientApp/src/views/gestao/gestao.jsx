@@ -23,6 +23,7 @@ function Gestao() {
         })
     }
 
+
     const BuscarTodosProdutos = () => {
         api.get("/api/Produto/BuscarTodos", res => {
             setProdutos(res.data);

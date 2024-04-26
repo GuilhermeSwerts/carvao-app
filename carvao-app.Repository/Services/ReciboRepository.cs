@@ -87,6 +87,9 @@ namespace carvao_app.Repository.Services
                 param.Add("@HashRecibo", reciboMap.hash_recibo);
 
                 int id = DataBase.Execute<int>(_configuration, QueryInsert, param).FirstOrDefault();
+
+                //AtualizarStatusPagamento(recibo.Id, StatusPagamentoEnum.Concluido);
+
                 return id;
                 
 
@@ -96,6 +99,36 @@ namespace carvao_app.Repository.Services
                 throw ex;
             }
         }
+
+        //private void AtualizarStatusPagamento(int pedidoId, StatusPagamentoEnum status)
+        //{
+        //    try
+        //    {
+        //        var pedido = _pedidoRepository.BuscarPedidoId(pedidoId);
+
+        //        if (pedido != null)
+        //        {
+        //            if (pedido.Status_pedido_id != (int)status)
+        //            {
+        //                pedido.Status_pedido_id = (int)status;
+
+        //                Chamando o método corretamente
+
+        //                _pedidoRepository.AtualizartSatusPagamento(pedido);
+
+        //            }
+        //        }
+        //        else
+        //        {
+        //            throw new Exception("Pedido não encontrado.");
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("Erro ao atualizar o status do pagamento: " + ex.Message);
+        //    }
+        //}
+
 
     }
 }

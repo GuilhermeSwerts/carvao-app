@@ -21,7 +21,7 @@ namespace carvao_app.Business.Services
 
         public object BuscarReciboPorId(int reciboId)
         {
-           return _repository.BuscarReciboPorId(reciboId);
+            return _repository.BuscarReciboPorId(reciboId);
         }
 
         public object BuscarRecibosId(int pedidoId)
@@ -52,6 +52,7 @@ namespace carvao_app.Business.Services
                         Observacao = recibo.observacoes,
                         ValorPagar = recibo.valor_pago,
                         HashRecibo = hashRecibo,
+
                     };
 
                     recibo.hash_recibo = hashRecibo;
@@ -83,4 +84,5 @@ namespace carvao_app.Business.Services
             }
         }
     }
+
 }
