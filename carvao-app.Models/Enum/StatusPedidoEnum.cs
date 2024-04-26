@@ -6,13 +6,12 @@ using System.Threading.Tasks;
 
 namespace carvao_app.Models.Enum
 {
-    public enum StatusPagamentoEnum
+    public enum StatusPedidoEnum
     {
-         Aberto = 1,
-        Separação = 2,
+        Aberto = 1,
+        Separacao = 2,
         Despachado = 3,
-        Concluído = 4,
+        Concluido = 4,
         Cancelado = 5,
-
     }
 }

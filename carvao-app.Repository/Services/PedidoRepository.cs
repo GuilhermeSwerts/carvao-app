@@ -4,6 +4,7 @@ using carvao_app.Repository.Interfaces;
 using carvao_app.Repository.Maps;
 using carvao_app.Repository.Request;
 using Dapper;
+using carvao_app.Models.Enum; 
 using Microsoft.Extensions.Configuration;
 using MySqlX.XDevAPI;
 using System;
@@ -26,27 +27,29 @@ namespace carvao_app.Repository.Services
             _produtoRepository = produtoRepository;
             _clienteRepository = clienteRepository;
         }
-        //public void AtualizartSatusPagamento(BuscarPedidoMap pedido)
-        //{
-        //    //var pedidoMap = BuscarPedidoId(pedido.Pedido.Pedido_id);
 
-        //    if (pedidoMap != null)
-        //    {
-        //        if (pedidoMap.Status_pedido_id != (int)pedido.Pedido.Status_pagamento_id)
-        //        {
-        //            var param = new DynamicParameters();
-        //            param.Add("@StatusPagamentoId", pedido.Pedido.Status_pagamento_id);
-        //            param.Add("@PedidoId", pedido.Pedido.Pedido_id);
 
-        //            string query = "UPDATE pedido SET status_pagamento_id = @StatusPagamentoId WHERE pedido_id = @PedidoId";
-        //            DataBase.Execute(_configuration, query, param);
-        //        }
-        //    }
-        //    else
-        //    {
-        //        throw new Exception("Pedido não encontrado.");
-        //    }
-        //}
+        public bool AtualizarStatusPedido(int pedidoId, int statusPedido)
+        {
+            var pedido = DataBase.Execute<PedidoMap>(_configuration, "SELECT * FROM pedido WHERE pedido_id = @Id", new { Id = pedidoId }).FirstOrDefault();
+
+            if (pedido != null)
+            {
+                var param = new DynamicParameters();
+                param.Add("@Id", pedidoId);
+                param.Add("@Status_pedido_id", statusPedido);
+
+                var query = "UPDATE pedido SET status_pedido_id = @Status_pedido_id WHERE pedido_id = @Id";
+
+                DataBase.Execute(_configuration, query, param);
+
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
 
         public bool AtualizarSaldoDevedor(int pedidoId, decimal valorPago)
         {
@@ -81,11 +84,13 @@ namespace carvao_app.Repository.Services
                 }
                 else
                 {
+                    param.Add("@status_pagamento_id", StatusPagamentoEnum.Parcial);
                     query = @"
                         UPDATE pedido
                         SET
                             data_atualizacao = NOW(),
-                            saldo_devedor = @SaldoDevedor
+                            saldo_devedor = @SaldoDevedor,
+                            status_pagamento_id = @status_pagamento_id
                         WHERE pedido_id = @Id;
                         ";
 
@@ -176,6 +181,7 @@ namespace carvao_app.Repository.Services
 
         public List<StatusPedidoMap> BuscarTodosStatusPedido()
             => DataBase.Execute<StatusPedidoMap>(_configuration, "SELECT * FROM status_pedido", new { }).ToList();
+
 
         public void EditarPedido(EditarPedidoRequestDb map)
         {

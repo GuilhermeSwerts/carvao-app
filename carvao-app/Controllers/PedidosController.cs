@@ -2,6 +2,7 @@
 using carvao_app.Models.Requests;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System;
 
 namespace carvao_app.Controllers
 {
@@ -29,6 +30,23 @@ namespace carvao_app.Controllers
             catch (System.Exception)
             {
                 return BadRequest("Houve um erro, por favor tente novamente mais tarde!");
+            }
+        }
+        [HttpPost]
+        [Route("/api/pedidos/AtualizarStatusPedido")]
+        public IActionResult AtualizarStatusPedido([FromForm] string obj)
+        
+        {
+            try 
+            { 
+                 var request = JsonConvert.DeserializeObject<EditarStatusPedidoResquest>(obj);
+                _service.AtualizarStatusPedido(request.PedidoId, request.StatusPedidoId);
+                return Ok("Status do pedido atualizado com sucesso.");
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Erro ao atualizar status do pedido: " + ex.Message);
             }
         }
 
@@ -69,7 +87,7 @@ namespace carvao_app.Controllers
         {
             try
             {
-                var pedidos = _service.BuscarTodosPedidos(q,dtInicio, dtFim,GetUser());
+                var pedidos = _service.BuscarTodosPedidos(q, dtInicio, dtFim, GetUser());
                 return Ok(pedidos);
             }
             catch (System.Exception)
@@ -92,5 +110,8 @@ namespace carvao_app.Controllers
                 return BadRequest("Houve um erro, por favor tente novamente mais tarde!");
             }
         }
+
+       
+
     }
 }
