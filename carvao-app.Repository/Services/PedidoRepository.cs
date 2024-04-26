@@ -26,11 +26,32 @@ namespace carvao_app.Repository.Services
             _produtoRepository = produtoRepository;
             _clienteRepository = clienteRepository;
         }
+        //public void AtualizartSatusPagamento(BuscarPedidoMap pedido)
+        //{
+        //    //var pedidoMap = BuscarPedidoId(pedido.Pedido.Pedido_id);
+
+        //    if (pedidoMap != null)
+        //    {
+        //        if (pedidoMap.Status_pedido_id != (int)pedido.Pedido.Status_pagamento_id)
+        //        {
+        //            var param = new DynamicParameters();
+        //            param.Add("@StatusPagamentoId", pedido.Pedido.Status_pagamento_id);
+        //            param.Add("@PedidoId", pedido.Pedido.Pedido_id);
+
+        //            string query = "UPDATE pedido SET status_pagamento_id = @StatusPagamentoId WHERE pedido_id = @PedidoId";
+        //            DataBase.Execute(_configuration, query, param);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        throw new Exception("Pedido não encontrado.");
+        //    }
+        //}
 
         public bool AtualizarSaldoDevedor(int pedidoId, decimal valorPago)
         {
             var pedido = DataBase.Execute<PedidoMap>(_configuration, "SELECT * FROM pedido WHERE pedido_id = @Id", new { Id = pedidoId }).FirstOrDefault();
-
+            
             if (pedido != null)
             {
                 if (valorPago > pedido.Saldo_devedor)
@@ -43,14 +64,33 @@ namespace carvao_app.Repository.Services
                 var param = new DynamicParameters();
                 param.Add("@Id", pedido.Pedido_id);
                 param.Add("@SaldoDevedor", pedido.Saldo_devedor);
+                
 
-                var query = @"
+                var query = " ";
+                if (pedido.Saldo_devedor == 0)
+                {
+                    param.Add("@status_pagamento_id", StatusPagamentoEnum.Concluido);
+                    query = @"
+                        UPDATE pedido
+                        SET
+                            data_atualizacao = NOW(),
+                            saldo_devedor = @SaldoDevedor,
+                            status_pagamento_id = @status_pagamento_id
+                        WHERE pedido_id = @Id;
+                        ";
+                }
+                else
+                {
+                    query = @"
                         UPDATE pedido
                         SET
                             data_atualizacao = NOW(),
                             saldo_devedor = @SaldoDevedor
                         WHERE pedido_id = @Id;
                         ";
+
+                }
+
 
                 DataBase.Execute(_configuration, query, param);
             }

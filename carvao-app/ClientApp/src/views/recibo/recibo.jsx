@@ -43,7 +43,7 @@ function Recibo() {
         api.get(`api/Pedidos/BuscarPedidoId?PedidoId=${id}`, res => {
             console.log("BuscarPedidoId")
             console.log(res);
-           
+            debugger;
             if (res.data && res.data.pedido) {
                 setPedido(res.data.pedido);
                 setCliente(res.data.cliente);
@@ -177,14 +177,13 @@ function Recibo() {
                 </Col>
                 <Col md={6}>
                     <label>Valor Total Pago:</label>
-                    <input value={"R$ " + (pedido.valor_total - pedido.saldo_devedor + recibos.reduce((total, recibo) =>
-                       total + recibo.valor_pago, 0)).toFixed(2)}className='form-control' disabled type="text" />
+                    <input value={"R$ " + (pedido.valor_total - pedido.saldo_devedor).toFixed(2)}className='form-control' disabled type="text" />
                 </Col>
             </Row>
             <Row>
                 <Col md={3}>
-                    <label>*Valor a Pagar 123:</label>
-                    <input disabled={showPdf} name='valor_pago' value={data.valor_pago} onChange={onChangevalor_pago} required min={1} className='form-control' type="number"  />
+                    <label>*Valor a Pagar:</label>
+                    <input disabled={showPdf} name='valor_pago' value={data.valor_pago} onChange={onChangevalor_pago} required min={1} className='form-control' type="text" />
                 </Col>
                 <Col md={4}>
                     <label>*Forma de Pagamento:</label>
