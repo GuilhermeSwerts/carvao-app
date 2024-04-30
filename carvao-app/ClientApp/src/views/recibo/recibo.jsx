@@ -43,7 +43,6 @@ function Recibo() {
         api.get(`api/Pedidos/BuscarPedidoId?PedidoId=${id}`, res => {
             console.log("BuscarPedidoId")
             console.log(res);
-            debugger;
             if (res.data && res.data.pedido) {
                 setPedido(res.data.pedido);
                 setCliente(res.data.cliente);
@@ -211,6 +210,9 @@ function Recibo() {
                 </Col>
                 <Col md={2}>
                     <button onClick={handdleEnviar} style={{ width: '100%' }} className='btn btn-primary'>Gerar Recibo</button>
+                </Col>
+                <Col md={2}>
+                    <button onClick={handdleEnviar} style={{ width: '100%' }} className='btn btn-primary'>Editar Status Pedido</button>
                 </Col>
             </Row>}
             {showPdf && (

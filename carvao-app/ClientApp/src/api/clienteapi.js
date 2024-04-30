@@ -115,7 +115,7 @@ export const buscarPedidosPorCliente = async (clienteId) => {
 
 export const atualizarStatusPedido = async (pedido) => {
   try {
-    const response = await axios.post(`${API_URL}/Pedido/atualizarStatusPedido`, pedido, {
+      const response = await axios.post(`${API_URL}/Pedido/AtualizarStatusPedido`, pedido, {
       headers: {
         'Content-Type': 'application/json', 
       },

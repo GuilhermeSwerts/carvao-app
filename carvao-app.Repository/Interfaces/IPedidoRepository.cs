@@ -11,7 +11,7 @@ namespace carvao_app.Repository.Interfaces
     public interface IPedidoRepository
     {
         BuscarPedidoMap BuscarPedidoId(int pedidoId);
-        List<PedidoMap> BuscarTodosPedidos(string q, string dtInicio, string dtFim,UsuarioMap usuarioMap);
+        List<PedidoMap> BuscarTodosPedidos(string q, string dtInicio, string dtFim, UsuarioMap usuarioMap);
         List<StatusPagamentoMap> BuscarTodosStatusPagamento();
         List<StatusPedidoMap> BuscarTodosStatusPedido();
         void EditarPedido(EditarPedidoRequestDb map);
@@ -20,6 +20,6 @@ namespace carvao_app.Repository.Interfaces
 
         bool AtualizarSaldoDevedor(int pedidoId, decimal valorPago);
 
-        //public void AtualizartSatusPagamento(BuscarPedidoMap pedido);
+        public bool AtualizarStatusPedido(int pedidoId, int statusPedido);
     }
 }

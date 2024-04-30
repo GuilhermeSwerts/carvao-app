@@ -4,7 +4,7 @@ import ModalPedidosCliente from '../../components/Modals/Clients/PedidosCliente'
 import {
     buscarClientesPorNome,
     buscarPedidosPorCliente,
-    atualizarStatusPedido,
+    atualizarstatuspedido,
     enviarPedido,
 } from "../../api/clienteapi";
 
@@ -35,11 +35,13 @@ function TelaPedido() {
     const [showModalNovoProduto, setShowModalNovoProduto] = useState(false);
     const [showModalHistorico, setShowModalHistorico] = useState(false);
     const [historico, setHistorico] = useState([]);
+    const [status, setStatus] = useState([]);
 
     const fetchClientes = (query, dtInicio, dtFim) => {
         try {
             api.get(`api/Cliente/BuscarClientes?q=${query ? query : ""}&dtInicio=${dtInicio ? dtInicio : ""}&dtFim=${dtFim ? dtFim : ""}&valores=true`, res => {
                 setClientes(res.data);
+               /* setStatus(res.data)*/
             })
         } catch (error) {
             console.error("Erro ao buscar clientes:", error);
@@ -107,7 +109,7 @@ function TelaPedido() {
 
                 if (abaixo) {
                     alert(`Valor do pedido está a baixo que o valor minímo.
-          Desconto permitido até o valor de R$ ${total}`);
+                    Desconto permitido até o valor de R$ ${total}`);
                 }
 
                 return abaixo;
@@ -267,6 +269,17 @@ function TelaPedido() {
         })
     }
 
+    const handleatualizarstatuspedido = async (pedidoid, novostatus) => {
+        try {
+            // chama a função para atualizar o status do pedido
+            await atualizarstatuspedido({ pedidoid, novostatus });
+            alert('status do pedido atualizado com sucesso!');
+            // adicione qualquer lógica adicional aqui, se necessário
+        } catch (error) {
+            console.error('erro ao atualizar o status do pedido:', error);
+            alert('ocorreu um erro ao atualizar o status do pedido. por favor, tente novamente.');
+        }
+    };
     return (
         <div>
             <ModalNovoPedido

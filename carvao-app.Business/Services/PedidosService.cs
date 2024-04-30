@@ -1,5 +1,6 @@
 ﻿using carvao_app.Business.Interfaces;
 using carvao_app.Models.Dtos;
+using carvao_app.Models.Enum;
 using carvao_app.Models.Requests;
 using carvao_app.Repository.Interfaces;
 using carvao_app.Repository.Maps;
@@ -26,7 +27,7 @@ namespace carvao_app.Business.Services
             return pedido;
         }
 
-        public PedidoDto BuscarTodosPedidos(string q ,string dtInicio, string dtFim, Repository.Maps.UsuarioMap usuarioMap)
+        public PedidoDto BuscarTodosPedidos(string q, string dtInicio, string dtFim, Repository.Maps.UsuarioMap usuarioMap)
         {
             var pedidos = _repository.BuscarTodosPedidos(q, dtInicio, dtFim, usuarioMap);
             var stPagamento = _repository.BuscarTodosStatusPagamento();
@@ -71,7 +72,7 @@ namespace carvao_app.Business.Services
                 ValorDesconto = request.ValorDesconto,
                 ValorTotal = request.ValorTotal,
                 VendedorUsuarioId = request.VendedorUsuarioId,
-                StatusPagamentoId = 1,
+                StatusPagamentoId = 3,
                 PercentualDesconto = request.PercentualDesconto,
                 ProdutosAdicionado = MapProdutosAdicionado(request.ProdutosAdicionado)
             };
@@ -101,5 +102,15 @@ namespace carvao_app.Business.Services
         {
             return _repository.AtualizarSaldoDevedor(pedidoId, valorPago);
         }
+
+        public bool AtualizarStatusPedido(int pedidoId, int status)
+        {
+            var pedido = _repository.AtualizarStatusPedido(pedidoId, status);
+
+            return pedido;
+             
+        }
+
+
     }
 }
