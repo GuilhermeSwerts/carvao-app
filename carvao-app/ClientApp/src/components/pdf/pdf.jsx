@@ -76,7 +76,7 @@ export const ReciboPDF = ({ pedidoId, data, tipoPagamento, cliente, pedido, reci
 
                     <View style={styles.containerRow}>
                         <Text style={styles.detailTitle}>Valor Pago</Text>
-                        <Text style={styles.detailValue}>R$ {(data.valor_pago+"").replace('.',',')}</Text>
+                        <Text style={styles.detailValue}>R$ {(data.valor_pago+"").toFixed(2).replace('.',',')}</Text>
                     </View>
 
                     <View style={styles.containerRow}>
