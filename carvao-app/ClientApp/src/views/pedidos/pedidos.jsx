@@ -147,6 +147,9 @@ function TelaPedido() {
         data.append("obj", obj);
         try {
             api.post("api/Pedido/NovoPedido", data, res => {
+                const loader = document.getElementById(`loadingpanel`);
+                if (loader)
+                    loader.style.display = 'none';
                 alert("Pedido enviado com sucesso!");
                 setProdutoSelecionado(null);
                 setQuantidade(1);

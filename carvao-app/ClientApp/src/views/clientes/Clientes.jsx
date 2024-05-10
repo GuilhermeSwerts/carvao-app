@@ -63,6 +63,11 @@ function ClienteListView() {
             clienteData.PessoaFisica = isPessoaFisica;
             api.post(`api/Cliente/${clienteSelecionado ? "AtualizaDadosCliente" : "NovoCliente"}`,
                 clienteData, res => {
+
+                    const loader = document.getElementById(`loadingpanel`);
+                    if (loader)
+                        loader.style.display = 'none';
+
                     fetchClientes();
                     setModalAberto(false);
                     window.alert("Cliente salvo com sucesso!");

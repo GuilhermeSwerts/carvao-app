@@ -36,6 +36,9 @@ function Produtos() {
         data.append("data", JSON.stringify(produto));
         api.post("api/Produto", data, res => {
             BuscarTodosProdutos();
+            const loader = document.getElementById(`loadingpanel`);
+            if (loader)
+                loader.style.display = 'none';
             alert('Produto adicionado com sucesso!');
         }, erro => {
             alert(erro.response ? erro.response.data : "Houve um erro na solicitação!")
@@ -57,6 +60,9 @@ function Produtos() {
         data.append("data", JSON.stringify(produto));
         api.post("api/Produto/Editar", data, res => {
             BuscarTodosProdutos();
+            const loader = document.getElementById(`loadingpanel`);
+            if (loader)
+                loader.style.display = 'none';
             alert('Produto editado com sucesso!');
         }, erro => {
             alert(erro.response ? erro.response.data : "Houve um erro na solicitação!")
@@ -67,6 +73,9 @@ function Produtos() {
         if (window.confirm("Deseja realmente excluir esse produto?")) {
             api.delete(`api/Produto/${id}`, res => {
                 BuscarTodosProdutos();
+                const loader = document.getElementById(`loadingpanel`);
+                if (loader)
+                    loader.style.display = 'none';
                 alert('Produto excluído com sucesso!');
             }, erro => {
                 alert(erro.response ? erro.response.data : "Houve um erro na solicitação!")
