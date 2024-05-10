@@ -89,8 +89,8 @@ function GestaoTable(props) {
                                 <td data-label="Nome Vendedor">{produto.nomeVendedor}</td>
                                 <td data-label="Localidade">{produto.localidade}</td>
                                 <td data-label="Data Do Pedido">{format(produto.data_pedido, "dd/MM/yyyy")}</td>
-                                <td data-label="Valor Total Pedido (R$)">R$ {produto.valor_total.toFixed(2)}</td>
-                                <td data-label="Saldo Devedor (R$)">R$ {produto.saldo_devedor.toFixed(2)}</td>
+                                <td data-label="Valor Total Pedido (R$)">R$ {produto.valor_total.toFixed(2).replaceAll('.', ',')}</td>
+                                <td data-label="Saldo Devedor (R$)">R$ {produto.saldo_devedor.toFixed(2).replaceAll('.', ',')}</td>
                                 <td data-label="Status Pedido">{statusPedido.filter(x => x.status_pedido_id === produto.status_pedido_id)[0].nome}</td>
                                 <td data-label="Status Pagamento">{statusPagamento.filter(x => x.status_pagamento_id === produto.status_pagamento_id)[0].nome}</td>
                                 <td data-label="Ações" style={{ display: 'flex', gap: 10 }}>

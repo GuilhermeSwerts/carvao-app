@@ -28,6 +28,10 @@ function Produtos() {
             alert("Valor do produto deve ser maior que o valor minimo")
             return;
         }
+
+        produto.valor = (produto.valor + '').replaceAll(',', '.')
+        produto.valorMinimo = (produto.valor + '').replaceAll(',', '.')
+
         var data = new FormData();
         data.append("data", JSON.stringify(produto));
         api.post("api/Produto", data, res => {
@@ -43,6 +47,11 @@ function Produtos() {
             alert("Valor do produto deve ser maior que o valor minimo")
             return;
         }
+
+        produto.valor = (produto.valor + '').replaceAll(',', '.')
+        produto.valorMinimo = (produto.valorMinimo + '').replaceAll(',', '.')
+        produto.valor = parseFloat (produto.valor);
+        produto.valorMinimo = parseFloat (produto.valorMinimo);
 
         var data = new FormData();
         data.append("data", JSON.stringify(produto));
@@ -95,12 +104,20 @@ function Produtos() {
                                 produto.produto_id = produto.id
                                 return (
                                     <tr>
-                                        <td data-label="Id">{i + 1}</td>
+                                        <td data-label="Id">{produto.produto_id}</td>
                                         <td data-label="Nome Do Produto">{produto.nome}</td>
-                                        <td data-label="Valor Do Produto">R$ {produto.valor.toFixed(2)}</td>
-                                        <td data-label="Valor Mínimo">R$ {produto.valorMinimo.toFixed(2)}</td>
+                                        <td data-label="Valor Do Produto">R$ {produto.valor.toFixed(2).replaceAll('.', ',')}</td>
+                                        <td data-label="Valor Mínimo">R$ {produto.valorMinimo.toFixed(2).replaceAll('.', ',')}</td>
                                         <td data-label="Ações" style={{ display: 'flex', gap: 10 }}>
-                                            <Produto textSubmit="Atualizar Produto" classButton="btn btn-success" onSubmit={EditarProduto} tooltip='Editar Produto' Produto={produto} icon={<FaPencil size={20} color='#fff' />} />
+                                            <Produto
+                                                textSubmit="Atualizar Produto"
+                                                classButton="btn btn-success"
+                                                onSubmit={EditarProduto}
+                                                tooltip='Editar Produto'
+                                                Produto={produto}
+                                                top={true}
+                                                icon={<FaPencil size={20} color='#fff' />}
+                                            />
                                             <button onClick={() => ExcluirProduto(produto.id)} className='btn btn-danger'><FaTrash size={20} /></button>
                                         </td>
                                     </tr>

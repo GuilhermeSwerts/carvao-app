@@ -22,7 +22,8 @@ function ModalNovoPedido({
     observacao = "",
     setObservacao = () => { },
     handleEnviarPedido = () => { },
-    mensagem = ""
+    mensagem = "",
+    closeModalNovoPedido = () => { }
 }) {
 
     const getValue = () => produtoSelecionado && (quantidade * produtoSelecionado.valor).toFixed(2);
@@ -106,7 +107,7 @@ function ModalNovoPedido({
                                     <tr>
                                         <th>Nome</th>
                                         <th>Quantidade</th>
-                                        <th>Valor Desconto123</th>
+                                        <th>Valor Desconto</th>
                                         <th>Valor Total</th>
                                         <th></th>
                                     </tr>
@@ -124,6 +125,7 @@ function ModalNovoPedido({
                                                         value={produto.valorDesconto === 0 ? '' : produto.valorDesconto} // Isso permite que o campo seja apagado
                                                         onChange={(e) => handleDescontoReaisChange(produto.id, e)}
                                                         step="0.01"
+                                                        min={0}
                                                     />
 
                                                 </td>
@@ -182,7 +184,7 @@ function ModalNovoPedido({
                 </div>
             </Modal.Body>
             <Modal.Footer>
-                <button className='btn btn-danger' onClick={() => setModal(false)}>Cancelar</button>
+                <button className='btn btn-danger' onClick={() => closeModalNovoPedido()}>Cancelar</button>
                 {produtosAdicionados.length > 0 && <button className='btn btn-primary' onClick={handleEnviarPedido}>Enviar Pedido</button>}
             </Modal.Footer>
         </Modal >

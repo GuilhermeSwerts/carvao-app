@@ -41,7 +41,7 @@ function TelaPedido() {
         try {
             api.get(`api/Cliente/BuscarClientes?q=${query ? query : ""}&dtInicio=${dtInicio ? dtInicio : ""}&dtFim=${dtFim ? dtFim : ""}&valores=true`, res => {
                 setClientes(res.data);
-               /* setStatus(res.data)*/
+                /* setStatus(res.data)*/
             })
         } catch (error) {
             console.error("Erro ao buscar clientes:", error);
@@ -148,12 +148,18 @@ function TelaPedido() {
         try {
             api.post("api/Pedido/NovoPedido", data, res => {
                 alert("Pedido enviado com sucesso!");
-                setClienteNome("");
-                setClienteSelecionado(null);
                 setProdutoSelecionado(null);
                 setQuantidade(1);
                 setValorTotal(0);
                 setObservacao("");
+                setProdutosAdicionados([]);
+                if (!window.confirm("Deseja realizar outro pedido com o mesmo cliente?")) {
+                    setClienteNome("");
+                    setClienteSelecionado(null);
+                    setProdutoSelecionado(null);
+                    setShowModalNovoProduto(false);
+                }
+
             }, erro => {
                 alert("Houve um erro na solicitação!\nPor favor tente novamente mais tarde.");
             })
@@ -280,12 +286,26 @@ function TelaPedido() {
             alert('ocorreu um erro ao atualizar o status do pedido. por favor, tente novamente.');
         }
     };
+
+    const closeModalNovoPedido = () => {
+        setProdutoSelecionado(null);
+        setQuantidade(1);
+        setValorTotal(0);
+        setObservacao("");
+        setProdutosAdicionados([]);
+        setClienteNome("");
+        setClienteSelecionado(null);
+        setProdutoSelecionado(null);
+        setShowModalNovoProduto(false);
+    }
+
     return (
         <div>
             <ModalNovoPedido
                 CalcularValorMinimo={CalcularValorMinimo}
                 modalAberto={showModalNovoProduto}
                 setModal={setShowModalNovoProduto}
+                closeModalNovoPedido={closeModalNovoPedido}
                 produtos={produtos}
                 setProdutoSelecionado={setProdutoSelecionado}
                 clienteSelecionado={clienteSelecionado}
@@ -317,7 +337,7 @@ function TelaPedido() {
                     <Filter
                         filtroNome={clienteNome}
                         handleInputChange={handleInputChange}
-                        handleAbrirModal={handleAbrirModal}
+                        handleAbrirModal={() => window.location.href = '/cliente'}
                         setDataInicio={setDataInicio}
                         setDataFim={setDataFim}
                         fetchClientes={fetchClientes}

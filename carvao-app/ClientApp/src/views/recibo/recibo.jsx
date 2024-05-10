@@ -17,7 +17,7 @@ function Recibo() {
 
 
     const [data, setData] = useState({
-        valor_pago: 0,
+        valor_pago: '',
         forma_pagamento: 1,
         nome_pagador: '',
         observacoes: '',
@@ -46,7 +46,7 @@ function Recibo() {
             if (res.data && res.data.pedido) {
                 setPedido(res.data.pedido);
                 setCliente(res.data.cliente);
-            }            
+            }
         }, erro => {
             alert('Houve um erro na solicitação BuscarPedidoId' + erro);
         });
@@ -71,37 +71,45 @@ function Recibo() {
     const onChangeValue = e => setData({ ...data, [e.target.name]: e.target.value });
 
     const onChangevalor_pago = e => {
-
         let valorRestante = (pedido.valor_total - (pedido.valor_total - pedido.saldo_devedor));
         if (e.target.value > valorRestante) {
             alert(`Valor acima do valor total a serem pagos\nValor máximo: R$ ${valorRestante.toFixed(2)}.`);
             return;
         }
 
-        setData({ ...data, ["valor_pago"]: e.target.value });
+        setData({ ...data, ["valor_pago"]: (e.target.value + "").replaceAll('.', ',') });
     }
 
     const handdleEnviar = () => {
+        let valorRestante = (pedido.valor_total - (pedido.valor_total - pedido.saldo_devedor));
+
+        if (!data.valor_pago || data.valor_pago == '' || data.valor_pago < 1) {
+            data.valor_pago = valorRestante;
+            onChangevalor_pago({ target: { value: valorRestante } })
+            if (!window.confirm("**Valor pago não foi informado! \n Deseja realizar recibo com valor total do saldo devedor?")) {
+                return;
+            }
+        }
+
         if (!pedido || !pedido.pedido_id || !pedidoId || pedidoId == 0) {
             alert("Pedido não está carregado ou pedidoId não está disponível");
             return;
         }
 
-        let valorRestante = (pedido.valor_total - (pedido.valor_total - pedido.saldo_devedor));
         if (data.valor_pago > valorRestante) {
-            alert(`Valor acima do valor total a serem pagos\nValor máximo: R$ ${valorRestante.toFixed(2)}.`);
+            alert(`Valor acima do valor total a serem pagos\nValor máximo: R$ ${valorRestante.toFixed(2).replaceAll('.', ',')}.`);
             return;
         }
 
         if (window.confirm("Deseja realmente gerar um recibo?")) {
 
             const formData = new FormData();
-
+            data.valor_pago = data.valor_pago.replaceAll(',', '.');
             formData.append("data", JSON.stringify(data));
             console.log(data);
 
             api.post("api/Recibo/GerarRecibo", formData, resGerarRecibo => {
-                
+
                 setReciboId("resGerarRecibo.data");
                 setReciboId(resGerarRecibo.data);
                 setShowPdf(true);
@@ -170,18 +178,22 @@ function Recibo() {
                 </Col>
             </Row>
             <Row>
-                <Col md={6}>
-                    <label>Valor Total:</label>
-                    <input value={"R$ " + pedido.valor_total.toFixed(2)} className='form-control' disabled type="text" />
+                <Col md={4}>
+                    <label>Valor Total Do Pedido:</label>
+                    <input value={"R$ " + pedido.valor_total.toFixed(2).replaceAll('.', ',')} className='form-control' disabled type="text" />
                 </Col>
-                <Col md={6}>
+                <Col md={4}>
                     <label>Valor Total Pago:</label>
-                    <input value={"R$ " + (pedido.valor_total - pedido.saldo_devedor).toFixed(2)}className='form-control' disabled type="text" />
+                    <input value={"R$ " + (pedido.valor_total - pedido.saldo_devedor).toFixed(2).replaceAll('.', ',')} className='form-control' disabled type="text" />
+                </Col>
+                <Col md={4}>
+                    <label>Saldo Devedor:</label>
+                    <input value={"R$ " + (pedido.saldo_devedor).toFixed(2).replaceAll('.', ',')} className='form-control' disabled type="text" />
                 </Col>
             </Row>
             <Row>
                 <Col md={3}>
-                    <label>*Valor a Pagar:</label>
+                    <label>*Valor Pago:</label>
                     <input disabled={showPdf} name='valor_pago' value={data.valor_pago} onChange={onChangevalor_pago} required min={1} className='form-control' type="text" />
                 </Col>
                 <Col md={4}>
@@ -205,33 +217,36 @@ function Recibo() {
             </Row>
             <br />
             {!showPdf && <Row style={{ display: 'flex', justifyContent: 'end', alignItems: 'end', gap: 10 }}>
-                <Col md={2}>
+                <Col md={3}>
                     <button onClick={() => window.history.back()} style={{ width: '100%' }} className='btn btn-danger'>Cancelar</button>
                 </Col>
-                <Col md={2}>
+                <Col md={3}>
                     <button onClick={handdleEnviar} style={{ width: '100%' }} className='btn btn-primary'>Gerar Recibo</button>
                 </Col>
-                <Col md={2}>
+                <Col md={3}>
                     <button onClick={handdleEnviar} style={{ width: '100%' }} className='btn btn-primary'>Editar Status Pedido</button>
                 </Col>
             </Row>}
-            {showPdf && (
-                <button type='button' className='btn btn-primary' style={{ marginTop: "20px" }}>
-                    <PDFDownloadLink
-                        style={{ color: '#fff', textDecoration: 'none', fontWeight: '700' }}
-                        document={
-                            <ReciboPDF pedidoId={pedidoId} data={reciboCorrente}
-                                tipoPagamento={tipoPagamento} cliente={cliente}
-                                pedido={pedido} reciboId={reciboId} />
-                        }
-                        fileName={`recibo-${reciboId}.pdf`}
-                    >
-                        {({ blob, url, loading, error }) =>
-                            loading ? "Carregando documento..." : "Baixar PDF"
-                        }
-                    </PDFDownloadLink>
-                </button>
-            )}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: "center" }}>
+                {showPdf && <a onClick={() => window.history.back()} className='btn btn-danger' >Voltar</a>}
+                {showPdf && (
+                    <button type='button' className='btn btn-primary' style={{ marginTop: "20px" }}>
+                        <PDFDownloadLink
+                            style={{ color: '#fff', textDecoration: 'none', fontWeight: '700' }}
+                            document={
+                                <ReciboPDF pedidoId={pedidoId} data={reciboCorrente}
+                                    tipoPagamento={tipoPagamento} cliente={cliente}
+                                    pedido={pedido} reciboId={reciboId} />
+                            }
+                            fileName={`recibo-${reciboId}.pdf`}
+                        >
+                            {({ blob, url, loading, error }) =>
+                                loading ? "Carregando documento..." : "Baixar PDF"
+                            }
+                        </PDFDownloadLink>
+                    </button>
+                )}
+            </div>
         </form>}
         {!cliente && !pedido && <div style={{ textAlign: 'center' }}>
             <h1>Pedido não encontrado!</h1>

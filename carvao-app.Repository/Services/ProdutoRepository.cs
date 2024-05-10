@@ -27,7 +27,7 @@ namespace carvao_app.Repository.Services
 
             var retorno = DataBase.Execute<ProdutoMap>(_configuration, query, new());
 
-            return retorno.OrderBy(c => c.Nome).ToList();
+            return retorno.OrderBy(c => c.Produto_id).ToList();
         }
 
         public List<PedidoProdutoMap> BuscarProdutosByClienteId(int id)
