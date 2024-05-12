@@ -88,7 +88,7 @@ function ClienteListView() {
     };
 
     const toggleStatus = async (statusAtual, id) => {
-        if (window.confirm("Deseja realmente atualizar o status desse cliente?"))
+        if (await window.confirm("Deseja realmente atualizar o status desse cliente?"))
             try {
                 api.post(`api/Cliente/${statusAtual ? "AtivaCliente" : "InativaCliente"}/${id}`,
                     {}, res => {

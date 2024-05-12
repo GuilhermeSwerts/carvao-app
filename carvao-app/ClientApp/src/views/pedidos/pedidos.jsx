@@ -146,17 +146,21 @@ function TelaPedido() {
         });
         data.append("obj", obj);
         try {
-            api.post("api/Pedido/NovoPedido", data, res => {
+            api.post("api/Pedido/NovoPedido", data, async res => {
                 const loader = document.getElementById(`loadingpanel`);
                 if (loader)
                     loader.style.display = 'none';
+
                 alert("Pedido enviado com sucesso!");
                 setProdutoSelecionado(null);
                 setQuantidade(1);
                 setValorTotal(0);
                 setObservacao("");
                 setProdutosAdicionados([]);
-                if (!window.confirm("Deseja realizar outro pedido com o mesmo cliente?")) {
+
+                var mesmoCliente = await window.confirm("Deseja realizar outro pedido para o mesmo cliente");
+                
+                if (!mesmoCliente) {
                     setClienteNome("");
                     setClienteSelecionado(null);
                     setProdutoSelecionado(null);

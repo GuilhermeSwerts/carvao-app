@@ -53,8 +53,8 @@ function Produtos() {
 
         produto.valor = (produto.valor + '').replaceAll(',', '.')
         produto.valorMinimo = (produto.valorMinimo + '').replaceAll(',', '.')
-        produto.valor = parseFloat (produto.valor);
-        produto.valorMinimo = parseFloat (produto.valorMinimo);
+        produto.valor = parseFloat(produto.valor);
+        produto.valorMinimo = parseFloat(produto.valorMinimo);
 
         var data = new FormData();
         data.append("data", JSON.stringify(produto));
@@ -69,8 +69,9 @@ function Produtos() {
         })
     }
 
-    const ExcluirProduto = (id) => {
-        if (window.confirm("Deseja realmente excluir esse produto?")) {
+    const ExcluirProduto = async (id) => {
+        var excluir = await window.confirm("Deseja realmente excluir esse produto?")
+        if (excluir) {
             api.delete(`api/Produto/${id}`, res => {
                 BuscarTodosProdutos();
                 const loader = document.getElementById(`loadingpanel`);

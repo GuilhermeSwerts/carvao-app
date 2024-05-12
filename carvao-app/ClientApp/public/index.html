@@ -1,41 +1,186 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="theme-color" content="#000000">
-    <base href="%PUBLIC_URL%/" />
-    <!--
-      manifest.json provides metadata used when your web app is added to the
-      homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
-    -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
-    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
 
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
-    <title>carvao_app</title>
-  </head>
-  <body>
-    <noscript>
-      You need to enable JavaScript to run this app.
-    </noscript>
-    <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="theme-color" content="#000000">
+  <base href="%PUBLIC_URL%/" />
+  <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
+  <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
+  <title>carvao_app</title>
+</head>
+<style>
+  .fade .modal .show {
+    z-index: 1050 !important;
+  }
 
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
+  .custom-alert {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 1062;
+  }
 
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
-  </body>
+  .ok-btn {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+
+  .overlay-alert-ok,
+  .overlay-alert {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1060;
+    display: none;
+  }
+
+  .overlay-alert-ok {
+    z-index: 1061 !important;
+  }
+
+  .custom-confirm {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 1061;
+  }
+
+  .button-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .confirm-btn {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+</style>
+
+<body>
+  <noscript>
+    You need to enable JavaScript to run this app.
+  </noscript>
+  <div id="root"></div>
+</body>
+<script>
+  function fecharAlerta() {
+    var overlay = document.querySelector('.overlay-alert-ok');
+    var alertBox = document.querySelector('.custom-alert');
+    if (alertBox && overlay) {
+      alertBox.parentNode.removeChild(alertBox);
+      overlay.parentNode.removeChild(overlay);
+    }
+  }
+
+  function fecharConfirmacao(result) {
+    var overlay = document.querySelector('.overlay-alert');
+    var confirmBox = document.querySelector('.custom-confirm');
+    if (confirmBox && overlay) {
+      confirmBox.parentNode.removeChild(confirmBox);
+      overlay.parentNode.removeChild(overlay);
+    }
+    window.__confirmResult(result);
+  }
+
+  window.confirm = function (msg) {
+    // Criando a sobreposição de fundo
+    var overlay = document.createElement('div');
+    overlay.className = 'overlay-alert';
+    overlay.style.display = 'block';
+
+    // Criando uma div personalizada para a caixa de diálogo de confirmação
+    var confirmBox = document.createElement('div');
+    confirmBox.className = 'custom-confirm';
+
+    // Adicionando a mensagem ao elemento
+    var mensagem = document.createElement('p');
+    mensagem.textContent = msg;
+    confirmBox.appendChild(mensagem);
+
+    // Criando a div para conter os botões
+    var buttonContainer = document.createElement('div');
+    buttonContainer.className = 'button-container';
+
+    // Adicionando os botões de confirmação à div
+    var simButton = document.createElement('button');
+    simButton.innerHTML = 'Sim';
+    simButton.className = 'confirm-btn';
+    simButton.onclick = function () { return fecharConfirmacao(true); };
+    buttonContainer.appendChild(simButton);
+
+    var naoButton = document.createElement('button');
+    naoButton.innerHTML = 'Não';
+    naoButton.className = 'confirm-btn';
+    naoButton.onclick = function () { return fecharConfirmacao(false); };
+    buttonContainer.appendChild(naoButton);
+
+    // Adicionando a div de botões à caixa de diálogo de confirmação
+    confirmBox.appendChild(buttonContainer);
+
+    // Adicionando a caixa de diálogo de confirmação ao corpo do documento
+    document.body.appendChild(confirmBox);
+    document.body.appendChild(overlay);
+
+    // Bloquear a thread principal até que o usuário clique em "Sim" ou "Não"
+    // e retornar o resultado correspondente
+    return new Promise(function (resolve, reject) {
+      window.__confirmResult = function (result) {
+        resolve(result);
+      };
+    });
+  };
+
+
+  window.alert = function (msg) {
+    var overlay = document.createElement('div');
+    overlay.className = 'overlay-alert-ok';
+    overlay.style.display = 'block';
+
+    var alertBox = document.createElement('div');
+    alertBox.className = 'custom-alert';
+
+    var mensagem = document.createElement('p');
+    mensagem.textContent = msg;
+    alertBox.appendChild(mensagem);
+
+    var okButton = document.createElement('button');
+    okButton.innerHTML = 'OK';
+    okButton.className = 'ok-btn';
+    okButton.onclick = fecharAlerta;
+    alertBox.appendChild(okButton);
+
+    document.body.appendChild(alertBox);
+    document.body.appendChild(overlay);
+  };
+</script>
+
 </html>

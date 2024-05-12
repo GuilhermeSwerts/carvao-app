@@ -80,13 +80,14 @@ function Recibo() {
         setData({ ...data, ["valor_pago"]: (e.target.value + "").replaceAll('.', ',') });
     }
 
-    const handdleEnviar = () => {
+    const handdleEnviar = async () => {
         let valorRestante = (pedido.valor_total - (pedido.valor_total - pedido.saldo_devedor));
 
         if (!data.valor_pago || data.valor_pago == '' || data.valor_pago < 1) {
             data.valor_pago = valorRestante;
             onChangevalor_pago({ target: { value: valorRestante } })
-            if (!window.confirm("**Valor pago não foi informado! \n Deseja realizar recibo com valor total do saldo devedor?")) {
+            var setValorTotal = await window.confirm("**Valor pago não foi informado! \n Deseja realizar recibo com valor total do saldo devedor?");
+            if (!setValorTotal) {
                 return;
             }
         }
@@ -101,7 +102,8 @@ function Recibo() {
             return;
         }
 
-        if (window.confirm("Deseja realmente gerar um recibo?")) {
+        var gerar = await window.confirm("Deseja realmente gerar um recibo?")
+        if (gerar) {
 
             const formData = new FormData();
             data.valor_pago = data.valor_pago.replaceAll(',', '.');
