@@ -173,7 +173,8 @@ namespace carvao_app.Repository.Services
                 pedido.Produtos = (_produtoRepository.BuscarProdutosByClienteId(pedido.Cliente_id))
                     .Where(x => x.Pedido_id == pedido.Pedido_id).ToList();
             }
-            return pedidos;
+
+            return pedidos.OrderBy(x => x.Status_pedido_id != 4).ToList();
         }
 
         public List<StatusPagamentoMap> BuscarTodosStatusPagamento()
