@@ -161,11 +161,11 @@ namespace carvao_app.Repository.Services
                 parameters.Add("@DataFim", dtFim + " 23:59:59");
             }
 
-            //if ((int)ETipoUsuario.Vendedor == usuarioMap.Tipo_usuario_id)
-            //{
-            //    parameters.Add("@Id", usuarioMap.Usuario_id);
-            //    query += " AND p.vendedorusuarioid = @Id";
-            //}
+            if ((int)ETipoUsuario.Vendedor == usuarioMap.Tipo_usuario_id)
+            {
+                parameters.Add("@Id", usuarioMap.Usuario_id);
+                query += " AND p.vendedorusuarioid = @Id";
+            }
 
             var pedidos = DataBase.Execute<PedidoMap>(_configuration, query, parameters).ToList();
             foreach (var pedido in pedidos)
