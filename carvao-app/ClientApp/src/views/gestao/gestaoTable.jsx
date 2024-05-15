@@ -123,7 +123,7 @@ function GestaoTable(props) {
                             </tr>
                         ))}
                         {pedidos.length === 0 && <tr>
-                            <td colSpan="10"><span>Não foi encontrado nenhum cliente...</span></td>
+                            <td colSpan="10"><span>Não foi encontrado nenhum pedido...</span></td>
                         </tr>}
                     </tbody>
                 </table>

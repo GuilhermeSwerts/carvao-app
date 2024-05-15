@@ -174,7 +174,9 @@ namespace carvao_app.Repository.Services
                     .Where(x => x.Pedido_id == pedido.Pedido_id).ToList();
             }
 
-            return pedidos.OrderBy(x => x.Status_pedido_id != 4).ToList();
+            var pedidosOrganizados = pedidos.OrderBy(x => x.Status_pedido_id == 4).ToList();
+
+            return pedidosOrganizados;
         }
 
         public List<StatusPagamentoMap> BuscarTodosStatusPagamento()
