@@ -225,9 +225,6 @@ function Recibo() {
                 <Col md={3}>
                     <button onClick={handdleEnviar} style={{ width: '100%' }} className='btn btn-primary'>Gerar Recibo</button>
                 </Col>
-                <Col md={3}>
-                    <button onClick={handdleEnviar} style={{ width: '100%' }} className='btn btn-primary'>Editar Status Pedido</button>
-                </Col>
             </Row>}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: "center" }}>
                 {showPdf && <a onClick={() => window.history.back()} className='btn btn-danger' >Voltar</a>}
