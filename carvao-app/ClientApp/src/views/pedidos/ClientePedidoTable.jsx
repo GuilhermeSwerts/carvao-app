@@ -25,7 +25,7 @@ function ClientePedidoTable({
                                 <td data-label="Nome">{cliente.nome}</td>
                                 <td data-label="Email">{cliente.email}</td>
                                 <td data-label="Telefone">{cliente.telefone}</td>
-                                <td data-label="Valor Total Pedidos (R$)">R$ {cliente.valorTotalPedidos.toFixed(2)}</td>
+                                <td data-label="Valor Total Pedidos (R$)">R$ {cliente.valorTotalPedidos.toFixed(2).replaceAll('.', ',')}</td>
                                 <td data-label="Ação" style={{ display: 'flex', gap: 10 }}>
                                     <ButtonTooltip
                                         text="Novo Pedido"

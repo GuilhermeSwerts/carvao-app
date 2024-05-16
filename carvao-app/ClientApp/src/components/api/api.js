@@ -18,20 +18,24 @@ export default class Api {
     execute = (api, funcResult, funcError) => {
 
         if (window.Wait != undefined) window.Wait(true);
-        document.getElementById("loadingpanel").style.display = 'block';
+        var loader = document.getElementById("loadingpanel");
+        if (loader)
+            loader.style.display = 'block';
 
         api.then((response) => {
             if (funcResult != undefined)
                 funcResult(response);
             if (window.Wait != undefined)
                 window.Wait(false);
-            document.getElementById("loadingpanel").style.display = 'none';
+            if (loader)
+                loader.style.display = 'none';
         })
             .catch((err) => {
                 console.log({ error: err });
                 if (err.response != null && err.response.status == 401) {
                     window.Wait(false);
-                    document.getElementById("loadingpanel").style.display = 'none';
+                    if (loader)
+                        loader.style.display = 'none';
                     window.location.href = this.loginPage;
                     return;
                 }
@@ -39,7 +43,8 @@ export default class Api {
                     funcError(err);
                 if (window.Wait != undefined)
                     window.Wait(false);
-                document.getElementById("loadingpanel").style.display = 'none';
+                if (loader)
+                    loader.style.display = 'none';
             });
     }
 

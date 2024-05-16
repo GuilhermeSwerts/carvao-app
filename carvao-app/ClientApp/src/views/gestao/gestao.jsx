@@ -6,6 +6,7 @@ import { api } from '../../components/api/api';
 
 function Gestao() {
     const [pedidos, setPedidos] = useState([]);
+    const [pedidosFiltro, setPedidoFiltro] = useState([]);
     const [statusPagamento, setStatusPagamento] = useState([]);
     const [statusPedido, setStatusPedido] = useState([]);
     const [dtInicio, setDtInicio] = useState('');
@@ -18,6 +19,7 @@ function Gestao() {
             setStatusPagamento(res.data.statusPagamento);
             setStatusPedido(res.data.statusPedido);
             setPedidos(res.data.pedidos);
+            setPedidoFiltro(res.data.pedidos);
         }, erro => {
             alert('Houve um erro na solicitação!');
         })
@@ -32,8 +34,16 @@ function Gestao() {
         })
     }
 
-
     useEffect(() => { BuscarTodosPedidos(); BuscarTodosProdutos(); }, []);
+
+    const onChangeFiltroStatusPedido = e => {
+        const value = e.target.value;
+        if (value == "0" || value == 0) {
+            setPedidoFiltro(pedidos);
+        } else {
+            setPedidoFiltro(pedidos.filter(x => x.status_pedido_id === parseInt(value)))
+        }
+    }
 
     return (
         <section className='app'>
@@ -48,12 +58,15 @@ function Gestao() {
                     showNovoCliente={false}
                     showFiltroNome={true}
                     filtroNome={nome}
+                    filtroStatusPedido={true}
+                    statusPedido={statusPedido}
+                    onChangeFiltroStatusPedido={onChangeFiltroStatusPedido}
                     handleInputChange={e => { setNome(e.target.value); BuscarTodosPedidos() }}
                 />
                 <GestaoTable
                     ReloadPage={BuscarTodosPedidos}
                     produtos={produtos}
-                    pedidos={pedidos}
+                    pedidos={pedidosFiltro}
                     statusPedido={statusPedido}
                     statusPagamento={statusPagamento}
                 />
