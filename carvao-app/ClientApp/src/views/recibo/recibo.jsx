@@ -211,9 +211,6 @@ function Recibo() {
                 <Col md={2}>
                     <button onClick={handdleEnviar} style={{ width: '100%' }} className='btn btn-primary'>Gerar Recibo</button>
                 </Col>
-                <Col md={2}>
-                    <button onClick={handdleEnviar} style={{ width: '100%' }} className='btn btn-primary'>Editar Status Pedido</button>
-                </Col>
             </Row>}
             {showPdf && (
                 <button type='button' className='btn btn-primary' style={{ marginTop: "20px" }}>
