@@ -3,6 +3,7 @@ import { FaPencil, FaPlus, FaTrash } from 'react-icons/fa6';
 import { GetDataUser } from '../../util/GetDataUser';
 import { api } from '../../components/api/api';
 import Produto from '../../components/Modals/Produto/Produto';
+import Filter from '../../components/filter/filter';
 
 function Produtos() {
     const usuario = GetDataUser();
@@ -86,6 +87,13 @@ function Produtos() {
 
     return (
         <section className='content'>
+            <div className="container-table">
+                <Filter
+                    filtroNome={''}
+                    handleInputChange={()=>{}}
+                />
+                <br />
+            </div>
             <div className='row'>
                 <div className="col-md-12">
                     <div style={{ display: 'flex', justifyContent: 'end', marginRight: 20 }}>
