@@ -7,6 +7,7 @@ import DetalhesDoCliente from '../../components/Modals/Clients/DetalhesCliente';
 import Filter from '../../components/filter/filter';
 import { GetDataUser } from "../../util/GetDataUser";
 import { buscarClientes } from "../../components/api/apiMiddle";
+import { eTipoDownload } from "../../enum/eTipoDownload";
 
 function ClienteListView() {
     const [clientes, setClientes] = useState([]);
@@ -22,7 +23,7 @@ function ClienteListView() {
 
     const fetchClientes = (query, dtInicio, dtFim) => {
         try {
-            buscarClientes(query, dtInicio, dtFim).then(result => {                
+            buscarClientes(query, dtInicio, dtFim).then(result => {
                 setClientes(result.data);
             }).catch(error => {
                 console.error("Erro ao buscar clientes:", error);
@@ -131,6 +132,8 @@ function ClienteListView() {
                         dataInicio={dataInicio}
                         dataFim={dataFim}
                         showNovoCliente={true}
+                        tipoDownload={eTipoDownload.Clientes}
+                        extrairDados={true}
                     />
                     <br />
                     <ClienteListViewTable

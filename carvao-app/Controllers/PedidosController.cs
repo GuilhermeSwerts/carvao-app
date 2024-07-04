@@ -1,5 +1,6 @@
 ﻿using carvao_app.Business.Interfaces;
 using carvao_app.Models.Requests;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;

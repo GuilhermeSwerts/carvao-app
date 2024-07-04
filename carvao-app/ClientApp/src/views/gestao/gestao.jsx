@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
+import {eTipoDownload} from '../../enum/eTipoDownload';
 import Filter from '../../components/filter/filter';
 import GestaoTable from './gestaoTable';
 import { api } from '../../components/api/api';
@@ -62,6 +63,8 @@ function Gestao() {
                     statusPedido={statusPedido}
                     onChangeFiltroStatusPedido={onChangeFiltroStatusPedido}
                     handleInputChange={e => { setNome(e.target.value); BuscarTodosPedidos() }}
+                    extrairDados={true}
+                    tipoDownload={eTipoDownload.GestaoPedidos}
                 />
                 <GestaoTable
                     ReloadPage={BuscarTodosPedidos}

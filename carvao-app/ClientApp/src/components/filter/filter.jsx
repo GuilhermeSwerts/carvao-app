@@ -1,5 +1,7 @@
 import React from 'react';
-import { FaPlus } from 'react-icons/fa'
+import { FaDownload, FaPlus } from 'react-icons/fa'
+import { api } from '../api/api';
+import { eTipoDownload } from '../../enum/eTipoDownload';
 
 function ClienteListHeader({
     filtroNome,
@@ -14,8 +16,51 @@ function ClienteListHeader({
     showFiltroNome = true,
     filtroStatusPedido = false,
     statusPedido = [],
-    onChangeFiltroStatusPedido = () => { }
+    onChangeFiltroStatusPedido = () => { },
+    extrairDados = false,
+    tipoDownload = 0
 }) {
+
+    const DonwloadArquivo = async () => {
+        const url = `${api.urlBase}api/DownloadFiltro?filtro=${filtroNome ? filtroNome : ''}&dtInicio=${dataInicio}&dtFim=${dataFim}&tipoDownload=${tipoDownload}`;
+        const token = api.access_token;
+        try {
+
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (!response.ok) {
+                alert('Erro ao baixar o arquivo');
+            }
+
+            const blob = await response.blob();
+            const urlBlob = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = urlBlob;
+            a.download = GetNomeArquivo();
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            window.URL.revokeObjectURL(urlBlob);
+        } catch (error) {
+            console.error('Erro:', error);
+        }
+    };
+
+    const GetNomeArquivo = () => {
+        switch (tipoDownload) {
+            case eTipoDownload.GestaoPedidos:
+                return "GestaoPedidos.csv";
+            case eTipoDownload.Clientes:
+                return "Clientes.csv";
+            default:
+                return "SemNome.csv";
+        }
+    }
 
     return (
         <div style={{
@@ -69,6 +114,10 @@ function ClienteListHeader({
                                 <option value={item.status_pedido_id}>{item.nome}</option>
                             ))}
                         </select>
+                    </div>}
+                    {extrairDados && <div className="col-md-12" style={{ width: '100%', display: 'flex', justifyContent: 'end' }}>
+                        <label></label>
+                        <button type='button' onClick={DonwloadArquivo} className='btn btn-success'>Extrair Dados <FaDownload size={25} /></button>
                     </div>}
                 </form>
             </div>
