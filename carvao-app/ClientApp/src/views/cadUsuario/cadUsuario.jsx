@@ -45,7 +45,7 @@ function CadUsuario() {
     return (
         <section id='login'>
             <div className='login-container-main'>
-                <div className="login">
+                <div className="login" style={{ width: '600px' }}>
                     <div class="login-triangle"></div>
                     <h2 class="login-header">Novo Usuário</h2>
                     <form className="login-container" onSubmit={e => { e.preventDefault(); handdleSubmit() }}>
@@ -79,7 +79,7 @@ function CadUsuario() {
                             <Row>
                                 <Col md={6}>
                                     <span>Tipo de usuário</span>
-                                    <select name='tipo' id='tipo' onChange={onChangeInputValue} className='form-control'>
+                                    <select name='tipo' id='tipo' onChange={onChangeInputValue} className='form-control' style={{ height: '70%' }}>
                                         {tiposUsuarios.map(tipo => (
                                             <option value={tipo.tipo_usuario_id}>{tipo.nome}</option>
                                         ))}

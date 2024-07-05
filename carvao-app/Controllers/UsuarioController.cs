@@ -64,8 +64,54 @@ namespace carvao_app.Controllers
             try
             {
                 NovoUsuarioRequest request = JsonConvert.DeserializeObject<NovoUsuarioRequest>(data);
-                _service.BuscarNovoUsuarios(request);
+                _service.NovoUsuarios(request);
                 return Ok(true);
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPut]
+        [Route("/Usuario/AtualizarUsuario")]
+        public async Task<IActionResult> Put([FromForm] string data)
+        {
+            try
+            {
+                NovoUsuarioRequest request = JsonConvert.DeserializeObject<NovoUsuarioRequest>(data);
+                _service.EditarUsuario(request);
+                return Ok(true);
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPut]
+        [Route("/Usuario/AtualizarStatusUsuario/{usuarioId}")]
+        public async Task<IActionResult> PutAtualizarStatusUsuario([FromRoute] int usuarioId, [FromQuery] int status)
+        {
+            try
+            {
+                _service.AtualizarStatusUsuario(usuarioId, status);
+                return Ok(true);
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("/Usuario/BuscarTodosUsuarios")]
+        public async Task<IActionResult> BuscarTodosUsuarios()
+        {
+            try
+            {
+                var usuarios = _service.BuscarTodosUsuarios();
+                return Ok(usuarios);
             }
             catch (System.Exception ex)
             {

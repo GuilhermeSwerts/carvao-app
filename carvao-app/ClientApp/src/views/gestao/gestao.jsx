@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 
-import {eTipoDownload} from '../../enum/eTipoDownload';
+import { eTipoDownload } from '../../enum/eTipoDownload';
 import Filter from '../../components/filter/filter';
 import GestaoTable from './gestaoTable';
 import { api } from '../../components/api/api';
+import { FaGears } from 'react-icons/fa6';
 
 function Gestao() {
     const [pedidos, setPedidos] = useState([]);
@@ -49,7 +50,7 @@ function Gestao() {
     return (
         <section className='app'>
             <div className="content">
-                <h1>Gestão de Pedidos</h1>
+                <h1>Gestão de Pedidos <FaGears /></h1>
                 <Filter
                     fetchClientes={BuscarTodosPedidos}
                     setDataInicio={setDtInicio}

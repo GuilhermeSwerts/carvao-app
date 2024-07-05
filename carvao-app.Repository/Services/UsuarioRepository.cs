@@ -1,4 +1,5 @@
 ﻿using carvao_app.Repository.Conexao;
+using carvao_app.Repository.Enum;
 using carvao_app.Repository.Helper;
 using carvao_app.Repository.Interfaces;
 using carvao_app.Repository.Maps;
@@ -22,14 +23,41 @@ namespace carvao_app.Repository.Services
             _configuration = configuration;
         }
 
-        public void BuscarNovoUsuarios(UsuarioMap usuarioMap)
+        public void NovoUsuarios(UsuarioMap usuarioMap)
         {
             usuarioMap.Cpf = usuarioMap.Cpf.Replace("-", "").Replace(".", "");
-            bool exist = DataBase.Execute<UsuarioMap>(_configuration, "select * from usuario where cpf = @Cpf", new
+            var exist = DataBase.Execute<UsuarioMap>(_configuration, "select * from usuario where cpf = @Cpf", new
             {
                 usuarioMap.Cpf
-            }).Any();
-            if (exist) throw new Exception("Usuário já existente.");
+            }).FirstOrDefault();
+            if (exist != null)
+            {
+                if (exist.Habilitado == (int)ESituacaoUsuario.Inativo)
+                {
+                    throw new Exception("Usuário já existente com status inativo\nAtualiza a situação no grid de usuários\nPara ativar o usuário.");
+                }
+                else if (exist.Habilitado == (int)ESituacaoUsuario.Deletado)
+                {
+                    var p = new DynamicParameters();
+                    p.Add("@Nome", usuarioMap.Nome);
+                    p.Add("@Email", usuarioMap.Email);
+                    p.Add("@Senha", usuarioMap.Senha);
+                    p.Add("@Data", usuarioMap.Data_cadastro);
+                    p.Add("@Tipo", usuarioMap.Tipo_usuario_id);
+                    p.Add("@Id", exist.Usuario_id);
+                    var sql = @"UPDATE usuario SET nome = @Nome, 
+                                                   email = @Email,
+                                                   senha = @Senha,
+                                                   tipo_usuario_id = @Tipo,
+                                                   habilitado = 1
+                                WHERE usuario_id = @Id";
+                    DataBase.Execute(_configuration, sql, p);
+                    return;
+                }else
+                {
+                    throw new Exception("Usuário já existente.");
+                }
+            };
 
             var parameters = new DynamicParameters();
             parameters.Add("@Nome", usuarioMap.Nome);
@@ -39,7 +67,7 @@ namespace carvao_app.Repository.Services
             parameters.Add("@Tipo", usuarioMap.Tipo_usuario_id);
             parameters.Add("@Cpf", usuarioMap.Cpf);
 
-            var query = @"INSERT INTO carvaodb.usuario
+            var query = @"INSERT INTO usuario
             (nome, email, senha, data_cadastro, tipo_usuario_id, habilitado, cpf)
             VALUES(@Nome, @Email, @Senha, @Data, @Tipo, 1, @Cpf)";
             DataBase.Execute(_configuration, query, parameters);
@@ -56,13 +84,68 @@ namespace carvao_app.Repository.Services
             parameters.Add("@Cpf", cpf.Replace(".", "").Replace("-", ""));
 
             var query = "select * from usuario WHERE cpf = @Cpf";
+
             var usuario = DataBase.Execute<UsuarioMap>(_configuration, query, parameters).FirstOrDefault()
                 ?? throw new Exception("Usuário ou senha inválido.");
+
+            if(usuario.Habilitado == (int)ESituacaoUsuario.Inativo)
+            {
+               throw new Exception("Usuário inativo.");
+            }
+
+            if (usuario.Habilitado == (int)ESituacaoUsuario.Deletado)
+            {
+                throw new Exception("Usuário não encontrado.");
+            }
 
             if (Cripto.Decrypt(usuario.Senha) != senha)
                 throw new Exception("senha inválida.");
 
             return usuario;
+        }
+
+        public List<UsuarioMap> BuscarTodosUsuarios()
+        {
+            var parameters = new DynamicParameters();
+            var query = "SELECT * FROM usuario WHERE habilitado <> 2";
+            var usuarios = DataBase.Execute<UsuarioMap>(_configuration, query, parameters).ToList();
+            return usuarios;
+        }
+
+        public UsuarioMap BuscarUsuarioById(int usuarioId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@Id", usuarioId);
+            var query = "SELECT * FROM usuario WHERE usuario_id = @Id";
+            var usuario = DataBase.Execute<UsuarioMap>(_configuration, query, parameters).FirstOrDefault()
+                ?? throw new Exception("Usuário não encontrado.");
+            return usuario;
+        }
+
+        public void AlterarStatusUsuario(int usuarioId,int status)
+        {
+            var parameters = new DynamicParameters();
+            
+            parameters.Add("@Id", usuarioId);
+            parameters.Add("@Status", status);
+            var query = "update usuario set habilitado = @Status WHERE usuario_id = @Id";
+            
+            DataBase.Execute(_configuration, query, parameters);
+        }
+
+
+        public void AtualizarUsuario(UsuarioMap usuarioMap)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@Id", usuarioMap.Usuario_id);
+            parameters.Add("@Nome", usuarioMap.Nome);
+            parameters.Add("@Email", usuarioMap.Email);
+            parameters.Add("@Tipo", usuarioMap.Tipo_usuario_id);
+            parameters.Add("@Cpf", usuarioMap.Cpf);
+            var sql = @"UPDATE usuario SET nome = @Nome,email = @Email,tipo_usuario_id = @Tipo,cpf = @Cpf
+                        WHERE usuario_id = @Id";
+
+            DataBase.Execute(_configuration, sql, parameters);
         }
     }
 }

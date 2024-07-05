@@ -9,8 +9,12 @@ namespace carvao_app.Repository.Interfaces
 {
     public interface IUsuarioRepository
     {
-        void BuscarNovoUsuarios(UsuarioMap usuarioMap);
+        void NovoUsuarios(UsuarioMap usuarioMap);
         object BuscarTiposUsuarios();
         UsuarioMap Login(string cpf, string senha);
+        List<UsuarioMap> BuscarTodosUsuarios();
+        void AlterarStatusUsuario(int usuarioId, int status);
+        void AtualizarUsuario(UsuarioMap usuarioMap);
+        UsuarioMap BuscarUsuarioById(int usuarioId);
     }
 }

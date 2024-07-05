@@ -9,6 +9,7 @@ namespace carvao_app.Models.Requests
 {
     public class NovoUsuarioRequest
     {
+        public int? Id { get; set; }
         public string Nome { get; set; }
         public string Cpf { get; set; }
         public string Email { get; set; }

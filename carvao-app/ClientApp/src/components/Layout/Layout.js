@@ -1,7 +1,7 @@
 import React from 'react';
 import './layout.css';
 import { GetDataUser } from "../../util/GetDataUser";
-import { FaArrowRight, FaDoorOpen, FaUserPlus } from 'react-icons/fa';
+import { FaArrowRight, FaDoorOpen, FaUser, FaUserPlus } from 'react-icons/fa';
 import { FaUsers, FaShoppingCart, FaCartPlus } from "react-icons/fa";
 import { FaGears } from "react-icons/fa6";
 import { FaBoxes } from "react-icons/fa";
@@ -38,13 +38,13 @@ function Layout({ children }) {
           GESTÃO DE PEDIDOS
           <FaGears size={20} className='slider-item-hover' />
         </a>
-        {usuario.IsMaster && <a class='slider_item' href='novousuario'>
-          NOVO USUÁRIO
-          <FaUserPlus size={20} className='slider-item-hover' />
-        </a>}
         {usuario.IsMaster && <a class='slider_item' href='produtos'>
           PRODUTOS
           <FaBoxes size={20} className='slider-item-hover' />
+        </a>}
+        {usuario.IsMaster && <a class='slider_item' href='usuarios'>
+          USUÁRIOS
+          <FaUsers size={20} className='slider-item-hover' />
         </a>}
       </div>
       <div class="menu-footer">

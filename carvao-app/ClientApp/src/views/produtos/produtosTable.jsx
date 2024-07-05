@@ -4,10 +4,13 @@ import { GetDataUser } from '../../util/GetDataUser';
 import { api } from '../../components/api/api';
 import Produto from '../../components/Modals/Produto/Produto';
 import Filter from '../../components/filter/filter';
+import { FaBoxes } from 'react-icons/fa';
 
 function Produtos() {
     const usuario = GetDataUser();
     const [produtos, setProdutos] = useState([]);
+    const [produtosFiltro, setProdutosFiltro] = useState([]);
+    const [filtroNome, setFiltroNome] = useState();
 
     useEffect(() => {
         if (!usuario.IsMaster)
@@ -19,9 +22,16 @@ function Produtos() {
     const BuscarTodosProdutos = () => {
         api.get("/api/Produto/BuscarTodos", res => {
             setProdutos(res.data);
+            setProdutosFiltro(res.data);
         }, erro => {
             alert(erro.mensage)
         })
+    }
+
+
+    const FiltroNome = e => {
+        setFiltroNome(e.target.value);
+        setProdutosFiltro(produtos.filter(produto => produto.nome.toUpperCase().includes(e.target.value.toUpperCase())))
     }
 
     const NovoProduto = (produto) => {
@@ -87,69 +97,86 @@ function Produtos() {
 
     return (
         <section className='content'>
+            <h1>Produtos <FaBoxes /></h1>
             <div className="container-table">
-                <Filter
-                    filtroNome={''}
-                    handleInputChange={()=>{}}
-                />
-                <br />
-            </div>
-            <div className='row'>
-                <div className="col-md-12">
+                <div style={{
+                    padding: '1rem',
+                    background: '#28d',
+                    color: '#fff',
+                    width: '100%',
+                    margin: '0'
+                }}
+                    className='row'
+                >
                     <div style={{ display: 'flex', justifyContent: 'end', marginRight: 20 }}>
                         <Produto
-                            top={false}
+                            top={true}
                             textSubmit="Cadastrar Produto"
-                            classButton="btn btn-primary"
+                            classButton="btn btn-success"
                             onSubmit={NovoProduto}
                             tooltip='Novo Produto'
                             icon={<FaPlus size={20} color='#fff' />} />
                     </div>
-                    <br />
-                    <br />
-                    <table className="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Id</th>
-                                <th>Nome Do Produto</th>
-                                <th>Valor Do Produto (R$)</th>
-                                <th>Valor Mínimo Do Produto (R$)</th>
-                                <th>Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {produtos.map((produto, i) => {
-                                produto.produto_id = produto.id
-                                return (
-                                    <tr>
-                                        <td data-label="Id">{produto.produto_id}</td>
-                                        <td data-label="Nome Do Produto">{produto.nome}</td>
-                                        <td data-label="Valor Do Produto">R$ {produto.valor.toFixed(2).replaceAll('.', ',')}</td>
-                                        <td data-label="Valor Mínimo">R$ {produto.valorMinimo.toFixed(2).replaceAll('.', ',')}</td>
-                                        <td data-label="Ações" style={{ display: 'flex', gap: 10 }}>
-                                            <Produto
-                                                textSubmit="Atualizar Produto"
-                                                classButton="btn btn-success"
-                                                onSubmit={EditarProduto}
-                                                tooltip='Editar Produto'
-                                                Produto={produto}
-                                                top={true}
-                                                icon={<FaPencil size={20} color='#fff' />}
-                                            />
-                                            <button onClick={() => ExcluirProduto(produto.id)} className='btn btn-danger'><FaTrash size={20} /></button>
-                                        </td>
-                                    </tr>
-                                )
-                            })}
-                            {produtos.length == 0 && <tr>
-                                <td><span>Não foi encontrado nenhum produto...</span></td>
-                                <td>-</td>
-                                <td>-</td>
-                                <td>-</td>
-                                <td>-</td>
-                            </tr>}
-                        </tbody>
-                    </table>
+                    <div class="col-md-12" style={{ marginBottom: '10px' }}>
+                        <label for="validationTooltipUsername">Filtros:</label>
+                        {<div class="input-group">
+                            <input
+                                type="text"
+                                placeholder="Nome do produto"
+                                value={filtroNome}
+                                className='form-control'
+                                onChange={FiltroNome}
+                            />
+                        </div>}
+                    </div>
+                </div>
+                <br />
+                <div className='row'>
+                    <div className="col-md-12">
+                        <table className="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Nome Do Produto</th>
+                                    <th>Valor Do Produto (R$)</th>
+                                    <th>Valor Mínimo Do Produto (R$)</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {produtosFiltro.map((produto, i) => {
+                                    produto.produto_id = produto.id
+                                    return (
+                                        <tr>
+                                            <td data-label="Id">{produto.produto_id}</td>
+                                            <td data-label="Nome Do Produto">{produto.nome}</td>
+                                            <td data-label="Valor Do Produto">R$ {produto.valor.toFixed(2).replaceAll('.', ',')}</td>
+                                            <td data-label="Valor Mínimo">R$ {produto.valorMinimo.toFixed(2).replaceAll('.', ',')}</td>
+                                            <td data-label="Ações" style={{ display: 'flex', gap: 10 }}>
+                                                <Produto
+                                                    textSubmit="Atualizar Produto"
+                                                    classButton="btn btn-success"
+                                                    onSubmit={EditarProduto}
+                                                    tooltip='Editar Produto'
+                                                    Produto={produto}
+                                                    top={true}
+                                                    icon={<FaPencil size={20} color='#fff' />}
+                                                />
+                                                <button onClick={() => ExcluirProduto(produto.id)} className='btn btn-danger'><FaTrash size={20} /></button>
+                                            </td>
+                                        </tr>
+                                    )
+                                })}
+                                {produtosFiltro.length == 0 && <tr>
+                                    <td><span>Não foi encontrado nenhum produto...</span></td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                </tr>}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </section>

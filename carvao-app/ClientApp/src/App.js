@@ -11,6 +11,7 @@ import ListaRecibo from './views/listaRecibo/listaRecibo';
 import Login from './views/login/login';
 import CadUsuario from './views/cadUsuario/cadUsuario';
 import Produtos from './views/produtos/produtosTable';
+import Usuarios from './views/usuarios';
 
 export default class App extends Component {
   static displayName = App.name;
@@ -26,6 +27,7 @@ export default class App extends Component {
         <Route exact path='/recibo' component={Recibo} />
         <Route exact path='/recibos' component={ListaRecibo} />
         <Route exact path='/novousuario' component={CadUsuario} />
+        <Route exact path='/usuarios' component={Usuarios} />
         <Route exact path='/produtos' component={Produtos} />
       </Layout>
     );

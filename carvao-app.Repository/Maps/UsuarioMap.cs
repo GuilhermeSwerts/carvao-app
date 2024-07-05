@@ -14,7 +14,7 @@ namespace carvao_app.Repository.Maps
         public string Senha { get; set; }
         public DateTime Data_cadastro { get; set; }
         public int Tipo_usuario_id { get; set; } 
-        public bool Habilitado { get; set; } 
+        public int Habilitado { get; set; } 
         public string Perfil { get; set; }
         public string Cpf { get; set; }
     }

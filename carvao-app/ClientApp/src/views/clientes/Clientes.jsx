@@ -8,6 +8,7 @@ import Filter from '../../components/filter/filter';
 import { GetDataUser } from "../../util/GetDataUser";
 import { buscarClientes } from "../../components/api/apiMiddle";
 import { eTipoDownload } from "../../enum/eTipoDownload";
+import { FaUsers } from "react-icons/fa";
 
 function ClienteListView() {
     const [clientes, setClientes] = useState([]);
@@ -120,7 +121,7 @@ function ClienteListView() {
                 clienteSelecionado={clienteSelecionado}
             />
             <div className="content">
-                <h1>Meus Clientes</h1>
+                <h1>Meus Clientes <FaUsers /> </h1>
                 <div className="container-table">
                     <Filter
                         filtroNome={filtroNome}

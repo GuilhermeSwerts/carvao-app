@@ -21,16 +21,16 @@ namespace carvao_app.Business.Services
             _repository = repository;
         }
 
-        public void BuscarNovoUsuarios(NovoUsuarioRequest request)
+        public void NovoUsuarios(NovoUsuarioRequest request)
         {
             try
             {
-                _repository.BuscarNovoUsuarios(new UsuarioMap
+                _repository.NovoUsuarios(new UsuarioMap
                 {
                     Cpf = request.Cpf,
                     Data_cadastro = DateTime.Now,
                     Email = request.Email,
-                    Habilitado = true,
+                    Habilitado = 1,
                     Nome = request.Nome,
                     Tipo_usuario_id = request.Tipo,
                     Senha = Cripto.Encrypt("P@drao123")
@@ -63,6 +63,53 @@ namespace carvao_app.Business.Services
 
                 throw;
             }
+        }
+
+        public object BuscarTodosUsuarios()
+        {
+            try
+            {
+                var usuario = _repository.BuscarTodosUsuarios();
+                return usuario.Select(usr => new UsuarioDto
+                {
+                    UsuarioId = usr.Usuario_id,
+                    TipoUsuario = usr.Tipo_usuario_id,
+                    Nome = usr.Nome,
+                    Email = usr.Email,
+                    DataCadastro = usr.Data_cadastro,
+                    Habilitado = usr.Habilitado,
+                    Cpf = usr.Cpf,
+                }).ToList();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public void EditarUsuario(NovoUsuarioRequest request)
+        {
+            try
+            {
+                _repository.AtualizarUsuario(new UsuarioMap
+                {
+                    Usuario_id = request.Id ?? 0,
+                    Cpf = request.Cpf,
+                    Data_cadastro = DateTime.Now,
+                    Email = request.Email,
+                    Nome = request.Nome,
+                    Tipo_usuario_id = request.Tipo
+                });
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public void AtualizarStatusUsuario(int usuarioId, int status)
+        {
+            _repository.AlterarStatusUsuario(usuarioId, status);
         }
     }
 }

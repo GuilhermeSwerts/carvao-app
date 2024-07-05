@@ -11,8 +11,11 @@ namespace carvao_app.Business.Interfaces
 {
     public interface IUsuario
     {
-        void BuscarNovoUsuarios(NovoUsuarioRequest request);
+        void NovoUsuarios(NovoUsuarioRequest request);
         object BuscarTiposUsuarios();
         UsuarioDto Login(string cpf, string senha);
+        object BuscarTodosUsuarios();
+        void EditarUsuario(NovoUsuarioRequest request);
+        void AtualizarStatusUsuario(int status, int status1);
     }
 }

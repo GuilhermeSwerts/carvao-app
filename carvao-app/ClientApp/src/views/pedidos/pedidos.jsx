@@ -2,10 +2,7 @@ import React, { useState, useEffect } from "react";
 import ModalNovoPedido from '../../components/Modals/Clients/NovoPedido';
 import ModalPedidosCliente from '../../components/Modals/Clients/PedidosCliente';
 import {
-    buscarClientesPorNome,
     buscarPedidosPorCliente,
-    atualizarstatuspedido,
-    enviarPedido,
 } from "../../api/clienteapi";
 
 import { Modal } from "react-bootstrap";
@@ -14,6 +11,7 @@ import { format } from "date-fns";
 import Filter from '../../components/filter/filter';
 import ClientePedidoTable from './ClientePedidoTable';
 import { api } from "../../components/api/api";
+import { FaShoppingCart } from "react-icons/fa";
 
 function TelaPedido() {
     const [clienteNome, setClienteNome] = useState("");
@@ -159,7 +157,7 @@ function TelaPedido() {
                 setProdutosAdicionados([]);
 
                 var mesmoCliente = await window.confirm("Deseja realizar outro pedido para o mesmo cliente");
-                
+
                 if (!mesmoCliente) {
                     setClienteNome("");
                     setClienteSelecionado(null);
@@ -282,17 +280,17 @@ function TelaPedido() {
         })
     }
 
-    const handleatualizarstatuspedido = async (pedidoid, novostatus) => {
-        try {
-            // chama a função para atualizar o status do pedido
-            await atualizarstatuspedido({ pedidoid, novostatus });
-            alert('status do pedido atualizado com sucesso!');
-            // adicione qualquer lógica adicional aqui, se necessário
-        } catch (error) {
-            console.error('erro ao atualizar o status do pedido:', error);
-            alert('ocorreu um erro ao atualizar o status do pedido. por favor, tente novamente.');
-        }
-    };
+    // const handleatualizarstatuspedido = async (pedidoid, novostatus) => {
+    //     try {
+    //         // chama a função para atualizar o status do pedido
+    //         await atualizarstatuspedido({ pedidoid, novostatus });
+    //         alert('status do pedido atualizado com sucesso!');
+    //         // adicione qualquer lógica adicional aqui, se necessário
+    //     } catch (error) {
+    //         console.error('erro ao atualizar o status do pedido:', error);
+    //         alert('ocorreu um erro ao atualizar o status do pedido. por favor, tente novamente.');
+    //     }
+    // };
 
     const closeModalNovoPedido = () => {
         setProdutoSelecionado(null);
@@ -340,7 +338,7 @@ function TelaPedido() {
             />
             <div className="App">
                 <div className="content">
-                    <h1>Pedidos Por Clientes</h1>
+                    <h1>Pedidos Por Clientes <FaShoppingCart /></h1>
                     <Filter
                         filtroNome={clienteNome}
                         handleInputChange={handleInputChange}
