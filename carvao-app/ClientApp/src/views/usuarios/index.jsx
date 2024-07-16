@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FaPencil, FaPlus, FaTrash, FaUserPen, FaUsers, FaUserSlash } from 'react-icons/fa6';
+import { FaKey, FaPencil, FaPlus, FaTrash, FaUserPen, FaUsers, FaUserSlash } from 'react-icons/fa6';
 import { GetDataUser } from '../../util/GetDataUser';
 import { api } from '../../components/api/api';
 import { RiUserFollowFill } from "react-icons/ri";
@@ -106,6 +106,15 @@ function Usuarios() {
         }
     }
 
+    const ResetarSenhaUsuario = async (usuarioId, usuarioNome) => {
+        if (await Pergunta("Deseja realmente resetar a senha de " + usuarioNome)) {
+            api.put('Usuario/ResetaSenha', { id: usuarioId }, res => {
+                Alert(`Senha de ${usuarioNome} resetada para P@drao123`);
+            }, erro => {
+                Alert("Houve um erro ao resetar a senha do usuário.", false)
+            })
+        }
+    }
 
     return (
         <section className='content'>
@@ -157,6 +166,7 @@ function Usuarios() {
                                     <th>Situação</th>
                                     <th>Editar</th>
                                     <th>Inativar/Ativar</th>
+                                    <th>Resetar Senha</th>
                                     <th>Excluir</th>
                                 </tr>
                             </thead>
@@ -222,10 +232,11 @@ function Usuarios() {
                                                     <button className='btn btn-warning' onClick={() => handleEditClick(i)}><FaUserPen color='#fff' /></button>
                                                 )}
                                             </td>
-                                            <td data-label="Inativar/Ativar">
+                                            <td data-label="Inativar/Ativar" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                                                 {usuario.habilitado === 1 && <button onClick={() => AlterarStatusCliente(usuario.usuarioId, 0, false, true)} className='btn btn-info'><FaUserSlash /></button>}
                                                 {usuario.habilitado === 0 && <button onClick={() => AlterarStatusCliente(usuario.usuarioId, 1, true)} className='btn btn-info'><RiUserFollowFill /></button>}
                                             </td>
+                                            <td data-label="Resetar Senha"><button className='btn btn-success' onClick={() => ResetarSenhaUsuario(usuario.usuarioId, usuario.nome)}><FaKey /></button></td>
                                             <td data-label="Excluir"><button className='btn btn-danger' onClick={() => AlterarStatusCliente(usuario.usuarioId, 2, false, false, true)}><FaUserTimes /></button></td>
                                         </tr>
                                     );

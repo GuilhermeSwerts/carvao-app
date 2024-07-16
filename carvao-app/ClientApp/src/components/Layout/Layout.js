@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './layout.css';
 import { GetDataUser } from "../../util/GetDataUser";
 import { FaArrowRight, FaDoorOpen, FaUser, FaUserPlus } from 'react-icons/fa';
 import { FaUsers, FaShoppingCart, FaCartPlus } from "react-icons/fa";
-import { FaGears } from "react-icons/fa6";
+import { FaGears, FaKey } from "react-icons/fa6";
 import { FaBoxes } from "react-icons/fa";
+import ModalAlterarSenha from '../Modals/Usuario/ModalAlterarSenha';
 
 function Layout({ children }) {
   const usuario = GetDataUser();
+  const [show, setShow] = useState(false);
 
   function toggleMenu() {
     document.querySelector('.menu').classList.toggle("open");
@@ -46,6 +48,10 @@ function Layout({ children }) {
           USUÁRIOS
           <FaUsers size={20} className='slider-item-hover' />
         </a>}
+        <a class='slider_item' onClick={e => setShow(true)}>
+          TROCA SENHA
+          <FaKey size={20} className='slider-item-hover' />
+        </a>
       </div>
       <div class="menu-footer">
         <a class="slider_item" style={{ borderTop: '1px solid #ccc' }} onClick={logout}>
@@ -55,6 +61,7 @@ function Layout({ children }) {
       </div>
     </div>
     <div style={{ width: '100%' }}>
+      <ModalAlterarSenha show={show} setShow={setShow} />
       {children}
     </div>
   </div>);

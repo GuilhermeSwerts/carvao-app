@@ -118,5 +118,36 @@ namespace carvao_app.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpPut]
+        [Route("/Usuario/ResetaSenha")]
+        public IActionResult ResetaSenhaUsuario([FromBody] int id)
+        {
+            try
+            {
+                _service.ResetaSenhaUsuario(id);
+                return Ok();
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        [Route("/Usuario/TrocaSenha")]
+        public IActionResult TrocaSenha([FromQuery] string senhaAtual, string senhaNova)
+        {
+            try
+            {
+                _service.TrocaSenhaUsuario(senhaAtual, senhaNova,GetUser());
+                return Ok();
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
     }
 }

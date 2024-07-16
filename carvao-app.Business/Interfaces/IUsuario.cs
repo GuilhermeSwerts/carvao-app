@@ -14,8 +14,10 @@ namespace carvao_app.Business.Interfaces
         void NovoUsuarios(NovoUsuarioRequest request);
         object BuscarTiposUsuarios();
         UsuarioDto Login(string cpf, string senha);
-        object BuscarTodosUsuarios();
+        object BuscarTodosUsuarios(bool retornarSenha = false);
         void EditarUsuario(NovoUsuarioRequest request);
         void AtualizarStatusUsuario(int status, int status1);
+        void ResetaSenhaUsuario(int id);
+        void TrocaSenhaUsuario(string senhaAtual, string senhaNova, UsuarioMap usuarioMap);
     }
 }

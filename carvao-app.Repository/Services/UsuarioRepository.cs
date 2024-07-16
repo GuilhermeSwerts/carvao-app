@@ -147,5 +147,15 @@ namespace carvao_app.Repository.Services
 
             DataBase.Execute(_configuration, sql, parameters);
         }
+
+        public void ResetaSenhaUsuario(int id, string senha)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@Id", id);
+            parameters.Add("@Senha", senha);
+            var sql = @"UPDATE usuario SET senha = @Senha
+                        WHERE usuario_id = @Id";
+            DataBase.Execute(_configuration, sql, parameters);
+        }
     }
 }

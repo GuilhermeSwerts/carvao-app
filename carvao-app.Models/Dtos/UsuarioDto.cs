@@ -17,6 +17,6 @@ namespace carvao_app.Models.Dtos
         public int Habilitado { get; set; }
         public string Perfil { get; set; }
         public string Cpf { get; set; }
-
+        public string Senha { get; set; }
     }
 }

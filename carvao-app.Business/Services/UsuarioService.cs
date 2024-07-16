@@ -65,13 +65,14 @@ namespace carvao_app.Business.Services
             }
         }
 
-        public object BuscarTodosUsuarios()
+        public object BuscarTodosUsuarios(bool retornarSenha = false)
         {
             try
             {
                 var usuario = _repository.BuscarTodosUsuarios();
                 return usuario.Select(usr => new UsuarioDto
                 {
+                    Senha = retornarSenha ? usr.Senha : "",
                     UsuarioId = usr.Usuario_id,
                     TipoUsuario = usr.Tipo_usuario_id,
                     Nome = usr.Nome,
@@ -110,6 +111,20 @@ namespace carvao_app.Business.Services
         public void AtualizarStatusUsuario(int usuarioId, int status)
         {
             _repository.AlterarStatusUsuario(usuarioId, status);
+        }
+
+        public void ResetaSenhaUsuario(int id)
+        {
+            _repository.ResetaSenhaUsuario(id, Cripto.Encrypt("P@drao123"));
+        }
+
+        public void TrocaSenhaUsuario(string senhaAtual, string senhaNova, UsuarioMap usuarioMap)
+        {
+            var usuario = ((List<UsuarioDto>)BuscarTodosUsuarios(true)).First(x=> x.UsuarioId == usuarioMap.Usuario_id);
+            if (senhaAtual != Cripto.Decrypt(usuario.Senha))
+                throw new Exception("Senha atual incorreta!");
+
+            _repository.ResetaSenhaUsuario(usuario.UsuarioId,Cripto.Encrypt(senhaNova));
         }
     }
 }

@@ -16,5 +16,6 @@ namespace carvao_app.Repository.Interfaces
         void AlterarStatusUsuario(int usuarioId, int status);
         void AtualizarUsuario(UsuarioMap usuarioMap);
         UsuarioMap BuscarUsuarioById(int usuarioId);
+        void ResetaSenhaUsuario(int id, string senha);
     }
 }
