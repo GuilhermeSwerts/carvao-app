@@ -36,7 +36,7 @@ function ModalPedidosCliente({ show, close, produtos, clienteSelecionado, handdl
                         ))}
                     </tbody>
                 </table>}
-                {produtos.length == 0 && <button onClick={() => handdleNovoPedido(true)} style={{ width: '100%' }} className='btn btn-success'>Adicionar novo pedido <FaCartPlus /> </button>}
+                {produtos.length == 0 && <button onClick={() => handdleNovoPedido(clienteSelecionado)} style={{ width: '100%' }} className='btn btn-success'>Adicionar novo pedido <FaCartPlus /> </button>}
             </Modal.Body>
             <Modal.Footer>
                 <button className='btn btn-danger' onClick={() => close(false)}>

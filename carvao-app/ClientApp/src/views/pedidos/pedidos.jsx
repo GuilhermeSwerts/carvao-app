@@ -164,6 +164,7 @@ function TelaPedido() {
                     setProdutoSelecionado(null);
                     setShowModalNovoProduto(false);
                 }
+                fetchClientes();
 
             }, erro => {
                 alert("Houve um erro na solicitação!\nPor favor tente novamente mais tarde.");
@@ -271,6 +272,7 @@ function TelaPedido() {
 
 
     const ShowModalHistoricoPedidos = (cliente) => {
+        console.log({cliente})
         setClienteSelecionado(cliente);
         api.get(`api/pedidos/cliente/${cliente.id}`, res => {
             setHistorico(res.data);
