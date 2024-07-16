@@ -116,20 +116,20 @@ function ModalNovoPedido({
                                     {produtosAdicionados.map((produto, index) => {
                                         return (
                                             <tr key={index}>
-                                                <td>{produto.nome}</td>
-                                                <td>{produto.quantidade}</td>
-                                                <td>
+                                                <td data-label="Nome">{produto.nome}</td>
+                                                <td data-label="Quantidade">{produto.quantidade}</td>
+                                                <td data-label="Valor Desconto">
                                                     <input
-                                                        type="number"
+                                                        type="text"
                                                         style={{ width: '50%' }}
                                                         value={produto.valorDesconto === 0 ? '' : produto.valorDesconto} // Isso permite que o campo seja apagado
-                                                        onChange={(e) => handleDescontoReaisChange(produto.id, e)}
+                                                        onChange={(e) => handleDescontoReaisChange(produto.id, produto.quantidade, e)}
                                                         step="0.01"
                                                         min={0}
                                                     />
 
                                                 </td>
-                                                <td>
+                                                <td data-label="Valor Total">
                                                     R${" "}
                                                     {(
                                                         produto.valor * produto.quantidade -

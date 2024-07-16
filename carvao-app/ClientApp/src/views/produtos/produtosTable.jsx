@@ -5,6 +5,7 @@ import { api } from '../../components/api/api';
 import Produto from '../../components/Modals/Produto/Produto';
 import Filter from '../../components/filter/filter';
 import { FaBoxes } from 'react-icons/fa';
+import { Alert, Pergunta } from '../../util/Alertas';
 
 function Produtos() {
     const usuario = GetDataUser();
@@ -24,7 +25,7 @@ function Produtos() {
             setProdutos(res.data);
             setProdutosFiltro(res.data);
         }, erro => {
-            alert(erro.mensage)
+            Alert(erro.mensage, false)
         })
     }
 
@@ -36,7 +37,7 @@ function Produtos() {
 
     const NovoProduto = (produto) => {
         if (produto.valor < produto.valorMinimo) {
-            alert("Valor do produto deve ser maior que o valor minimo")
+            Alert("Valor do produto deve ser maior que o valor minimo", false, true)
             return;
         }
 
@@ -50,15 +51,15 @@ function Produtos() {
             const loader = document.getElementById(`loadingpanel`);
             if (loader)
                 loader.style.display = 'none';
-            alert('Produto adicionado com sucesso!');
+            Alert('Produto adicionado com sucesso!', true);
         }, erro => {
-            alert(erro.response ? erro.response.data : "Houve um erro na solicitação!")
+            Alert(erro.response ? erro.response.data : "Houve um erro na solicitação!", false)
         })
     }
 
     const EditarProduto = (produto) => {
         if (produto.valor < produto.valorMinimo) {
-            alert("Valor do produto deve ser maior que o valor minimo")
+            Alert("Valor do produto deve ser maior que o valor minimo", false, true)
             return;
         }
 
@@ -74,29 +75,30 @@ function Produtos() {
             const loader = document.getElementById(`loadingpanel`);
             if (loader)
                 loader.style.display = 'none';
-            alert('Produto editado com sucesso!');
+            Alert('Produto editado com sucesso!');
         }, erro => {
-            alert(erro.response ? erro.response.data : "Houve um erro na solicitação!")
+            Alert(erro.response ? erro.response.data : "Houve um erro na solicitação!", false, true)
         })
     }
 
     const ExcluirProduto = async (id) => {
-        var excluir = await window.confirm("Deseja realmente excluir esse produto?")
+        var excluir = await Pergunta("Deseja realmente excluir esse produto?")
         if (excluir) {
             api.delete(`api/Produto/${id}`, res => {
                 BuscarTodosProdutos();
                 const loader = document.getElementById(`loadingpanel`);
                 if (loader)
                     loader.style.display = 'none';
-                alert('Produto excluído com sucesso!');
+                Alert('Produto excluído com sucesso!');
             }, erro => {
-                alert(erro.response ? erro.response.data : "Houve um erro na solicitação!")
+                Alert(erro.response ? erro.response.data : "Houve um erro na solicitação!", false)
             })
         }
     }
 
     return (
         <section className='content'>
+            <button onClick={() => window.history.go(-1)} className="btn btn-link">Voltar</button>
             <h1>Produtos <FaBoxes /></h1>
             <div className="container-table">
                 <div style={{

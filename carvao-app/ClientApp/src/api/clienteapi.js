@@ -11,6 +11,7 @@ export const GetCliente = async (clienteId) => {
     });
     return response.data;
   } catch (error) {
+    debugger
     console.error('Erro ao buscar clientes:', error);
     throw error;
   }

@@ -3,6 +3,7 @@ import { GetDataUser } from '../../util/GetDataUser';
 import { Row, Col } from 'react-bootstrap';
 import InputMask from "react-input-mask";
 import { api } from '../../components/api/api';
+import { Alert } from '../../util/Alertas';
 
 function CadUsuario() {
     const usuario = GetDataUser();
@@ -34,11 +35,11 @@ function CadUsuario() {
         var data = new FormData();
         data.append("data", JSON.stringify(form));
         api.post("Usuario", data, res => {
-            alert("Cadastro realizada com sucesso!")
+            Alert("Cadastro realizada com sucesso!")
             setForm(initialForm);
             document.getElementById("tipo").value = "1";
         }, erro => {
-            alert(erro.response ? erro.response.data : "Houve um erro na solicitação.")
+            Alert(erro.response ? erro.response.data : "Houve um erro na solicitação.", false)
         })
     }
 

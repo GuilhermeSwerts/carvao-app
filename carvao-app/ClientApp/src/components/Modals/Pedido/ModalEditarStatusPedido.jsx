@@ -2,6 +2,7 @@
 import { Modal, Button, Form, ProgressBar } from 'react-bootstrap';
 import { FaEdit } from 'react-icons/fa';
 import { api } from '../../../components/api/api';
+import { Alert } from '../../../util/Alertas';
 
 function ModalEditarStatusPedido({ pedido, statusPedido, onHide, onEdit, onReload }) {
     const [novoStatus, setNovoStatus] = useState('');
@@ -27,18 +28,18 @@ function ModalEditarStatusPedido({ pedido, statusPedido, onHide, onEdit, onReloa
                         setProgresso(progressoAtual);
                     }
                 });
-                alert('Status do pedido atualizado com sucesso!');
+                Alert('Status do pedido atualizado com sucesso!');
                 if (onReload) {
                     onReload();
                 }
             } catch (error) {
-                alert('Erro ao alterar Status do Pedido:', error);
+                Alert('Erro ao alterar Status do Pedido: ' + error.response.data ? error.response.data : error.message, false);
             }
 
             onEdit(pedido.pedido_id, novoStatus);
             onHide();
         } else {
-            alert('Por favor, selecione um novo status para o pedido.');
+            Alert('Por favor, selecione um novo status para o pedido.', false, true);
         }
     };
 

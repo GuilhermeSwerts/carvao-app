@@ -2,6 +2,7 @@ import React from 'react';
 import { FaDownload, FaPlus } from 'react-icons/fa'
 import { api } from '../api/api';
 import { eTipoDownload } from '../../enum/eTipoDownload';
+import { Alert } from '../../util/Alertas';
 
 function ClienteListHeader({
     filtroNome,
@@ -34,7 +35,7 @@ function ClienteListHeader({
             });
 
             if (!response.ok) {
-                alert('Erro ao baixar o arquivo');
+                Alert('Erro ao baixar o arquivo', false);
             }
 
             const blob = await response.blob();

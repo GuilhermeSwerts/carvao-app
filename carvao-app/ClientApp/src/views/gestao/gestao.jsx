@@ -5,6 +5,7 @@ import Filter from '../../components/filter/filter';
 import GestaoTable from './gestaoTable';
 import { api } from '../../components/api/api';
 import { FaGears } from 'react-icons/fa6';
+import { Alert } from '../../util/Alertas';
 
 function Gestao() {
     const [pedidos, setPedidos] = useState([]);
@@ -23,7 +24,7 @@ function Gestao() {
             setPedidos(res.data.pedidos);
             setPedidoFiltro(res.data.pedidos);
         }, erro => {
-            alert('Houve um erro na solicitação!');
+            Alert('Houve um erro na solicitação!', false);
         })
     }
 
@@ -32,7 +33,7 @@ function Gestao() {
         api.get("/api/Produto/BuscarTodos", res => {
             setProdutos(res.data);
         }, erro => {
-            alert(erro.mensage)
+            Alert(erro.mensage, false)
         })
     }
 
@@ -50,6 +51,7 @@ function Gestao() {
     return (
         <section className='app'>
             <div className="content">
+                <button onClick={() => window.history.go(-1)} className="btn btn-link">Voltar</button>
                 <h1>Gestão de Pedidos <FaGears /></h1>
                 <Filter
                     fetchClientes={BuscarTodosPedidos}
