@@ -12,6 +12,7 @@ import Filter from '../../components/filter/filter';
 import ClientePedidoTable from './ClientePedidoTable';
 import { api } from "../../components/api/api";
 import { FaShoppingCart } from "react-icons/fa";
+import { Alert, Pergunta } from "../../util/Alertas";
 
 function TelaPedido() {
     const [clienteNome, setClienteNome] = useState("");
@@ -50,7 +51,7 @@ function TelaPedido() {
         api.get("/api/Produto/BuscarTodos", res => {
             setProdutos(res.data);
         }, erro => {
-            alert(erro.mensage)
+            Alert(erro.mensage, false)
         })
     }
 
@@ -106,8 +107,8 @@ function TelaPedido() {
                 let abaixo = (valorVenda - valorDesconto.toFixed(2)) < total;
 
                 if (abaixo) {
-                    alert(`Valor do pedido está a baixo que o valor minímo.
-                    Desconto permitido até o valor de R$ ${total}`);
+                    Alert(`Valor do pedido está a baixo que o valor minímo.
+                    Desconto permitido até o valor de R$ ${total}`, false, true);
                 }
 
                 return abaixo;
@@ -117,12 +118,12 @@ function TelaPedido() {
 
     const handleEnviarPedido = async () => {
         if (!clienteSelecionado) {
-            alert("Por favor, selecione um cliente.");
+            Alert("Por favor, selecione um cliente.", false, true);
             return;
         }
 
         if (produtosAdicionados.length === 0) {
-            alert("Por favor, selecione pelo menos um produto.");
+            Alert("Por favor, selecione pelo menos um produto.", false, true);
             return;
         }
 
@@ -149,14 +150,17 @@ function TelaPedido() {
                 if (loader)
                     loader.style.display = 'none';
 
-                alert("Pedido enviado com sucesso!");
+                Alert("Pedido enviado com sucesso!");
                 setProdutoSelecionado(null);
                 setQuantidade(1);
                 setValorTotal(0);
                 setObservacao("");
                 setProdutosAdicionados([]);
+                setDescontoPercentual(0);
 
-                var mesmoCliente = await window.confirm("Deseja realizar outro pedido para o mesmo cliente");
+                fetchClientes();
+
+                var mesmoCliente = await Pergunta("Deseja realizar outro pedido para o mesmo cliente");
 
                 if (!mesmoCliente) {
                     setClienteNome("");
@@ -166,8 +170,9 @@ function TelaPedido() {
                 }
                 fetchClientes();
 
+
             }, erro => {
-                alert("Houve um erro na solicitação!\nPor favor tente novamente mais tarde.");
+                Alert("Houve um erro na solicitação!\nPor favor tente novamente mais tarde.", false);
             })
 
         } catch (error) {
@@ -256,17 +261,55 @@ function TelaPedido() {
         }
     };
 
-    const handleDescontoReaisChange = (produtoId, event) => {
-        const valor = event.target.value;
-        const valorDescontoReais = valor === '' ? 0 : parseFloat(valor);
-        if (!isNaN(valorDescontoReais)) {
-            const updatedProdutosAdicionados = produtosAdicionados.map((produto) => {
-                if (produto.id === produtoId) {
-                    return { ...produto, valorDesconto: valorDescontoReais };
-                }
-                return produto;
-            });
-            setProdutosAdicionados(updatedProdutosAdicionados);
+    const CalcularValorDescontoPorQuantidade = (produtoId, quantidade, valorDescontoDigitado) => {
+        let produto = produtos.filter(x => x.id === produtoId)[0];
+
+        let valorTotal = produto.valor * quantidade;
+        let valorMinimo = produto.valorMinimo * quantidade;
+        let valorMaximoDesconto = (valorTotal - valorMinimo);
+
+        if (valorMaximoDesconto < valorDescontoDigitado) {
+            Alert(`Valor do pedido está a baixo que o valor minímo.
+                Desconto permitido até o valor de R$ ${valorMaximoDesconto}`, false, true);
+            return true;
+        }
+
+        return false;
+    }
+
+    const handleDescontoReaisChange = (produtoId, quantidade, event) => {
+        try {
+            const valor = event.target.value.replace(/[^0-9,.]/g, '').replace(',', '.');
+            if (valor.includes('.') && (valor.split('.').length === 1 || valor.split('.').length > 1 && valor.split('.')[1] === '')) {
+                const produtoSemValidacao = produtosAdicionados.map((produto) => {
+                    if (produto.id === produtoId) {
+                        return { ...produto, valorDesconto: valor };
+                    }
+                    return produto;
+                });
+                setProdutosAdicionados(produtoSemValidacao);
+                return;
+            }
+
+            const valorDescontoReais = valor === '' ? 0 : parseFloat(valor);
+
+            if (CalcularValorDescontoPorQuantidade(produtoId, quantidade, valorDescontoReais)) {
+                return;
+            }
+
+            if (!isNaN(valorDescontoReais)) {
+                const updatedProdutosAdicionados = produtosAdicionados.map((produto) => {
+                    if (produto.id === produtoId) {
+                        return { ...produto, valorDesconto: valorDescontoReais };
+                    }
+                    return produto;
+                });
+                setProdutosAdicionados(updatedProdutosAdicionados);
+            } else {
+                Alert('Valor digitado esta incorreto!', false, true);
+            }
+        } catch (error) {
+            Alert('Valor digitado esta incorreto!', false, true);
         }
     };
 
@@ -274,6 +317,7 @@ function TelaPedido() {
     const ShowModalHistoricoPedidos = (cliente) => {
         console.log({cliente})
         setClienteSelecionado(cliente);
+        debugger
         api.get(`api/pedidos/cliente/${cliente.id}`, res => {
             setHistorico(res.data);
             setShowModalHistorico(true);
@@ -340,6 +384,7 @@ function TelaPedido() {
             />
             <div className="App">
                 <div className="content">
+                    <button onClick={() => window.history.go(-1)} className="btn btn-link">Voltar</button>
                     <h1>Pedidos Por Clientes <FaShoppingCart /></h1>
                     <Filter
                         filtroNome={clienteNome}

@@ -5,6 +5,7 @@ import { api } from '../../components/api/api';
 import CancelarReciboModal from '../../components/Modals/Clients/CancelarRecibo';
 import { ReciboPDF } from '../../components/pdf/pdf';
 import { PDFDownloadLink } from "@react-pdf/renderer";
+import { Alert } from '../../util/Alertas';
 
 function ListaRecibo() {
     const [pedidoId, setPedidoId] = useState(0);
@@ -27,7 +28,7 @@ function ListaRecibo() {
 
         api.get(`api/Recibo/BuscarRecibosPorPedido?pedidoId=${id}`,
             res => setRecibos(res.data),
-            erro => alert('1 Houve um erro na solicitação para buscar recibos' + erro)
+            erro => Alert('Houve um erro na solicitação para buscar recibos' + erro, false)
         );
 
         setShowCancelarModal(false);
@@ -39,7 +40,7 @@ function ListaRecibo() {
 
         api.get(`api/Recibo/BuscarRecibosPorPedido?pedidoId=${id}`,
             res => setRecibos(res.data),
-            erro => alert('2 Houve um erro na solicitação para buscar recibos' + erro)
+            erro => Alert('2 Houve um erro na solicitação para buscar recibos' + erro, false)
         );
 
         api.get(`api/Pedidos/BuscarPedidoId?PedidoId=${id}`,
@@ -47,12 +48,12 @@ function ListaRecibo() {
                 setCliente(res.data.cliente);
                 setPedido(res.data.pedido);
             },
-            erro => alert('Houve um erro na solicitação para buscar pedido' + erro)
+            erro => Alert('Houve um erro na solicitação para buscar pedido' + erro, false)
         );
 
         api.get(`api/Pedidos/BuscarTipoPagamento`,
             res => setTipoPagamento(res.data),
-            erro => alert('Houve um erro na solicitação para buscar tipos de pagamento' + erro)
+            erro => Alert('Houve um erro na solicitação para buscar tipos de pagamento' + erro, false)
         );
 
     }, [])
@@ -72,6 +73,7 @@ function ListaRecibo() {
         <section className='content'>
             {cliente && pedido && (
                 <div>
+                    <button onClick={() => window.history.go(-1)} className="btn btn-link">Voltar</button>
                     <h1>Histórico De Recibos</h1>
                     <div className="header-recibo" style={{
                         padding: '1rem',
@@ -146,7 +148,7 @@ function ListaRecibo() {
                                                             forma_pagamento: recibo.forma_pagamento,
                                                             nome_pagador: recibo.nome_pagador,
                                                             observacoes: recibo.observacoes,
-                                                            valor_pago: recibo.valor_pago.toFixed(2), 
+                                                            valor_pago: recibo.valor_pago.toFixed(2),
                                                             hash_recibo: recibo.hash_recibo
                                                         }} tipoPagamento={tipoPagamento} cliente={cliente} pedido={pedido} reciboId={recibo.recibo_id} />
                                                     }

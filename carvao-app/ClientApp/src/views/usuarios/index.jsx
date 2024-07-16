@@ -4,6 +4,7 @@ import { GetDataUser } from '../../util/GetDataUser';
 import { api } from '../../components/api/api';
 import { RiUserFollowFill } from "react-icons/ri";
 import { FaUserTimes } from 'react-icons/fa';
+import { Alert, Pergunta } from '../../util/Alertas';
 
 function Usuarios() {
     const usuario = GetDataUser();
@@ -24,7 +25,7 @@ function Usuarios() {
             setUsuarios(res.data);
             setUsuariosFiltro(res.data);
         }, err => {
-            alert("Houve um erro ao buscar os usuários")
+            Alert("Houve um erro ao buscar os usuários", false)
         })
     }
 
@@ -54,22 +55,22 @@ function Usuarios() {
 
         const nome = document.getElementById('nome' + index);
         if (!nome || nome.value === "") {
-            alert("Digite um nome");
+            Alert("Digite um nome", false, true);
             return;
         }
         const email = document.getElementById('email' + index);
         if (!email || email.value === "") {
-            alert("Digite um email");
+            Alert("Digite um email", false, true);
             return;
         }
         const cpf = document.getElementById('cpf' + index);
         if (!cpf || cpf.value === "") {
-            alert("Digite um cpf");
+            Alert("Digite um cpf", false, true);
             return;
         }
         const tipo = document.getElementById('tipo' + index);
         if (!tipo || tipo.value === "") {
-            alert("Selecione um tipo de usuario");
+            Alert("Selecione um tipo de usuario", false, true);
             return;
         }
 
@@ -81,26 +82,26 @@ function Usuarios() {
             id: usuarios[index].usuarioId
         }
 
-        if (await window.confirm("Deseja realmente salvar as informações?")) {
+        if (await Pergunta("Deseja realmente salvar as informações?")) {
             var data = new FormData();
             data.append("data", JSON.stringify(form));
             api.put("Usuario/AtualizarUsuario", data, res => {
                 setEditingIndex(null);
                 BuscarTodosUsuarios();
-                alert("Usuário atualizado com sucesso!")
+                Alert("Usuário atualizado com sucesso!")
             }, err => {
-                alert("Houve um erro ao atualizar o usuário.")
+                Alert("Houve um erro ao atualizar o usuário.", false)
             })
         }
     };
 
     const AlterarStatusCliente = async (usuarioId, novoStatus, ativar = false, inativar = false, excluir = false) => {
-        if (await window.confirm(`Deseja realmente ${ativar ? "ativar " : inativar ? "inativar " : excluir ? "excluir " : "alterar status d"}o usuário?`)) {
+        if (await Pergunta(`Deseja realmente ${ativar ? "ativar " : inativar ? "inativar " : excluir ? "excluir " : "alterar status d"}o usuário?`)) {
             api.put(`Usuario/AtualizarStatusUsuario/${usuarioId}?status=${novoStatus}`, {}, res => {
                 BuscarTodosUsuarios();
-                alert(`Usuário ${ativar ? "ativado" : inativar ? "inativado" : excluir ? "excluido" : "alterado"} com sucesso!`)
+                Alert(`Usuário ${ativar ? "ativado" : inativar ? "inativado" : excluir ? "excluido" : "alterado"} com sucesso!`)
             }, err => {
-                alert("Houve um erro ao atualizar o status do usuário.")
+                Alert("Houve um erro ao atualizar o status do usuário.", false)
             })
         }
     }
@@ -108,6 +109,7 @@ function Usuarios() {
 
     return (
         <section className='content'>
+            <button onClick={() => window.history.go(-1)} className="btn btn-link">Voltar</button>
             <h1>Usuários <FaUsers /></h1>
             <div className="container-table">
                 <div style={{

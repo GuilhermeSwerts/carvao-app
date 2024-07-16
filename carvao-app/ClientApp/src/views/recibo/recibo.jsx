@@ -4,6 +4,7 @@ import { api } from '../../components/api/api';
 import { format } from 'date-fns';
 import { ReciboPDF } from '../../components/pdf/pdf';
 import { PDFDownloadLink } from "@react-pdf/renderer";
+import { Alert, Pergunta } from '../../util/Alertas';
 
 function Recibo() {
     const [pedido, setPedido] = useState();
@@ -48,7 +49,7 @@ function Recibo() {
                 setCliente(res.data.cliente);
             }
         }, erro => {
-            alert('Houve um erro na solicitação BuscarPedidoId' + erro);
+            Alert('Houve um erro na solicitação BuscarPedidoId' + erro, false);
         });
 
         api.get(`api/Pedidos/BuscarTipoPagamento`, res => {
@@ -56,7 +57,7 @@ function Recibo() {
                 setTipoPagamento(res.data);
             }
         }, erro => {
-            alert('Houve um erro na solicitação BuscarTipoPagamento' + erro);
+            Alert('Houve um erro na solicitação BuscarTipoPagamento' + erro, false);
         })
 
         api.get(`api/Recibo/BuscarRecibosPorPedido?PedidoId=${id}`, res => {
@@ -64,7 +65,7 @@ function Recibo() {
                 setRecibos(res.data);
             }
         }, erro => {
-            alert('Houve um erro na solicitação BuscarRecibosPorPedido' + erro);
+            Alert('Houve um erro na solicitação BuscarRecibosPorPedido' + erro, false);
         });
     }, []);
 
@@ -73,7 +74,7 @@ function Recibo() {
     const onChangevalor_pago = e => {
         let valorRestante = (pedido.valor_total - (pedido.valor_total - pedido.saldo_devedor));
         if (e.target.value > valorRestante) {
-            alert(`Valor acima do valor total a serem pagos\nValor máximo: R$ ${valorRestante.toFixed(2)}.`);
+            Alert(`Valor acima do valor total a serem pagos\nValor máximo: R$ ${valorRestante.toFixed(2)}.`, false, true);
             return;
         }
 
@@ -86,23 +87,23 @@ function Recibo() {
         if (!data.valor_pago || data.valor_pago == '' || data.valor_pago < 1) {
             data.valor_pago = valorRestante;
             onChangevalor_pago({ target: { value: valorRestante } })
-            var setValorTotal = await window.confirm("**Valor pago não foi informado! \n Deseja realizar recibo com valor total do saldo devedor?");
+            var setValorTotal = await Pergunta("**Valor pago não foi informado! \n Deseja realizar recibo com valor total do saldo devedor?");
             if (!setValorTotal) {
                 return;
             }
         }
 
         if (!pedido || !pedido.pedido_id || !pedidoId || pedidoId == 0) {
-            alert("Pedido não está carregado ou pedidoId não está disponível");
+            Alert("Pedido não está carregado ou pedidoId não está disponível", false, true);
             return;
         }
 
         if (data.valor_pago > valorRestante) {
-            alert(`Valor acima do valor total a serem pagos\nValor máximo: R$ ${valorRestante.toFixed(2).replaceAll('.', ',')}.`);
+            Alert(`Valor acima do valor total a serem pagos\nValor máximo: R$ ${valorRestante.toFixed(2).replaceAll('.', ',')}.`, false, true);
             return;
         }
 
-        var gerar = await window.confirm("Deseja realmente gerar um recibo?")
+        var gerar = await Pergunta("Deseja realmente gerar um recibo?")
         if (gerar) {
 
             const formData = new FormData();
@@ -120,16 +121,16 @@ function Recibo() {
                     setPedido(resPedido.data.pedido);
 
                 }, erro => {
-                    alert('Houve um erro na solicitação');
+                    Alert('Houve um erro na solicitação', false);
                 });
 
                 api.get(`/api/Recibo/BuscarReciboPorId?reciboId=${resGerarRecibo.data}`, resRecibo => {
                     setReciboCorrente(resRecibo.data);
                 }, erro => {
-                    alert('Houve um erro na solicitação');
+                    Alert('Houve um erro na solicitação', false);
                 });
             }, erro => {
-                alert('Houve um erro na solicitação');
+                Alert('Houve um erro na solicitação', false);
             })
         }
 

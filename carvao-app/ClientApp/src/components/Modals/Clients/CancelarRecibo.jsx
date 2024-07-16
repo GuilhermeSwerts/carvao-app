@@ -1,31 +1,32 @@
 ﻿import React, { useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import { api } from '../../../components/api/api';
+import { Alert } from '../../../util/Alertas';
 
 function CancelarReciboModal({ show, onHide, onCancelRecibo, recibo, onReload }) {
     const [justificativa, setJustificativa] = useState('');
-   
+
 
     const handleCancelarClick = () => {
         if (!justificativa.trim()) {
-            alert('A justificativa para o cancelamento é obrigatória.');
+            Alert('A justificativa para o cancelamento é obrigatória.', false, true);
             return;
         }
         const form = new FormData();
         const data = {
-            id: recibo.recibo_id, justificativa: justificativa 
+            id: recibo.recibo_id, justificativa: justificativa
         }
 
-       form.append("data", JSON.stringify(data))
-        
+        form.append("data", JSON.stringify(data))
+
 
         console.log(recibo);
 
         api.post('/api/Recibo/CancelarReciboPorId', form, res => {
-            alert('Recibo cancelado com sucesso:', res.data);
+            Alert('Recibo cancelado com sucesso');
             onReload();
         }, error => {
-            alert('Erro ao cancelar recibo:', error);
+            Alert('Erro ao cancelar recibo: ' + error.response.data ? error.response.data : error.message, false);
         })
         onCancelRecibo(justificativa);
 

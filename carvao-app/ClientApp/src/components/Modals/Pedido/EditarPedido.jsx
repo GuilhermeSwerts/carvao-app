@@ -4,6 +4,7 @@ import { FaPlus } from 'react-icons/fa';
 import ButtonTooltip from '../../Inputs/ButtonTooltip';
 import { FaPencil } from 'react-icons/fa6';
 import { api } from '../../api/api';
+import { Alert } from '../../../util/Alertas';
 
 function ModalEditarPedido({ PedidoId, Produtos, Historico, Pedido, reloadPage }) {
     const [show, setShow] = useState(false);
@@ -58,30 +59,39 @@ function ModalEditarPedido({ PedidoId, Produtos, Historico, Pedido, reloadPage }
         setProdutosAdicionados(novosProdutosAdicionados);
     }
 
-    //const onChangeValor = (produtoId, e) => {
-    //    const valorDescontoReais = parseFloat(e.target.value);
-    //    if (!isNaN(valorDescontoReais)) {
-    //        const updatedProdutosAdicionados = produtosAdicionados.map((produto) => {
-    //            if (produto.id === produtoId) {
-    //                return { ...produto, valorDesconto: valorDescontoReais, valorDescontoUnitario: valorDescontoReais };
-    //            }
-    //            return produto;
-    //        });
-    //        setProdutosAdicionados(updatedProdutosAdicionados);
-    //    }
-    //}
-    const onChangeValor = (produtoId, e) => {
-        const valor = e.target.value;
-     
-        const valorDescontoReais = valor === '' ? 0 : parseFloat(valor);
-        if (!isNaN(valorDescontoReais) || valor === '') {
-            const updatedProdutosAdicionados = produtosAdicionados.map((produto) => {
-                if (produto.id === produtoId) {
-                    return { ...produto, valorDesconto: valorDescontoReais, valorDescontoUnitario: valorDescontoReais };
-                }
-                return produto;
-            });
-            setProdutosAdicionados(updatedProdutosAdicionados);
+    const onChangeValor = (produtoId, quantidade, e) => {
+        try {
+            const valor = e.target.value.replace(/[^0-9,.]/g, '').replace(',', '.');
+            if (valor.includes('.') && (valor.split('.').length === 1 || valor.split('.').length > 1 && valor.split('.')[1] === '')) {
+                const produtoSemValidacao = produtosAdicionados.map((produto) => {
+                    if (produto.id === produtoId) {
+                        return { ...produto, valorDesconto: valor };
+                    }
+                    return produto;
+                });
+                setProdutosAdicionados(produtoSemValidacao);
+                return;
+            }
+
+            const valorDescontoReais = valor === '' ? 0 : parseFloat(valor);
+
+            if (CalcularValorDescontoPorQuantidade(produtoId, quantidade, valorDescontoReais)) {
+                return;
+            }
+
+            if (!isNaN(valorDescontoReais)) {
+                const updatedProdutosAdicionados = produtosAdicionados.map((produto) => {
+                    if (produto.id === produtoId) {
+                        return { ...produto, valorDesconto: valorDescontoReais };
+                    }
+                    return produto;
+                });
+                setProdutosAdicionados(updatedProdutosAdicionados);
+            } else {
+                Alert('Valor digitado esta incorreto!', false, true);
+            }
+        } catch (error) {
+            Alert('Valor digitado esta incorreto!', false, true);
         }
     };
 
@@ -139,6 +149,22 @@ function ModalEditarPedido({ PedidoId, Produtos, Historico, Pedido, reloadPage }
         }
     };
 
+    const CalcularValorDescontoPorQuantidade = (produtoId, quantidade, valorDescontoDigitado) => {
+        let produto = Produtos.filter(x => x.id === produtoId)[0];
+
+        let valorTotal = produto.valor * quantidade;
+        let valorMinimo = produto.valorMinimo * quantidade;
+        let valorMaximoDesconto = (valorTotal - valorMinimo);
+
+        if (valorMaximoDesconto < valorDescontoDigitado) {
+            Alert(`Valor do pedido está a baixo que o valor minímo.
+                Desconto permitido até o valor de R$ ${valorMaximoDesconto}`, false, true);
+            return true;
+        }
+
+        return false;
+    }
+
     const CalcularValorMinimo = (desconto) => {
         if (/^\d*\.?\d*$/.test(desconto) || desconto === "") {
             const percentual = desconto === "" ? "" : parseFloat(desconto);
@@ -159,8 +185,8 @@ function ModalEditarPedido({ PedidoId, Produtos, Historico, Pedido, reloadPage }
                 let abaixo = (valorVenda - valorDesconto.toFixed(2)) < total;
 
                 if (abaixo) {
-                    alert(`Valor do pedido está a baixo que o valor minímo.
-          Desconto permitido até o valor de R$ ${total}`);
+                    Alert(`Valor do pedido está a baixo que o valor minímo.
+          Desconto permitido até o valor de R$ ${total}`, false, true);
                 }
 
                 return abaixo;
@@ -180,7 +206,7 @@ function ModalEditarPedido({ PedidoId, Produtos, Historico, Pedido, reloadPage }
 
     const onSubmit = () => {
         if (produtosAdicionados.length === 0) {
-            alert("Por favor, selecione pelo menos um produto.");
+            Alert("Por favor, selecione pelo menos um produto.", false, true);
             return;
         }
 
@@ -207,11 +233,11 @@ function ModalEditarPedido({ PedidoId, Produtos, Historico, Pedido, reloadPage }
         data.append("obj", obj);
         try {
             api.post("api/Pedido/EditarPedido", data, res => {
-                alert("Pedido editado com sucesso!");
+                Alert("Pedido editado com sucesso!");
                 reloadPage();
                 setShow(false);
             }, erro => {
-                alert("Houve um erro na solicitação!\nPor favor tente novamente mais tarde.");
+                Alert("Houve um erro na solicitação!\nPor favor tente novamente mais tarde.", false);
             })
 
         } catch (error) {
@@ -293,18 +319,18 @@ function ModalEditarPedido({ PedidoId, Produtos, Historico, Pedido, reloadPage }
                                         {produtosAdicionados.map((produto, index) => {
                                             return (
                                                 <tr key={index}>
-                                                    <td>{produto.nome}</td>
-                                                    <td>{produto.qtdProdutos}</td>
-                                                    <td>
+                                                    <td data-label="Nome">{produto.nome}</td>
+                                                    <td data-label="Quantidade">{produto.qtdProdutos}</td>
+                                                    <td data-label="Valor Desconto">
                                                         <input
                                                             type="number"
                                                             style={{ width: '50%' }}
                                                             value={produto.valorDesconto === 0 ? '' : produto.valorDesconto}
-                                                            onChange={(e) => onChangeValor(produto.id, e)}
+                                                            onChange={(e) => onChangeValor(produto.id, produto.qtdProdutos, e)}
                                                             step="0.01" // Permite inserir valores decimais
                                                         />
                                                     </td>
-                                                    <td>
+                                                    <td data-label="Valor Total">
                                                         R${" "}
                                                         {(
                                                             produto.valor * produto.qtdProdutos -

@@ -9,6 +9,7 @@ import { GetDataUser } from "../../util/GetDataUser";
 import { buscarClientes } from "../../components/api/apiMiddle";
 import { eTipoDownload } from "../../enum/eTipoDownload";
 import { FaUsers } from "react-icons/fa";
+import { Alert, Pergunta } from "../../util/Alertas";
 
 function ClienteListView() {
     const [clientes, setClientes] = useState([]);
@@ -23,16 +24,13 @@ function ClienteListView() {
     const usuario = GetDataUser();
 
     const fetchClientes = (query, dtInicio, dtFim) => {
-        try {
-            buscarClientes(query, dtInicio, dtFim).then(result => {
-                setClientes(result.data);
-            }).catch(error => {
-                console.error("Erro ao buscar clientes:", error);
-            });
 
-        } catch (error) {
-            console.error("Erro ao buscar clientes:", error);
-        }
+        api.get(`api/Cliente/BuscarClientes?q=${query || ""}&dtInicio=${dtInicio || ""}&dtFim=${dtFim || ""}`, res => {
+            setClientes(res.data);
+        }, error => {
+            Alert("Erro ao buscar clientes: " + error, false);
+
+        })
     };
 
     useEffect(() => {
@@ -72,10 +70,10 @@ function ClienteListView() {
 
                     fetchClientes();
                     setModalAberto(false);
-                    window.alert("Cliente salvo com sucesso!");
+                    Alert("Cliente salvo com sucesso!");
                 }, erro => {
                     const msg = erro.response ? erro.response.data : erro.message;
-                    window.alert(msg);
+                    Alert(msg, false);
                 });
 
         } catch (error) {
@@ -90,15 +88,15 @@ function ClienteListView() {
     };
 
     const toggleStatus = async (statusAtual, id) => {
-        if (await window.confirm("Deseja realmente atualizar o status desse cliente?"))
+        if (await Pergunta("Deseja realmente atualizar o status desse cliente?"))
             try {
                 api.post(`api/Cliente/${statusAtual ? "AtivaCliente" : "InativaCliente"}/${id}`,
                     {}, res => {
                         fetchClientes();
-                        window.alert("Cliente atualizado com sucesso!");
+                        Alert("Cliente atualizado com sucesso!");
                     });
             } catch (error) {
-                console.error("Erro ao alterar o status do cliente:", error);
+                Alert("Erro ao alterar o status do cliente", false);
             }
     };
 
@@ -121,6 +119,7 @@ function ClienteListView() {
                 clienteSelecionado={clienteSelecionado}
             />
             <div className="content">
+                <button onClick={() => window.history.go(-1)} className="btn btn-link">Voltar</button>
                 <h1>Meus Clientes <FaUsers /> </h1>
                 <div className="container-table">
                     <Filter
