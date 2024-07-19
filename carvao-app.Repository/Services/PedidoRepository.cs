@@ -146,7 +146,8 @@ namespace carvao_app.Repository.Services
                             p.data_atualizacao, 
                             p.observacao, 
                             p.status_pagamento_id, 
-                            CONCAT(COALESCE(e.localidade, ''), ' - ', COALESCE(e.uf, '')) AS Localidade, 
+                            CONCAT(COALESCE(e.localidade, ''), ' - ', COALESCE(e.uf, '')) AS Localidade,
+                            CONCAT(e.logradouro,', ',e.`Numero`,' - ',e.bairro,' - ',COALESCE(e.localidade, ''), ' - ', COALESCE(e.uf, ''),', ',e.cep) as Endereco,
                             p.saldo_devedor 
                         FROM pedido p 
                         JOIN cliente c ON p.cliente_id = c.cliente_id 

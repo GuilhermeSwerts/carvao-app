@@ -1,0 +1,28 @@
+.resumo-titulo{
+  width: 100%;
+  background-color: rgb(13,110,253);
+  color: #fff;
+  padding: 10px;
+  font-weight: 700;
+}
+.resumo-box-dados-gerais
+{
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  gap: 10px;
+}
+.resumo-box-dados-gerais label
+{
+  font-weight: 700;
+  flex-grow: 1;
+}
+.conteudo-dados-gerais
+{
+  border-bottom: 1px solid;
+}
+.resumo-dados-gerais-container
+{
+  display: flex;
+  flex-wrap: wrap;
+}

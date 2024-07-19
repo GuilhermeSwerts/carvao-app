@@ -25,6 +25,7 @@ namespace carvao_app.Repository.Maps
         public string NomeCliente { get; set; } 
         public string NomeVendedor { get; set; }
         public string Localidade { get; set; }
+        public string Endereco { get; set; }
         public decimal Saldo_devedor { get; set; }
     }
 }
