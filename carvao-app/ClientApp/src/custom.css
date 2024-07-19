@@ -145,3 +145,80 @@ body {
     justify-content: flex-start;
   }
 }
+
+.resumo-titulo {
+  width: 100%;
+  background-color: rgb(13, 110, 253);
+  color: #fff;
+  padding: 10px;
+  font-weight: 700;
+}
+
+.resumo-box-dados-gerais {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  gap: 10px;
+}
+
+.resumo-box-dados-gerais label {
+  font-weight: 700;
+  flex-grow: 1;
+}
+
+.conteudo-dados-gerais {
+  border-bottom: 1px solid;
+}
+
+.resumo-dados-gerais-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.custom-modal {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+.custom-modal .modal-content {
+  width: 70vw;
+  height: 90vh;
+  overflow: auto;
+}
+
+.footer-modal-detalhe-pedido
+{
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  gap: 10px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  background-color: #fff;
+  padding: 5px;
+  width: 100%;
+  transition: 0.5s;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}

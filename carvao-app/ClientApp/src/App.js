@@ -12,6 +12,7 @@ import Login from './views/login/login';
 import CadUsuario from './views/cadUsuario/cadUsuario';
 import Produtos from './views/produtos/produtosTable';
 import Usuarios from './views/usuarios';
+import Teste from './views/Teste/Teste';
 
 export default class App extends Component {
   static displayName = App.name;
@@ -19,6 +20,7 @@ export default class App extends Component {
   render() {
     return (
       <Layout>
+        <Route exact path='/dev' component={Teste} />
         <Route exact path='/' component={Clientes} />
         <Route exact path='/login' component={Login} />
         <Route exact path='/cliente' component={Clientes} />
