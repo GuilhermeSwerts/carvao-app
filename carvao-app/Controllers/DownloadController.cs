@@ -61,6 +61,20 @@ namespace carvao_app.Controllers
                 XFont sectionFont = new XFont("Arial", 12, XFontStyleEx.Bold);
                 XFont normalFont = new XFont("Arial", 12, XFontStyleEx.Regular);
 
+                XImage image = XImage.FromFile("images/icone.jpg");
+
+                //gfx.DrawImage(image, 50, 50, 100, 100); // x, y, largura, altura
+
+                // Calcule a posição X para alinhar a imagem à direita
+                double width = 250; // Largura desejada da imagem
+                double height = image.PixelHeight * (width / image.PixelWidth); // Altura proporcional à largura
+                double xPosition = page.Width - width + 50; // Ajuste o fator conforme necessário, incluindo margem
+                double yPosition = 35; // Ajuste a posição Y conforme necessário
+
+                // Desenhe a imagem na posição desejada
+                gfx.DrawImage(image, xPosition, yPosition, width, height);
+
+
                 XRect rect = new XRect(0, 0, page.Width, 40);
                 XColor backgroundColor = XColor.FromArgb(13, 110, 253);
                 gfx.DrawRectangle(new XSolidBrush(backgroundColor), rect);
