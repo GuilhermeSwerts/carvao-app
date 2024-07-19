@@ -68,7 +68,6 @@ namespace carvao_app.Controllers
                 double xPosition = page.Width - width + 50;
                 double yPosition = 35; 
 
-                // Desenhe a imagem na posição desejada
                 gfx.DrawImage(image, xPosition, yPosition, width, height);
 
 
