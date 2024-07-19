@@ -121,7 +121,7 @@ namespace carvao_app.Controllers
                     gfx.DrawString($"R$ {item.Desconto_unitario:F2}", normalFont, XBrushes.Black, new XRect(tableStartX + columnWidths.Take(3).Sum(), yPoint, columnWidths[3], tableHeight), XStringFormats.Center);
 
                     gfx.DrawRectangle(XPens.Black, tableStartX + columnWidths.Take(4).Sum(), yPoint, columnWidths[4], tableHeight);
-                    gfx.DrawString($"R$ {item.Valor_total:F2}", normalFont, XBrushes.Black, new XRect(tableStartX + columnWidths.Take(4).Sum(), yPoint, columnWidths[4], tableHeight), XStringFormats.Center);
+                    gfx.DrawString($"R$ {((item.Quantidade * item.Valor_unitario) - item.Desconto_unitario):F2}", normalFont, XBrushes.Black, new XRect(tableStartX + columnWidths.Take(4).Sum(), yPoint, columnWidths[4], tableHeight), XStringFormats.Center);
 
                     yPoint += Convert.ToInt32(tableHeight);
                 }

@@ -12,7 +12,7 @@ import Login from './views/login/login';
 import CadUsuario from './views/cadUsuario/cadUsuario';
 import Produtos from './views/produtos/produtosTable';
 import Usuarios from './views/usuarios';
-import Teste from './views/Teste/Teste';
+import Teste from './components/pdf/pdf';
 
 export default class App extends Component {
   static displayName = App.name;

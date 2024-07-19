@@ -44,6 +44,15 @@ class VisualizarPedido extends React.Component {
             }
         };
 
+        const getDataFormatada = (datastr) => {
+            var data = new Date(datastr);
+
+            const day = String(data.getDate()).padStart(2, '0');
+            const month = String(data.getMonth() + 1).padStart(2, '0');
+            const year = data.getFullYear();
+            
+            return `${day}/${month}/${year} ${data.getHours()}:${data.getMinutes()}:${data.getSeconds()}`
+        }
 
         return (
             <>
@@ -69,7 +78,7 @@ class VisualizarPedido extends React.Component {
                                 <span><b>N° DO PEDIDO:</b> {Pedido.pedido_id}</span>
                             </div>
                             <div className="col-sm-4">
-                                <span><b>DATA DO PEDIDO:</b> {Pedido.data_pedido}</span>
+                                <span><b>DATA DO PEDIDO:</b> {getDataFormatada(Pedido.data_pedido)}</span>
                             </div>
                             <div className="col-sm-6">
                                 <span><b>NOME DO VENDEDOR:</b> {Pedido.nomeVendedor.toUpperCase()}</span>
@@ -100,11 +109,11 @@ class VisualizarPedido extends React.Component {
                             <tbody>
                                 {Pedido.produtos.map((produto, i) => (
                                     <tr key={i}>
-                                        <td>{produto.quantidade}</td>
-                                        <td>{this.props.produtos.filter(x => x.id === produto.produto_id)[0]?.nome}</td>
-                                        <td>R$ {produto.valor_unitario.toFixed(2)}</td>
-                                        <td>R$ {produto.desconto_unitario.toFixed(2)}%</td>
-                                        <td>R$ {produto.valor_total.toFixed(2)}</td>
+                                        <td data-label="QUANTIDADE">{produto.quantidade}</td>
+                                        <td data-label="PRODUTO">{this.props.produtos.filter(x => x.id === produto.produto_id)[0]?.nome}</td>
+                                        <td data-label="QUANVALOR UN.TIDADE">R$ {produto.valor_unitario.toFixed(2)}</td>
+                                        <td data-label="DESCONTO UN.">R$ {produto.desconto_unitario.toFixed(2)}</td>
+                                        <td data-label="TOTAL">R$ {((produto.quantidade * produto.valor_unitario) - produto.desconto_unitario).toFixed(2)}</td>
                                     </tr>
                                 ))}
                             </tbody>
