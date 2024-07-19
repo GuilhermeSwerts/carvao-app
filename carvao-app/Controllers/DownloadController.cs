@@ -63,13 +63,10 @@ namespace carvao_app.Controllers
 
                 XImage image = XImage.FromFile("images/icone.jpg");
 
-                //gfx.DrawImage(image, 50, 50, 100, 100); // x, y, largura, altura
-
-                // Calcule a posição X para alinhar a imagem à direita
-                double width = 250; // Largura desejada da imagem
-                double height = image.PixelHeight * (width / image.PixelWidth); // Altura proporcional à largura
-                double xPosition = page.Width - width + 50; // Ajuste o fator conforme necessário, incluindo margem
-                double yPosition = 35; // Ajuste a posição Y conforme necessário
+                double width = 250; 
+                double height = image.PixelHeight * (width / image.PixelWidth); 
+                double xPosition = page.Width - width + 50;
+                double yPosition = 35; 
 
                 // Desenhe a imagem na posição desejada
                 gfx.DrawImage(image, xPosition, yPosition, width, height);
