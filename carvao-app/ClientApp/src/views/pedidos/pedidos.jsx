@@ -296,7 +296,7 @@ function TelaPedido() {
             if (CalcularValorDescontoPorQuantidade(produtoId, quantidade, valorDescontoReais)) {
                 return;
             }
-
+            debugger
             if (!isNaN(valorDescontoReais)) {
                 const updatedProdutosAdicionados = produtosAdicionados.map((produto) => {
                     if (produto.id === produtoId) {

@@ -1,6 +1,7 @@
 import React from 'react';
 import { format } from 'date-fns';
-import { PDFDownloadLink, Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
+import { PDFDownloadLink, Document, Page, Text, View, StyleSheet, Image } from "@react-pdf/renderer";
+import logo from '../../imgs/icone.jpg';
 
 const styles = StyleSheet.create({
     page: {
@@ -44,6 +45,12 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         width: '100%',
         gap: 10
+    },
+    containerImg: {
+        position: 'absolute',
+        right: 20,
+        top: 150,
+        width:250
     }
 });
 
@@ -71,7 +78,9 @@ export const ReciboPDF = ({ pedidoId, data, tipoPagamento, cliente, pedido, reci
                     <Text style={{ textAlign: "center" }}>CNPJ: 52.808.774/0001-47</Text>
                     <Text style={styles.title}>Recibo {reciboId}</Text>
                 </View>
-
+                <View style={styles.containerImg}>
+                    <Image source={logo} />
+                </View>
                 <View style={styles.detailItem}>
                     <View style={styles.containerRow}>
                         <Text style={styles.detailTitle}>Nome Cliente:</Text>

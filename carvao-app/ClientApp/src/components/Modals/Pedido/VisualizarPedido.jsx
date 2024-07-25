@@ -2,7 +2,8 @@ import React from 'react';
 import { Modal } from 'react-bootstrap';
 import { CgDetailsMore } from 'react-icons/cg';
 import ButtonTooltip from '../../Inputs/ButtonTooltip';
-import { api } from '../../api/api';
+import axios from 'axios';
+import { api } from '../../../components/api/api';
 class VisualizarPedido extends React.Component {
 
     constructor(props) {
@@ -25,23 +26,33 @@ class VisualizarPedido extends React.Component {
 
         const handleExport = async () => {
             try {
-              
-                const response = await axios.get(`api/Download/Pdf/DetalhesPedido/${Pedido.pedido_id}`, {
-                responseType: 'blob',
-                headers: {
-                    "Authorization": `Bearer ${api.access_token ? api.access_token : ""}`
-                }
-              });
 
-              const blob = new Blob([response.data], { type: 'application/pdf' });
-              const link = document.createElement('a');
-              link.href = window.URL.createObjectURL(blob);
-              link.download =  `pedido_${Pedido.nomeCliente}_${Pedido.pedido_id}.pdf` 
-              link.click();
+                const response = await axios.get(`api/Download/Pdf/DetalhesPedido/${Pedido.pedido_id}`, {
+                    responseType: 'blob',
+                    headers: {
+                        "Authorization": `Bearer ${api.access_token ? api.access_token : ""}`
+                    }
+                });
+
+                const blob = new Blob([response.data], { type: 'application/pdf' });
+                const link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = `pedido_${Pedido.nomeCliente}_${Pedido.pedido_id}.pdf`
+                link.click();
             } catch (error) {
-              console.error('Erro ao exportar para PDF:', error);
+                console.error('Erro ao exportar para PDF:', error);
             }
-          };
+        };
+
+        const getDataFormatada = (datastr) => {
+            var data = new Date(datastr);
+
+            const day = String(data.getDate()).padStart(2, '0');
+            const month = String(data.getMonth() + 1).padStart(2, '0');
+            const year = data.getFullYear();
+            
+            return `${day}/${month}/${year} ${data.getHours()}:${data.getMinutes()}:${data.getSeconds()}`
+        }
 
         return (
             <>
@@ -67,7 +78,7 @@ class VisualizarPedido extends React.Component {
                                 <span><b>N° DO PEDIDO:</b> {Pedido.pedido_id}</span>
                             </div>
                             <div className="col-sm-4">
-                                <span><b>DATA DO PEDIDO:</b> {Pedido.data_pedido}</span>
+                                <span><b>DATA DO PEDIDO:</b> {getDataFormatada(Pedido.data_pedido)}</span>
                             </div>
                             <div className="col-sm-6">
                                 <span><b>NOME DO VENDEDOR:</b> {Pedido.nomeVendedor.toUpperCase()}</span>
@@ -98,11 +109,11 @@ class VisualizarPedido extends React.Component {
                             <tbody>
                                 {Pedido.produtos.map((produto, i) => (
                                     <tr key={i}>
-                                        <td>{produto.quantidade}</td>
-                                        <td>{this.props.produtos.filter(x => x.id === produto.produto_id)[0]?.nome}</td>
-                                        <td>R$ {produto.valor_unitario.toFixed(2)}</td>
-                                        <td>R$ {produto.desconto_unitario.toFixed(2)}%</td>
-                                        <td>R$ {produto.valor_total.toFixed(2)}</td>
+                                        <td data-label="QUANTIDADE">{produto.quantidade}</td>
+                                        <td data-label="PRODUTO">{this.props.produtos.filter(x => x.id === produto.produto_id)[0]?.nome}</td>
+                                        <td data-label="QUANVALOR UN.TIDADE">R$ {produto.valor_unitario.toFixed(2)}</td>
+                                        <td data-label="DESCONTO UN.">R$ {produto.desconto_unitario.toFixed(2)}</td>
+                                        <td data-label="TOTAL">R$ {((produto.quantidade * produto.valor_unitario) - produto.desconto_unitario).toFixed(2)}</td>
                                     </tr>
                                 ))}
                             </tbody>
@@ -117,7 +128,7 @@ class VisualizarPedido extends React.Component {
                             </div>
                             <div className="col-md-3">
                                 <label>VALOR TOTAL DO PEDIDO</label>
-                                <input type="text" disabled className='form-control' value={`R$ ${this.props.historico.filter(x=> x.pedido_id === Pedido.pedido_id)[0].valor_total.toFixed(2)}`} />
+                                <input type="text" disabled className='form-control' value={`R$ ${this.props.historico.filter(x => x.pedido_id === Pedido.pedido_id)[0].valor_total.toFixed(2)}`} />
                             </div>
                         </div>
                         <div className="footer-modal-detalhe-pedido">

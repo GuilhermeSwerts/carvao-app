@@ -138,7 +138,7 @@ function Recibo() {
 
 
     return (<section className='content'>
-        {cliente && pedido && <form className="container" onSubmit={e => { e.preventDefault(); }}>
+        {cliente && pedido && <form className="container" onSubmit={e => { e.preventDefault(); handdleEnviar() }}>
             <div className="header-recibo" style={{
                 padding: '1rem',
                 background: '#28d',
@@ -224,7 +224,7 @@ function Recibo() {
                     <button onClick={() => window.history.back()} style={{ width: '100%' }} className='btn btn-danger'>Cancelar</button>
                 </Col>
                 <Col md={3}>
-                    <button onClick={handdleEnviar} style={{ width: '100%' }} className='btn btn-primary'>Gerar Recibo</button>
+                    <button type="submit" style={{ width: '100%' }} className='btn btn-primary'>Gerar Recibo</button>
                 </Col>
             </Row>}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: "center" }}>
