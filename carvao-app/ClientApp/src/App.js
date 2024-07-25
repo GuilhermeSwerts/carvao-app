@@ -1,4 +1,4 @@
-.import React, { Component } from 'react';
+import React, { Component } from 'react';
 import { Route } from 'react-router';
 import './custom.css'
 import Layout from './components/Layout/Layout';
@@ -12,6 +12,7 @@ import Login from './views/login/login';
 import CadUsuario from './views/cadUsuario/cadUsuario';
 import Produtos from './views/produtos/produtosTable';
 import Usuarios from './views/usuarios';
+import Estoque from './views/estoque/estoque';
 
 export default class App extends Component {
   static displayName = App.name;
@@ -20,6 +21,7 @@ export default class App extends Component {
     return (
       <Layout>
         <Route exact path='/' component={Clientes} />
+        <Route exact path='/estoqueCarvao' component={Estoque} />
         <Route exact path='/login' component={Login} />
         <Route exact path='/cliente' component={Clientes} />
         <Route exact path='/pedido' component={Pedidos} />

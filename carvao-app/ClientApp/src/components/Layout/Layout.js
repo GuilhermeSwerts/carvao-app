@@ -5,6 +5,7 @@ import { FaArrowRight, FaDoorOpen, FaUser, FaUserPlus } from 'react-icons/fa';
 import { FaUsers, FaShoppingCart, FaCartPlus } from "react-icons/fa";
 import { FaGears, FaKey } from "react-icons/fa6";
 import { FaBoxes } from "react-icons/fa";
+import { BsInboxesFill } from "react-icons/bs";
 import ModalAlterarSenha from '../Modals/Usuario/ModalAlterarSenha';
 
 function Layout({ children }) {
@@ -43,6 +44,10 @@ function Layout({ children }) {
         {usuario.IsMaster && <a class='slider_item' href='produtos'>
           PRODUTOS
           <FaBoxes size={20} className='slider-item-hover' />
+        </a>}
+        {usuario.IsMaster && <a class='slider_item' href='estoqueCarvao'>
+          ESTOQUE
+          <BsInboxesFill size={20} className='slider-item-hover' />
         </a>}
         {usuario.IsMaster && <a class='slider_item' href='usuarios'>
           USUÁRIOS
