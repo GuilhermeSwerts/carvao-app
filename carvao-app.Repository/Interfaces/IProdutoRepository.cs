@@ -15,5 +15,6 @@ namespace carvao_app.Repository.Interfaces
         void NovoProduto(ProdutoMap request);
         void DeletaProduto(int id);
         void EditarProduto(ProdutoMap request);
+        void AtualizarEstoque(int id, int qtd);
     }
 }

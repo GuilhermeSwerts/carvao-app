@@ -2,6 +2,7 @@ import React from 'react';
 import { Modal } from 'react-bootstrap';
 import { CgDetailsMore } from 'react-icons/cg';
 import ButtonTooltip from '../../Inputs/ButtonTooltip';
+import { api } from '../../api/api';
 class VisualizarPedido extends React.Component {
 
     constructor(props) {
@@ -17,27 +18,30 @@ class VisualizarPedido extends React.Component {
     }
 
     render() {
-        const produtos = [
-            {
-                qtd: 1,
-                produto: 'Carvão 10kg',
-                valorUn: 10.5,
-                porcentagemDesconto: 10,
-                total: 240.5
-            },
-            {
-                qtd: 1,
-                produto: 'Carvão 10kg',
-                valorUn: 10.5,
-                porcentagemDesconto: 10,
-                total: 20
-            }
-        ]
-
         const CloseModal = () => this.setState({ show: false });
         const OpenModal = () => this.setState({ show: true });
 
         const { Pedido } = this.props;
+
+        const handleExport = async () => {
+            try {
+              
+                const response = await axios.get(`api/Download/Pdf/DetalhesPedido/${Pedido.pedido_id}`, {
+                responseType: 'blob',
+                headers: {
+                    "Authorization": `Bearer ${api.access_token ? api.access_token : ""}`
+                }
+              });
+
+              const blob = new Blob([response.data], { type: 'application/pdf' });
+              const link = document.createElement('a');
+              link.href = window.URL.createObjectURL(blob);
+              link.download =  `pedido_${Pedido.nomeCliente}_${Pedido.pedido_id}.pdf` 
+              link.click();
+            } catch (error) {
+              console.error('Erro ao exportar para PDF:', error);
+            }
+          };
 
         return (
             <>
@@ -118,7 +122,7 @@ class VisualizarPedido extends React.Component {
                         </div>
                         <div className="footer-modal-detalhe-pedido">
                             <button className='btn btn-danger' onClick={CloseModal}>Fechar</button>
-                            <button className='btn btn-primary'>Download</button>
+                            <button className='btn btn-primary' onClick={handleExport}>Download</button>
                         </div>
                     </Modal.Body>
                 </Modal>

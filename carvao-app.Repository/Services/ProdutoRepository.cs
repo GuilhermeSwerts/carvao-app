@@ -82,5 +82,17 @@ namespace carvao_app.Repository.Services
             
             DataBase.Execute(_configuration, query, parameters);
         }
+
+        public void AtualizarEstoque(int id, int qtd)
+        {
+            var query = @"UPDATE produto
+            SET quantidade = @Qtd WHERE produto_id = @Id";
+
+            var parameters = new DynamicParameters();
+            parameters.Add("@Id", id);
+            parameters.Add("@Qtd", qtd);
+
+            DataBase.Execute(_configuration, query, parameters);
+        }
     }
 }

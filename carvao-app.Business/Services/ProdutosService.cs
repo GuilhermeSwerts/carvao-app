@@ -21,6 +21,11 @@ namespace carvao_app.Business.Services
             _repository = repository;
         }
 
+        public void AtualizarEstoque(int id, int qtd)
+        {
+            _repository.AtualizarEstoque(id,qtd);
+        }
+
         public object BuscarTiposPagamento()
         {
             return _repository.BuscarTiposPagamento();

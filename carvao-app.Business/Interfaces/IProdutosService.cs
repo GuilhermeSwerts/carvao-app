@@ -9,6 +9,7 @@ namespace carvao_app.Business.Interfaces
 {
     public interface IProdutosService
     {
+        void AtualizarEstoque(int id, int qtd);
         object BuscarTiposPagamento();
         object BuscarTodosProdutos();
         void DeletaProduto(int id);
