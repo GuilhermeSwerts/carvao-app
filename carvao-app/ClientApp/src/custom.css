@@ -4,6 +4,10 @@
   box-sizing: border-box;
 }
 
+:root {
+  --cor-principal: rgb(34, 136, 221);
+}
+
 body {
   overflow-x: hidden;
 }
@@ -93,6 +97,10 @@ body {
     z-index: 1000;
     /* Ensures it's above other content */
   }
+
+  .container-header nav {
+    justify-content: center !important;
+  }
 }
 
 @media (max-width: 768px) {
@@ -105,11 +113,19 @@ body {
     display: none;
     /* Hides non-critical columns on small screens */
   }
+
+  .container-header nav {
+    justify-content: center !important;
+  }
 }
 
 @media (width <=767px) {
   thead {
     display: none;
+  }
+
+  .container-header nav {
+    justify-content: center !important;
   }
 
   table {
@@ -188,8 +204,7 @@ body {
   overflow: auto;
 }
 
-.footer-modal-detalhe-pedido
-{
+.footer-modal-detalhe-pedido {
   display: flex;
   justify-content: end;
   align-items: center;

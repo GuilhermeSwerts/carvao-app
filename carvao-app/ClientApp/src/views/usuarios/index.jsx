@@ -118,8 +118,6 @@ function Usuarios() {
 
     return (
         <section className='content'>
-            <button onClick={() => window.history.go(-1)} className="btn btn-link">Voltar</button>
-            <h1>Usuários <FaUsers /></h1>
             <div className="container-table">
                 <div style={{
                     padding: '1rem',

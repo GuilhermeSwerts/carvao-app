@@ -384,8 +384,6 @@ function TelaPedido() {
             />
             <div className="App">
                 <div className="content">
-                    <button onClick={() => window.history.go(-1)} className="btn btn-link">Voltar</button>
-                    <h1>Pedidos Por Clientes <FaShoppingCart /></h1>
                     <Filter
                         filtroNome={clienteNome}
                         handleInputChange={handleInputChange}

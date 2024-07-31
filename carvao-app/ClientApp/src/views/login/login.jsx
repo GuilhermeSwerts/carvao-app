@@ -3,6 +3,7 @@ import "./login.css";
 import { FaEye, FaEyeSlash } from 'react-icons/fa'
 import { api } from '../../components/api/api';
 import InputMask from "react-input-mask";
+import Logo from '../../imgs/logo_branco.png';
 
 const Login = ({ onLogin }) => {
   const [cpf, setCpf] = useState('');
@@ -10,10 +11,6 @@ const Login = ({ onLogin }) => {
   const [error, setError] = useState('');
   const [showPsw, setShowPsw] = useState(false);
 
-
-  useEffect(() => {
-    document.querySelector(".menu").style.display = 'none';
-  }, [1])
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -31,7 +28,9 @@ const Login = ({ onLogin }) => {
       <div className='login-container-main'>
         <div className="login">
           <div class="login-triangle"></div>
-          <h2 class="login-header">Log in</h2>
+          <h2 class="login-header">
+            <img src={Logo} alt="logo" width={350} style={{ background: "transparent" }} />
+          </h2>
 
           <form onSubmit={handleSubmit} className="login-container">
             <p>
@@ -52,8 +51,9 @@ const Login = ({ onLogin }) => {
                 <button onClick={() => setShowPsw(!showPsw)} type='button' className='login-eye'>{showPsw ? <FaEye size={20} /> : <FaEyeSlash size={20} />}</button>
               </div>
             </p>
+            <p style={{ display: 'flex', justifyContent: "start", alignItems: "center" }}>Esqueceu a senha? <button onClick={() => alert('Função ainda em desenvolvimento')} className='btn btn-link'>Clique aqui!</button></p>
             <p>
-              <input type="submit" value="Log in" />
+              <input type="submit" value="ENTRAR" />
             </p>
           </form>
           {error && <div className="error-message-login">* {error} *</div>}

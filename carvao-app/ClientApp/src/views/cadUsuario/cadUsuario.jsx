@@ -44,7 +44,7 @@ function CadUsuario() {
     }
 
     return (
-        <section id='login'>
+        <section className='content'>
             <div className='login-container-main'>
                 <div className="login" style={{ width: '600px' }}>
                     <div class="login-triangle"></div>

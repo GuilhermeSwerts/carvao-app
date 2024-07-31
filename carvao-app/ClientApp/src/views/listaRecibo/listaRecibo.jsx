@@ -73,8 +73,6 @@ function ListaRecibo() {
         <section className='content'>
             {cliente && pedido && (
                 <div>
-                    <button onClick={() => window.history.go(-1)} className="btn btn-link">Voltar</button>
-                    <h1>Histórico De Recibos</h1>
                     <div className="header-recibo" style={{
                         padding: '1rem',
                         background: '#28d',

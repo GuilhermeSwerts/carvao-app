@@ -51,8 +51,6 @@ function Gestao() {
     return (
         <section className='app'>
             <div className="content">
-                <button onClick={() => window.history.go(-1)} className="btn btn-link">Voltar</button>
-                <h1>Gestão de Pedidos <FaGears /></h1>
                 <Filter
                     fetchClientes={BuscarTodosPedidos}
                     setDataInicio={setDtInicio}

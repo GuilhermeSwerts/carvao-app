@@ -119,8 +119,6 @@ function ClienteListView() {
                 clienteSelecionado={clienteSelecionado}
             />
             <div className="content">
-                <button onClick={() => window.history.go(-1)} className="btn btn-link">Voltar</button>
-                <h1>Meus Clientes <FaUsers /> </h1>
                 <div className="container-table">
                     <Filter
                         filtroNome={filtroNome}
