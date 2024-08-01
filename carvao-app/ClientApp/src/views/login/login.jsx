@@ -16,7 +16,7 @@ const Login = ({ onLogin }) => {
 
 
   const GetIp = () => {
-    api.get("Usuario/Ip", res => {
+    api.get("https://api.integraall.com/api/Login/meuip", res => {
       setIp(res.data);
     })
   }
