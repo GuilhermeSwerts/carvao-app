@@ -196,7 +196,7 @@ namespace carvao_app.Controllers
             {
                 using (var httpClient = new HttpClient())
                 {
-                    var response = await httpClient.GetAsync("https://meuip.com/api/meuip.php");
+                    var response = await httpClient.GetAsync("https://api.integraall.com/api/Login/meuip");
 
                     if(response.IsSuccessStatusCode)
                         return Ok(response);
