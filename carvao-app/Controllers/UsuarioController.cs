@@ -2,8 +2,11 @@
 using carvao_app.Helper;
 using carvao_app.Models.Requests;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Org.BouncyCastle.Bcpg.OpenPgp;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace carvao_app.Controllers
@@ -149,5 +152,62 @@ namespace carvao_app.Controllers
             }
         }
 
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("/Usuario/EsqueciSenha/Email")]
+        public IActionResult EmailEsqueciSenha([FromQuery] string cpf,string email,string ip)
+        {
+            try
+            {
+                _service.EmailEsqueciSenha(cpf, email, ip);
+                return Ok();
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("/Usuario/EsqueciSenha")]
+        public IActionResult EsqueciSenha([FromForm] string obj)
+        {
+            try
+            {
+
+                var request = JsonConvert.DeserializeObject<EsqueciSenha>(obj);
+                _service.EsqueciSenha(request);
+                return Ok();
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("/Usuario/Ip")]
+        public async Task<IActionResult> GetIp()
+        {
+            try
+            {
+                using (var httpClient = new HttpClient())
+                {
+                    var response = await httpClient.GetAsync("https://meuip.com/api/meuip.php");
+
+                    if(response.IsSuccessStatusCode)
+                        return Ok(response);
+
+                    return Ok("123.123.123");
+                }
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

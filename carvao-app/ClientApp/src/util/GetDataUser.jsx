@@ -3,8 +3,7 @@ export const GetDataUser = () => {
     let access_token = window.localStorage.getItem("access_token");
     if (!access_token) {
         if (window.location.pathname.toUpperCase() != "/LOGIN")
-            alert('')
-        // window.location.href = '/login';
+            window.location.href = '/login';
         else
             return {
                 TipoUsuario: 0,
@@ -12,7 +11,7 @@ export const GetDataUser = () => {
                 IsMaster: false
             }
     }
-    return { TipoUsuario: 1, UsuarioId: 1, IsMaster: true };
+
     const data = JSON.parse(atob(access_token.split('.')[1]));
     const split = JSON.stringify(data).split(',');
     let id = 0;

@@ -19,5 +19,7 @@ namespace carvao_app.Business.Interfaces
         void AtualizarStatusUsuario(int status, int status1);
         void ResetaSenhaUsuario(int id);
         void TrocaSenhaUsuario(string senhaAtual, string senhaNova, UsuarioMap usuarioMap);
+        void EmailEsqueciSenha(string cpf, string email,string ip);
+        void EsqueciSenha(EsqueciSenha request);
     }
 }

@@ -23,6 +23,7 @@ import Teste from './views/Test';
 import { FaUsers, FaDev, FaShoppingCart, FaRegFileAlt, FaHistory, FaUser, FaBoxes } from 'react-icons/fa';
 import { BsInboxesFill } from 'react-icons/bs';
 import { FaGears } from 'react-icons/fa6';
+import ResetarSenha from './views/resetarSenha/ResetarSenha';
 
 
 const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');
@@ -89,9 +90,9 @@ createRoot(rootElement).render(
         <Produtos {...props} />
       </Layout>
     )} />
-    {/* <Route exact path='/*' component={(props) => (
-      <NotFound {...props} />
-    )} /> */}
+    <Route exact path='/ResetarSenha' component={(props) => (
+      <ResetarSenha {...props} />
+    )} />
   </BrowserRouter>);
 
 
