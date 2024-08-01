@@ -138,7 +138,7 @@ namespace carvao_app.Business.Services
             _repository.ResetaSenhaUsuario(usuario.UsuarioId, Cripto.Encrypt(senhaNova));
         }
 
-        public void EmailEsqueciSenha(string cpf, string email,string ip)
+        public void EmailEsqueciSenha(string cpf, string email, string ip)
         {
             try
             {
@@ -182,7 +182,9 @@ namespace carvao_app.Business.Services
         {
             try
             {
-                var token = Cripto.Decrypt(request.Token.Replace(" ", "+").Substring(1));
+                var str_token = request.Token.Substring(0, 1) == "$" ? request.Token : "$" + request.Token;
+
+                var token = Cripto.Decrypt(str_token.Replace(" ", "+").Substring(1));
 
                 int id = int.Parse(token.Split(":")[1]);
 

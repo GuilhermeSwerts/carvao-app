@@ -16,7 +16,6 @@ const ResetarSenha = ({ onLogin }) => {
         if (senhaNova != senhaConfirmaNova) {
             Alert('As senhas não coincidem.', false, true);
             setsenhaNova('');
-            setsenhaAntiga('');
             return;
         }
 
