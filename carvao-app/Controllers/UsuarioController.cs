@@ -199,9 +199,12 @@ namespace carvao_app.Controllers
                     var response = await httpClient.GetAsync("https://api.integraall.com/api/Login/meuip");
 
                     if(response.IsSuccessStatusCode)
-                        return Ok(response);
+                    {
+                      var data = await response.Content.ReadAsStringAsync();
+                      return Ok(data);
+                    };
 
-                    return Ok("123.123.123");
+                    return Ok("");
                 }
             }
             catch (System.Exception ex)
