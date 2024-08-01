@@ -182,6 +182,41 @@ function TelaPedido() {
 
     const handleQuantidadeChange = (event) => {
         const newQuantidade = parseInt(event.target.value);
+
+        if (isNaN(newQuantidade)){
+            setQuantidade('');
+        };
+
+        if ((produtoSelecionado.quantidade - newQuantidade) <= 0) {
+            Alert(`Não há estoque suficiente, quantidade máxima do produto ${produtoSelecionado.nome} é de ${produtoSelecionado.quantidade}`, false, true);
+            return;
+        }
+
+        const produtoExistente = produtosAdicionados.find(
+            (p) => p.id === produtoSelecionado.id
+        );
+
+        if (produtoExistente) {
+            let erro = false;
+            let max = 0;
+            produtosAdicionados.forEach((p) => {
+                if (p.id === produtoExistente.id) {
+
+                    console.clear();
+                    console.log(produtosAdicionados)
+                    console.log(produtoSelecionado)
+                    console.log(newQuantidade)
+                    max = produtoSelecionado.quantidade - p.quantidade;
+                    erro = ((produtoSelecionado.quantidade - p.quantidade - newQuantidade) <= 0)
+                }
+            })
+
+            if (erro) {
+                Alert(`Não há estoque suficiente, quantidade máxima do produto ${produtoSelecionado.nome} é de ${max}`, false, true);
+                return;
+            }
+        }
+
         setQuantidade(newQuantidade);
         if (produtoSelecionado) {
             setValorTotal(produtoSelecionado.valor * newQuantidade);
@@ -315,7 +350,7 @@ function TelaPedido() {
 
 
     const ShowModalHistoricoPedidos = (cliente) => {
-        console.log({cliente})
+        console.log({ cliente })
         setClienteSelecionado(cliente);
         debugger
         api.get(`api/pedidos/cliente/${cliente.id}`, res => {

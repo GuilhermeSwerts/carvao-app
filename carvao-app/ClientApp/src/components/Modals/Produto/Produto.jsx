@@ -11,7 +11,8 @@ class Produto extends Component {
             produto: {
                 nome: '',
                 valor: '',
-                valorMinimo: ''
+                valorMinimo: '',
+                Quantidade: 0
             }
         };
     }
@@ -49,47 +50,61 @@ class Produto extends Component {
             <>
                 <ButtonTooltip text={tooltip} textButton={icon} className={classButton} top={top} onClick={() => this.Open(this.props.Produto)} />
                 <Modal show={show}>
-                    <Modal.Header>
-                        <h2>{tooltip.toUpperCase()}</h2>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <Row>
-                            <Col>
-                                <label>Nome Do Produto</label>
-                                <input
-                                    onChange={this.onChangeInputValue}
-                                    name='nome'
-                                    value={produto.nome}
-                                    className='form-control'
-                                    type="text"
-                                />
-                            </Col>
-                            <Col>
-                                <label>Valor Do Produto</label>
-                                <input
-                                    onChange={this.onChangeInputValue}
-                                    name='valor'
-                                    value={"R$ " + produto.valor}
-                                    className='form-control'
-                                    type="text"
-                                />
-                            </Col>
-                            <Col>
-                                <label>Valor Mínimo</label>
-                                <input
-                                    onChange={this.onChangeInputValue}
-                                    name='valorMinimo'
-                                    value={`R$ ${produto.valorMinimo}`}
-                                    className='form-control'
-                                    type="text"
-                                />
-                            </Col>
-                        </Row>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <button className='btn btn-danger' onClick={() => this.setState({ show: false })}>Cancelar</button>
-                        <button className='btn btn-primary' type='button' onClick={() => { onSubmit(produto); this.setState({ show: false }) }}>{textSubmit}</button>
-                    </Modal.Footer>
+                    <form onSubmit={e => { e.preventDefault(); onSubmit(produto); this.setState({ show: false }) }}>
+                        <Modal.Header>
+                            <h2>{tooltip.toUpperCase()}</h2>
+                        </Modal.Header>
+                        <Modal.Body>
+                            <label>Nome Do Produto</label>
+                            <input
+                                required
+                                onChange={this.onChangeInputValue}
+                                name='nome'
+                                value={produto.nome}
+                                className='form-control'
+                                type="text"
+                            />
+                            <label>Valor Do Produto</label>
+                            <input
+                                required
+                                onChange={this.onChangeInputValue}
+                                name='valor'
+                                value={"R$ " + produto.valor}
+                                className='form-control'
+                                type="text"
+                            />
+                            <label>Valor Mínimo</label>
+                            <input
+                                required
+                                onChange={this.onChangeInputValue}
+                                name='valorMinimo'
+                                value={`R$ ${produto.valorMinimo}`}
+                                className='form-control'
+                                type="text"
+                            />
+                            <label>Quantidade Em Estoque</label>
+                            <input
+                                onChange={this.onChangeInputValue}
+                                name='Quantidade'
+                                value={`${produto.Quantidade}`}
+                                className='form-control'
+                                type="number"
+                                min={0}
+                                required
+                            />
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <button className='btn btn-danger' onClick={() => this.setState({
+                                show: false, produto: {
+                                    nome: '',
+                                    valor: '',
+                                    valorMinimo: '',
+                                    Quantidade: 0
+                                }
+                            })}>Cancelar</button>
+                            <button className='btn btn-primary' type='submit'>{textSubmit}</button>
+                        </Modal.Footer>
+                    </form>
                 </Modal >
             </>
         );

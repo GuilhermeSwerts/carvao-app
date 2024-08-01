@@ -42,7 +42,7 @@ function Produtos() {
         }
 
         produto.valor = (produto.valor + '').replaceAll(',', '.')
-        produto.valorMinimo = (produto.valor + '').replaceAll(',', '.')
+        produto.valorMinimo = (produto.valorMinimo + '').replaceAll(',', '.')
 
         var data = new FormData();
         data.append("data", JSON.stringify(produto));

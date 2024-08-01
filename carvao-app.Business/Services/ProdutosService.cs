@@ -62,6 +62,7 @@ namespace carvao_app.Business.Services
                 Data_cadastro = DateTime.Now,
                 Valor_desconto_maximo = request.ValorMinimo,
                 Valor = request.Valor,
+                Quantidade = request.Quantidade
             });
         }
     }

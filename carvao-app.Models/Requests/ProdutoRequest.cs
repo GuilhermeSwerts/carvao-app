@@ -12,5 +12,6 @@ namespace carvao_app.Models.Requests
         public string Nome { get; set; }
         public decimal Valor { get; set; }
         public decimal ValorMinimo { get; set; }
+        public int Quantidade { get; set; }
     }
 }

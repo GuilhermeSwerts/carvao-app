@@ -53,12 +53,13 @@ namespace carvao_app.Repository.Services
 
             var query = @"INSERT INTO produto
             (nome, descricao, data_cadastro, valor, valor_desconto_maximo,link_foto,codigo_barra,quantidade)
-            VALUES(@Nome, @Nome, now(), @Valor, @ValorMinimo,'','',999);";
+            VALUES(@Nome, @Nome, now(), @Valor, @ValorMinimo,'','',@Qtd);";
             var parameters = new DynamicParameters();
             parameters.Add("@Nome", request.Nome);
             parameters.Add("@Valor", request.Valor);
             parameters.Add("@ValorMinimo", request.Valor_desconto_maximo);
-
+            parameters.Add("@Qtd", request.Quantidade);
+            
             DataBase.Execute(_configuration, query, parameters);
         }
 
