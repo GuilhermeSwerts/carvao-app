@@ -66,7 +66,7 @@ function ClienteListHeader({
     return (
         <div style={{
             padding: '1rem',
-            background: '#28d',
+            background: 'var(--cor-principal)',
             color: '#fff',
             width: '100%',
             margin: '0'
@@ -75,7 +75,7 @@ function ClienteListHeader({
         >
             <div class="col-md-12" style={{ marginBottom: '10px' }}>
                 <label for="validationTooltipUsername">Filtros:</label>
-                {showFiltroNome && <div class="input-group">
+                {showFiltroNome && <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
                     <input
                         type="text"
                         placeholder="Nome do cliente"
@@ -85,7 +85,7 @@ function ClienteListHeader({
                     />
                     {showNovoCliente && <div class="input-group-prepend">
                         <button
-                            className='btn btn-success'
+                            className='btn btn-white'
                             style={{ display: "flex", justifyContent: 'center', alignItems: 'center', height: '100%', gap: 10 }}
                             onClick={() => handleAbrirModal(null)}
                         >
@@ -100,12 +100,10 @@ function ClienteListHeader({
                     </div>
                     <div className="col-md-3">
                         <label>Até:</label>
-                        <div class="input-group">
-                            <input onChange={e => setDataFim(e.target.value)} type="date" required className='form-control' />
-                            <div class="input-group-prepend">
-                                <button className='btn btn-success'>Buscar</button>
-                            </div>
-                        </div>
+                        <input onChange={e => setDataFim(e.target.value)} type="date" required className='form-control' />
+                    </div>
+                    <div className="col-md-3" style={{ marginTop: 24 }}>
+                        <button className='btn btn-white'>Buscar</button>
                     </div>
                     {filtroStatusPedido && <div className="col-md-3">
                         <label>Status do pedido:</label>
@@ -116,9 +114,9 @@ function ClienteListHeader({
                             ))}
                         </select>
                     </div>}
-                    {extrairDados && <div className="col-md-12" style={{ width: '100%', display: 'flex', justifyContent: 'end' }}>
+                    {extrairDados && <div className="col-md-12" style={{ width: '100%', display: 'flex', justifyContent: 'end',marginTop:'20px' }}>
                         <label></label>
-                        <button type='button' onClick={DonwloadArquivo} className='btn btn-success'>Extrair Dados <FaDownload size={25} /></button>
+                        <button type='button' onClick={DonwloadArquivo} className='btn btn-white'>Extrair Dados <FaDownload size={25} /></button>
                     </div>}
                 </form>
             </div>

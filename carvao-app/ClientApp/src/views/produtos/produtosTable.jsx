@@ -101,7 +101,7 @@ function Produtos() {
             <div className="container-table">
                 <div style={{
                     padding: '1rem',
-                    background: '#28d',
+                    background: 'var(--cor-principal)',
                     color: '#fff',
                     width: '100%',
                     margin: '0'

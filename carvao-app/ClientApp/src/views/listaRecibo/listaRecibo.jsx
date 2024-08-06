@@ -75,7 +75,7 @@ function ListaRecibo() {
                 <div>
                     <div className="header-recibo" style={{
                         padding: '1rem',
-                        background: '#28d',
+                        background: 'var(--cor-principal)',
                         color: '#fff',
                         width: '100%',
                         margin: '0'
@@ -169,7 +169,7 @@ function ListaRecibo() {
                     <h1>Pedido não encontrado!</h1>
                     <h3>
                         <a onClick={() => window.history.back()}
-                            style={{ textDecoration: 'underline #28d', color: '#28d', cursor: 'pointer' }}>
+                            style={{ textDecoration: 'underline var(--cor-principal)', color: 'var(--cor-principal)', cursor: 'pointer' }}>
                             Voltar
                         </a>
                     </h3>

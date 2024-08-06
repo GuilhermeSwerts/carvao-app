@@ -5,7 +5,8 @@
 }
 
 :root {
-  --cor-principal: rgb(34, 136, 221);
+  --cor-principal: #cf2a3b;
+  /* --cor-principal: rgb(34, 136, 221); */
 }
 
 body {
@@ -164,7 +165,7 @@ body {
 
 .resumo-titulo {
   width: 100%;
-  background-color: rgb(13, 110, 253);
+  background-color: var(--cor-principal);
   color: #fff;
   padding: 10px;
   font-weight: 700;
@@ -236,4 +237,18 @@ body {
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
+}
+
+.btn-white
+{
+  background-color: #fff;
+  border: 1px solid #fff;
+  transition: opacity 0.5s;
+  color: var(--cor-principal);
+}
+
+.btn-white:hover{
+  background-color: #fff;
+  color: var(--cor-principal);
+  opacity: .7;
 }

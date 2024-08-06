@@ -141,7 +141,7 @@ function Recibo() {
         {cliente && pedido && <form className="container" onSubmit={e => { e.preventDefault(); handdleEnviar() }}>
             <div className="header-recibo" style={{
                 padding: '1rem',
-                background: '#28d',
+                background: 'var(--cor-principal)',
                 color: '#fff',
                 width: '100%',
                 margin: '0',
@@ -250,7 +250,7 @@ function Recibo() {
         </form>}
         {!cliente && !pedido && <div style={{ textAlign: 'center' }}>
             <h1>Pedido não encontrado!</h1>
-            <h3><a onClick={() => window.history.back()} style={{ textDecoration: 'underline #28d', color: '#28d', cursor: 'pointer' }}>Voltar</a></h3>
+            <h3><a onClick={() => window.history.back()} style={{ textDecoration: 'underline var(--cor-principal)', color: 'var(--cor-principal)', cursor: 'pointer' }}>Voltar</a></h3>
         </div>}
 
     </section>

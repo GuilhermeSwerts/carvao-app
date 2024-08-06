@@ -72,7 +72,7 @@ namespace carvao_app.Controllers
 
 
                 XRect rect = new XRect(0, 0, page.Width, 40);
-                XColor backgroundColor = XColor.FromArgb(13, 110, 253);
+                XColor backgroundColor = XColor.FromArgb(207, 42, 59);
                 gfx.DrawRectangle(new XSolidBrush(backgroundColor), rect);
 
                 gfx.DrawString("DETALHES DO PEDIDO", titleFont, XBrushes.White, rect, XStringFormats.Center);

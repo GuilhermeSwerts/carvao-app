@@ -1,134 +1,45 @@
-@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,700);
-
-* {
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
-}
-
-#login {
-  font-family: 'Open Sans', sans-serif;
-  width: 100%;
-  min-height: 100vh;
-  padding: 2rem;
-  display: flex;
-  justify-content: start;
-  align-items: center;
-  flex-direction: column;
-}
-
-.login {
-  width: 30%;
-  margin: 16px auto;
-  font-size: 16px;
-  box-shadow: 0px 0px 20px 0px var(--cor-principal);
-  border-radius: 20px 20px 0 0 ;
-}
-
-.login-container-main {
-  width: 100%;
-}
-
-.login-header,
-.login p {
-  margin-top: 0;
-  margin-bottom: 0;
-}
-
-/* .login-triangle {
-  width: 0;
-  margin-right: auto;
-  margin-left: auto;
-  border: 12px solid transparent;
-  border-bottom-color: #28d;
-} */
-
-.login-header {
-  background: #28d;
-  padding: 20px;
-  font-size: 1.4em;
-  font-weight: normal;
-  text-align: center;
-  text-transform: uppercase;
-  color: #fff;
-  border-radius: 20px 20px 0px 0;
-}
-
-.login-container {
-  background: #ebebeb;
-  padding: 12px;
-}
-
-.login p {
-  padding: 12px;
-}
-
-.login input {
-  box-sizing: border-box;
-  display: block;
-  width: 100%;
-  border-width: 1px;
-  border-style: solid;
-  padding: 16px;
-  outline: 0;
-  font-family: inherit;
-  font-size: 0.95em;
-}
-
-.login input[type="email"],
-.login input[type="password"] {
-  background: #fff;
-  border-color: #bbb;
-  color: #555;
-}
-
-.login input[type="email"]:focus,
-.login input[type="password"]:focus {
-  border-color: #888;
-}
-
-.login input[type="submit"] {
-  background: #28d;
-  border-color: transparent;
-  color: #fff;
-  cursor: pointer;
-}
-
-.login input[type="submit"]:hover {
-  background: #17c;
-}
-
-.login input[type="submit"]:focus {
-  border-color: #05a;
-}
-
-.login-eye-container {
-  position: relative;
-  width: 100%;
-  right: 0;
-  top: -2.8rem;
-}
-
-.login-eye-container button {
-  position: absolute;
-  right: 10px;
-  padding: .5rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: none;
-  background: transparent;
-  cursor: pointer;
-}
-
-.error-message-login {
-  color: red;
-  font-size: 1rem;
-  text-align: center;
-}
-
-@media (width <=900px) {
-  .login {
+.backgroud-login {
     width: 100%;
-  }
+    min-height: 100vh;
+    height: 100%;
+    background-color: #f2f2f2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-page {
+    width: 80%;
+    height: 500px;
+    background-color: #fff;
+    border-radius: 1rem;
+    display: flex;
+    justify-content: space-between;
+    box-shadow: 2px 8px 20px 3px rgba(0, 0, 0, 0.7);
+}
+
+.left-container-login {
+    width: 30%;
+    height: 100%;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.right-container-login {
+    width: 70%;
+    height: 100%;
+    background-image: url('../../imgs/maos-carvao-mineral.jpg');
+    border-image: fill 0 linear-gradient(#0003,#000);
+    background-position: center;
+    background-color: transparent;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 20px; 
+    color: #fff;
+    font-weight: 700;
 }

@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
         lineHeight: 1.5,
     },
     header: {
-        backgroundColor: "#28d",
+        backgroundColor: "#cf2a3b",
         color: "#fff",
         padding: 10,
         marginBottom: 15,
