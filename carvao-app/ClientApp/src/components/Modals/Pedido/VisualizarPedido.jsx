@@ -50,7 +50,7 @@ class VisualizarPedido extends React.Component {
             const day = String(data.getDate()).padStart(2, '0');
             const month = String(data.getMonth() + 1).padStart(2, '0');
             const year = data.getFullYear();
-            
+
             return `${day}/${month}/${year} ${data.getHours()}:${data.getMinutes()}:${data.getSeconds()}`
         }
 
@@ -131,11 +131,14 @@ class VisualizarPedido extends React.Component {
                                 <input type="text" disabled className='form-control' value={`R$ ${this.props.historico.filter(x => x.pedido_id === Pedido.pedido_id)[0].valor_total.toFixed(2)}`} />
                             </div>
                         </div>
-                        <div className="footer-modal-detalhe-pedido">
+
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <div style={{ display: 'flex', justifyContent: 'end', alignItems: 'center', gap: 10 }}>
                             <button className='btn btn-danger' onClick={CloseModal}>Fechar</button>
                             <button className='btn btn-primary' onClick={handleExport}>Download</button>
                         </div>
-                    </Modal.Body>
+                    </Modal.Footer>
                 </Modal>
             </>
         );
