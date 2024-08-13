@@ -135,6 +135,8 @@ namespace carvao_app.Controllers
                 yPoint += 40;
                 gfx.DrawString($"PORCENTAGEM DE DESCONTO: {Pedido.Percentual_desconto}%", normalFont, XBrushes.Black, new XRect(20, yPoint, page.Width, 20), XStringFormats.CenterLeft);
                 yPoint += 20;
+                gfx.DrawString($"VALOR DESCONTO DO PEDIDO: R$ {Pedido.Valor_desconto:F2}", normalFont, XBrushes.Black, new XRect(20, yPoint, page.Width, 20), XStringFormats.CenterLeft);
+                yPoint += 20;
                 gfx.DrawString($"VALOR TOTAL DO PEDIDO: R$ {Pedido.Valor_total:F2}", normalFont, XBrushes.Black, new XRect(20, yPoint, page.Width, 20), XStringFormats.CenterLeft);
 
                 document.Save(memoryStream, false);

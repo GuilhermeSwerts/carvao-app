@@ -22,7 +22,7 @@ function Gestao() {
             setStatusPagamento(res.data.statusPagamento);
             setStatusPedido(res.data.statusPedido);
             setPedidos(res.data.pedidos);
-            setPedidoFiltro(res.data.pedidos);
+            setPedidoFiltro(res.data.pedidos.filter(x => x.status_pedido_id !== 5 && x.status_pedido_id !== 4));
         }, erro => {
             Alert('Houve um erro na solicitação!', false);
         })
@@ -43,6 +43,8 @@ function Gestao() {
         const value = e.target.value;
         if (value == "0" || value == 0) {
             setPedidoFiltro(pedidos);
+        } else if (value == "-1" || value == -1) {
+            setPedidoFiltro(pedidos.filter(x => x.status_pedido_id !== 5 && x.status_pedido_id !== 4));
         } else {
             setPedidoFiltro(pedidos.filter(x => x.status_pedido_id === parseInt(value)))
         }

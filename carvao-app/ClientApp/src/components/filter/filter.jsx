@@ -108,6 +108,7 @@ function ClienteListHeader({
                     {filtroStatusPedido && <div className="col-md-3">
                         <label>Status do pedido:</label>
                         <select onChange={onChangeFiltroStatusPedido} className='form-control'>
+                            <option value="-1">TODOS MENOS CONCLUÍDOS E CANCELADOS</option>
                             <option value="0">TODOS</option>
                             {statusPedido.map(item => (
                                 <option value={item.status_pedido_id}>{item.nome}</option>

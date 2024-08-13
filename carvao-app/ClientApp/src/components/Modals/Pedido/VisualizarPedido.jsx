@@ -121,10 +121,14 @@ class VisualizarPedido extends React.Component {
                         <label>OBSERVAÇÃO</label>
                         <textarea className='form-control' value={Pedido.observacao} disabled style={{ resize: 'none', height: 100, width: '100%' }} />
                         <div className="row">
-                            <div className="col-md-6"></div>
+                            <div className="col-md-3"></div>
                             <div className="col-md-3">
                                 <label>PORCENTAGEM DE DESCONTO</label>
                                 <input type="text" disabled className='form-control' value={`${Pedido.percentual_desconto}%`} />
+                            </div>
+                            <div className="col-md-3">
+                                <label>VALOR DESCONTO DO PEDIDO</label>
+                                <input type="text" disabled className='form-control' value={`R$ ${Pedido.valor_desconto.toFixed(2)}`} />
                             </div>
                             <div className="col-md-3">
                                 <label>VALOR TOTAL DO PEDIDO</label>

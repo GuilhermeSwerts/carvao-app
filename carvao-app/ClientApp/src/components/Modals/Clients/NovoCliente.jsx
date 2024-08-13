@@ -10,7 +10,7 @@ function ModalNovoCliente(props) {
         handleSalvarCliente,
         InputMask,
         isPessoaFisica, clienteSelecionado } = props;
-        
+
     const onChangeTipoPessoa = (e) => {
         if (e.target.value == "0") {
             setIsPessoaFisica(true);
@@ -267,9 +267,10 @@ function ModalNovoCliente(props) {
                             </Col>
                             <Col md={6}>
                                 <label htmlFor="inscricaoMunicipal">
-                                    Inscrição Municipal:
+                                    Inscrição Municipal*:
                                 </label>
                                 <input
+                                    required
                                     className="form-control"
                                     type="text"
                                     id="inscricaoMunicipal"

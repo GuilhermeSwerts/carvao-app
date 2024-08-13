@@ -9,9 +9,10 @@ import DetalhesPedido from '../../components/Modals/Clients/DetalhesPedido';
 import ModalEditarPedido from '../../components/Modals/Pedido/EditarPedido';
 import ModalEditarStatusPedido from '../../components/Modals/Pedido/ModalEditarStatusPedido';
 import VisualizarPedido from '../../components/Modals/Pedido/VisualizarPedido';
+import { GetDataUser } from '../../util/GetDataUser';
 
 function GestaoTable(props) {
-
+    const user = GetDataUser();
     const [showEditarStatusModal, setShowEditarStatusModal] = useState(false);
     const [pedidoSelecionado, setPedidoSelecionado] = useState(null);
     const [statusPedidoIcon, setStatusPedidoIcon] = useState({});
@@ -34,12 +35,10 @@ function GestaoTable(props) {
         console.log('Pedido ID:', pedidoId);
         console.log('Novo Status:', novoStatus);
         handleHideEditarStatusModal();
-        window.location.reload(); 
+        window.location.reload();
     };
 
     const getStatusButtonProps = (statusPedidoId) => {
-        console.log("Status Pedido ID:", statusPedidoId);
-
         switch (statusPedidoId) {
             case 1:
                 return { text: "Aberto", color: "btn btn-info", icon: <FaBoxOpen /> };
@@ -95,7 +94,7 @@ function GestaoTable(props) {
                                 <td data-label="Status Pedido">{statusPedido.filter(x => x.status_pedido_id === produto.status_pedido_id)[0].nome}</td>
                                 <td data-label="Status Pagamento">{statusPagamento.filter(x => x.status_pagamento_id === produto.status_pagamento_id)[0].nome}</td>
                                 <td data-label="Ações" style={{ display: 'flex', gap: 10 }}>
-                                    <VisualizarPedido Pedido={produto} produtos={produtos} historico={produto.produtos}/>
+                                    <VisualizarPedido Pedido={produto} produtos={produtos} historico={produto.produtos} />
                                     {/* <DetalhesPedido /> */}
                                     <ModalEditarPedido reloadPage={ReloadPage} PedidoId={produto.pedido_id} Pedido={produto} Produtos={produtos} Historico={produto.produtos} />
                                     <ButtonTooltip
@@ -105,7 +104,7 @@ function GestaoTable(props) {
                                         top={true}
                                         onClick={() => window.location.href = `/recibos?pedidoId=${produto.pedido_id}`}
                                     />
-                                    {produto.saldo_devedor !== 0 &&
+                                    {produto.saldo_devedor !== 0 && produto.status_pedido_id !== 5 &&
                                         <ButtonTooltip
                                             text={"Gerar Recibo"}
                                             textButton={<LiaReceiptSolid size={23} color='#fff' />}
@@ -114,13 +113,13 @@ function GestaoTable(props) {
                                             onClick={() => window.location.href = `/recibo?pedidoId=${produto.pedido_id}`}
                                         />
                                     }
-                                    <ButtonTooltip
+                                    {user.IsMaster && <ButtonTooltip
                                         text={"Editar Status Pedido"}
                                         textButton={getStatusButtonProps(produto.status_pedido_id).icon}
                                         className={`btn ${getStatusButtonProps(produto.status_pedido_id).color}`}
                                         top={true}
                                         onClick={() => handleShowEditarStatusModal(produto)}
-                                    />
+                                    />}
                                 </td>
                             </tr>
                         ))}
