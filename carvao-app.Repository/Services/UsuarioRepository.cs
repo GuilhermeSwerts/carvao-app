@@ -53,7 +53,8 @@ namespace carvao_app.Repository.Services
                                 WHERE usuario_id = @Id";
                     DataBase.Execute(_configuration, sql, p);
                     return;
-                }else
+                }
+                else
                 {
                     throw new Exception("Usuário já existente.");
                 }
@@ -88,9 +89,9 @@ namespace carvao_app.Repository.Services
             var usuario = DataBase.Execute<UsuarioMap>(_configuration, query, parameters).FirstOrDefault()
                 ?? throw new Exception("Usuário ou senha inválido.");
 
-            if(usuario.Habilitado == (int)ESituacaoUsuario.Inativo)
+            if (usuario.Habilitado == (int)ESituacaoUsuario.Inativo)
             {
-               throw new Exception("Usuário inativo.");
+                throw new Exception("Usuário inativo.");
             }
 
             if (usuario.Habilitado == (int)ESituacaoUsuario.Deletado)
@@ -122,14 +123,14 @@ namespace carvao_app.Repository.Services
             return usuario;
         }
 
-        public void AlterarStatusUsuario(int usuarioId,int status)
+        public void AlterarStatusUsuario(int usuarioId, int status)
         {
             var parameters = new DynamicParameters();
-            
+
             parameters.Add("@Id", usuarioId);
             parameters.Add("@Status", status);
             var query = "update usuario set habilitado = @Status WHERE usuario_id = @Id";
-            
+
             DataBase.Execute(_configuration, query, parameters);
         }
 
@@ -142,7 +143,8 @@ namespace carvao_app.Repository.Services
             parameters.Add("@Email", usuarioMap.Email);
             parameters.Add("@Tipo", usuarioMap.Tipo_usuario_id);
             parameters.Add("@Cpf", usuarioMap.Cpf);
-            var sql = @"UPDATE usuario SET nome = @Nome,email = @Email,tipo_usuario_id = @Tipo,cpf = @Cpf
+            parameters.Add("@Comissao", usuarioMap.Percentual_comissao);
+            var sql = @"UPDATE usuario SET nome = @Nome,email = @Email,tipo_usuario_id = @Tipo,cpf = @Cpf,percentual_comissao = @Comissao 
                         WHERE usuario_id = @Id";
 
             DataBase.Execute(_configuration, sql, parameters);
@@ -156,6 +158,13 @@ namespace carvao_app.Repository.Services
             var sql = @"UPDATE usuario SET senha = @Senha
                         WHERE usuario_id = @Id";
             DataBase.Execute(_configuration, sql, parameters);
+        }
+
+        public List<UsuarioMap> BuscarVendedores()
+        {
+            var sql = @"SELECT * FROM usuario WHERE tipo_usuario_id = 1 AND habilitado = 1";
+            var usuarios = DataBase.Execute<UsuarioMap>(_configuration, sql, new { }).ToList();
+            return usuarios;
         }
     }
 }

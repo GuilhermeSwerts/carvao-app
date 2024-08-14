@@ -3,7 +3,7 @@ import './layout.css';
 import { GetDataUser } from "../../util/GetDataUser";
 import { FaArrowRight, FaDoorOpen, FaUser, FaUserPlus } from 'react-icons/fa';
 import { FaUsers, FaShoppingCart, FaCartPlus } from "react-icons/fa";
-import { FaGears, FaKey } from "react-icons/fa6";
+import { FaCalendar, FaGears, FaKey } from "react-icons/fa6";
 import { FaBoxes } from "react-icons/fa";
 import { BsInboxesFill } from "react-icons/bs";
 import ModalAlterarSenha from '../Modals/Usuario/ModalAlterarSenha';
@@ -55,6 +55,10 @@ function Layout({ children, Tela, Icon }) {
           {usuario.IsMaster && <a className='slider_item' href='usuarios' title='Usuários'>
             USUÁRIOS
             <FaUsers size={20} className='slider-item-hover' />
+          </a>}
+          {usuario.IsMaster && <a className='slider_item' href='fechamento' title='Usuários'>
+            FECHAMENTO MÊS
+            <FaCalendar size={20} className='slider-item-hover' />
           </a>}
           <a className='slider_item' onClick={e => setShow(true)} title='Troca de Senha'>
             TROCA SENHA

@@ -96,11 +96,11 @@ function ClienteListHeader({
                 <form className="row" onSubmit={e => { e.preventDefault(); fetchClientes(filtroNome, dataInicio, dataFim) }}>
                     <div className="col-md-3">
                         <label>De:</label>
-                        <input onChange={e => setDataInicio(e.target.value)} type="date" required className='form-control' />
+                        <input value={dataInicio} onChange={e => setDataInicio(e.target.value)} type="date" required className='form-control' />
                     </div>
                     <div className="col-md-3">
                         <label>Até:</label>
-                        <input onChange={e => setDataFim(e.target.value)} type="date" required className='form-control' />
+                        <input value={dataFim} onChange={e => setDataFim(e.target.value)} type="date" required className='form-control' />
                     </div>
                     <div className="col-md-3" style={{ marginTop: 24 }}>
                         <button className='btn btn-white'>Buscar</button>

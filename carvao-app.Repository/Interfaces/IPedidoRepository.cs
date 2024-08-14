@@ -21,5 +21,6 @@ namespace carvao_app.Repository.Interfaces
         bool AtualizarSaldoDevedor(int pedidoId, decimal valorPago);
 
         public bool AtualizarStatusPedido(int pedidoId, int statusPedido);
+        List<PedidoMap> BuscarPedidosVinculadoVendedor(int usuario_id, DateTime? dataInicio = null, DateTime? dataFim = null);
     }
 }

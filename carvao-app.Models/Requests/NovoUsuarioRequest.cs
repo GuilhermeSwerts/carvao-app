@@ -14,5 +14,6 @@ namespace carvao_app.Models.Requests
         public string Cpf { get; set; }
         public string Email { get; set; }
         public int Tipo { get; set; }
+        public int? PercentualComissao { get; set; }
     }
 }

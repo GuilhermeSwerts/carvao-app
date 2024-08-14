@@ -21,5 +21,6 @@ namespace carvao_app.Business.Interfaces
         void TrocaSenhaUsuario(string senhaAtual, string senhaNova, UsuarioMap usuarioMap);
         void EmailEsqueciSenha(string cpf, string email,string ip);
         void EsqueciSenha(EsqueciSenha request);
+        object BuscarVendedores(DateTime dataInicio, DateTime dataFim);
     }
 }

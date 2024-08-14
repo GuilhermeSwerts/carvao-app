@@ -73,13 +73,17 @@ function Usuarios() {
             Alert("Selecione um tipo de usuario", false, true);
             return;
         }
+        var comissao = document.getElementById('percentualComissao' + index);
+
+        comissao = comissao ? comissao.value : null;
 
         const form = {
             nome: nome.value,
             cpf: cpf.value,
             email: email.value,
             tipo: tipo.value,
-            id: usuarios[index].usuarioId
+            id: usuarios[index].usuarioId,
+            percentualComissao: comissao
         }
 
         if (await Pergunta("Deseja realmente salvar as informações?")) {
@@ -161,6 +165,7 @@ function Usuarios() {
                                     <th>Email</th>
                                     <th>Data Cadastro</th>
                                     <th>Tipo Usuario</th>
+                                    <th>Percentual Comissão</th>
                                     <th>Situação</th>
                                     <th>Editar</th>
                                     <th>Inativar/Ativar</th>
@@ -218,6 +223,14 @@ function Usuarios() {
                                                         }
                                                     })}
                                                 </select>
+                                            </td>
+                                            <td data-label="percentualComissao">
+                                                {isEditing ? (
+                                                    <input type="number" min={0} id={'percentualComissao' + i} className='form-control' defaultValue={usuario.percentualComissao ?? 0} />
+                                                ) : (
+                                                    usuario.percentualComissao ?? 0
+                                                )}
+                                                {!isEditing && <span>%</span>}
                                             </td>
                                             <td data-label="Situação">{usuario.habilitado === 1 ? "Ativo" : usuario.habilitado === 0 ? "Inativo" : 'Excluido'}</td>
                                             <td data-label="Editar">

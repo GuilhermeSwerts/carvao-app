@@ -316,5 +316,27 @@ namespace carvao_app.Repository.Services
 
             return decimal.Parse(novoValor);
         }
+
+        public List<PedidoMap> BuscarPedidosVinculadoVendedor(int usuario_id, DateTime? dataInicio = null, DateTime? dataFim = null)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@Id", usuario_id);
+            var sql = "SELECT * FROM pedido where vendedorusuarioid = @Id";
+
+            if(dataInicio.HasValue)
+            {
+                parameters.Add("@DtInicio", dataInicio);
+                sql += " AND data_pedido >= @DtInicio";
+            }
+            if(dataFim.HasValue)
+            {
+                parameters.Add("@DtFim", dataFim);
+                sql += " AND data_pedido <= @DtFim";
+            }
+
+            var pedidos = DataBase.Execute<PedidoMap>(_configuration, sql, parameters).ToList();
+
+            return pedidos;
+        }
     }
 }

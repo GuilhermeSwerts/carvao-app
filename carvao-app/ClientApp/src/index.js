@@ -22,8 +22,9 @@ import Teste from './views/Test';
 
 import { FaUsers, FaDev, FaShoppingCart, FaRegFileAlt, FaHistory, FaUser, FaBoxes } from 'react-icons/fa';
 import { BsInboxesFill } from 'react-icons/bs';
-import { FaGears } from 'react-icons/fa6';
+import { FaCalendar, FaGears } from 'react-icons/fa6';
 import ResetarSenha from './views/resetarSenha/ResetarSenha';
+import FechamentoMes from './views/fechamentoMes';
 
 
 const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');
@@ -92,6 +93,11 @@ createRoot(rootElement).render(
     )} />
     <Route exact path='/ResetarSenha' component={(props) => (
       <ResetarSenha {...props} />
+    )} />
+    <Route exact path='/fechamento' component={(props) => (
+      <Layout Icon={<FaCalendar size={25} color='#fff' />} Tela="Fechamento Do Mês">
+        <FechamentoMes {...props} />
+      </Layout>
     )} />
   </BrowserRouter>);
 

@@ -23,13 +23,15 @@ namespace carvao_app.Business.Services
         private readonly IConfiguration _configuration;
         private readonly IEmail _email;
         private readonly IMemoryCache _cache;
+        private readonly IPedidoRepository _pedidoRepository;
 
-        public UsuarioService(IUsuarioRepository repository, IConfiguration configuration, IEmail email, IMemoryCache cache)
+        public UsuarioService(IUsuarioRepository repository, IConfiguration configuration, IEmail email, IMemoryCache cache, IPedidoRepository pedidoRepository)
         {
             _repository = repository;
             _configuration = configuration;
             _email = email;
             _cache = cache;
+            _pedidoRepository = pedidoRepository;
         }
 
         public void NovoUsuarios(NovoUsuarioRequest request)
@@ -91,6 +93,7 @@ namespace carvao_app.Business.Services
                     DataCadastro = usr.Data_cadastro,
                     Habilitado = usr.Habilitado,
                     Cpf = usr.Cpf,
+                    PercentualComissao = usr.Percentual_comissao
                 }).ToList();
             }
             catch (Exception)
@@ -110,7 +113,8 @@ namespace carvao_app.Business.Services
                     Data_cadastro = DateTime.Now,
                     Email = request.Email,
                     Nome = request.Nome,
-                    Tipo_usuario_id = request.Tipo
+                    Tipo_usuario_id = request.Tipo,
+                    Percentual_comissao = request.PercentualComissao
                 });
             }
             catch (Exception)
@@ -238,5 +242,55 @@ namespace carvao_app.Business.Services
 
         private string GetAttemptsKey(string ip) => $"Attempts_{ip}";
         private string GetBlockKey(string ip) => $"Blocked_{ip}";
+
+        public object BuscarVendedores(DateTime dataInicio, DateTime dataFim)
+        {
+            var vededoresDb = _repository.BuscarVendedores();
+
+            List<ComissaoVendedor> vendedores = new();
+            foreach (var vendedor in vededoresDb)
+            {
+                ComissaoVendedor comissaoVendedor = new()
+                {
+                    NomeVendedor = vendedor.Nome,
+                    VendedorId = vendedor.Usuario_id
+                };
+
+                var pedidos = _pedidoRepository.BuscarPedidosVinculadoVendedor(vendedor.Usuario_id, dataInicio, dataFim);
+                pedidos = pedidos.Where(x=> x.Status_pedido_id != 5).ToList();
+                decimal soma = 0;
+                foreach (var pedido in pedidos)
+                {
+                    decimal? comissao = (pedido.Valor_total * vendedor.Percentual_comissao) / 100m;
+                    soma += comissao ?? 0;
+                    comissaoVendedor.Pedidos.Add(new PedidosVendedor
+                    {
+                        PedidoId = pedido.Pedido_id,
+                        ValorComissao = comissao ?? 0,
+                        ValorTotalPedido = pedido.Valor_total
+                    });
+                }
+                comissaoVendedor.ValorTotalComissao = soma;
+                vendedores.Add(comissaoVendedor);
+            }
+                
+            return vendedores.OrderByDescending(x=> x.ValorTotalComissao);
+        }
+
+        public class ComissaoVendedor
+        {
+            public string NomeVendedor { get; set; }
+            public int VendedorId { get; set; }
+            public decimal ValorTotalComissao { get; set; }
+            public List<PedidosVendedor> Pedidos { get; set; } = new List<PedidosVendedor>();
+        }
+
+        public class PedidosVendedor
+        {
+            public decimal ValorComissao { get; set; }
+            public decimal ValorTotalPedido { get; set; }
+            public int PedidoId { get; set; }
+        }
+
     }
 }

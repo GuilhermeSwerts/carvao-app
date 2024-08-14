@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Org.BouncyCastle.Bcpg.OpenPgp;
+using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -53,6 +54,21 @@ namespace carvao_app.Controllers
             {
                 var tipos = _service.BuscarTiposUsuarios();
                 return Ok(tipos);
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("/Usuario/FechamentoMes")]
+        public async Task<IActionResult> GetBuscarVendedores([FromQuery] DateTime dataInicio, DateTime dataFim)
+        {
+            try
+            {
+                var vendedores = _service.BuscarVendedores(dataInicio, dataFim);
+                return Ok(vendedores);
             }
             catch (System.Exception ex)
             {

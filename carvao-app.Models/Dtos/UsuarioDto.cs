@@ -18,5 +18,6 @@ namespace carvao_app.Models.Dtos
         public string Perfil { get; set; }
         public string Cpf { get; set; }
         public string Senha { get; set; }
+        public int? PercentualComissao { get; set; }
     }
 }

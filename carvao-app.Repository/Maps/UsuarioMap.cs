@@ -17,5 +17,6 @@ namespace carvao_app.Repository.Maps
         public int Habilitado { get; set; } 
         public string Perfil { get; set; }
         public string Cpf { get; set; }
+        public int? Percentual_comissao { get; set; }
     }
 }
