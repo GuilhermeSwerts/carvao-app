@@ -23,7 +23,8 @@ function ModalNovoPedido({
     setObservacao = () => { },
     handleEnviarPedido = () => { },
     mensagem = "",
-    closeModalNovoPedido = () => { }
+    closeModalNovoPedido = () => { },
+    vendedorComissao
 }) {
 
     const getValue = () => produtoSelecionado && (quantidade * produtoSelecionado.valor).toFixed(2);
@@ -165,8 +166,12 @@ function ModalNovoPedido({
                                 />
                             </Col>}
                         {produtosAdicionados.length > 0
-                            && <Col md={12} style={{ width: '100%', textAlign: 'end', marginTop: 10 }}>
+                            && <Col md={6} style={{ width: '100%', textAlign: 'end', marginTop: 10 }}>
                                 <label style={{ fontSize: 25 }}>Total: R$ {calcularValorTotalPedido()}</label>
+                            </Col>}
+                        {produtosAdicionados.length > 0
+                            && <Col md={6} style={{ width: '100%', textAlign: 'end', marginTop: 10 }}>
+                                <small>Valor Comissão: R$ {((calcularValorTotalPedido() * vendedorComissao) / 100).toFixed(2)}</small>
                             </Col>}
                     </Row>
                     <Row>

@@ -1,5 +1,6 @@
 ﻿using carvao_app.Business.Interfaces;
 using carvao_app.Helper;
+using carvao_app.Models.Dtos;
 using carvao_app.Models.Requests;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -7,6 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Org.BouncyCastle.Bcpg.OpenPgp;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -131,6 +134,23 @@ namespace carvao_app.Controllers
             {
                 var usuarios = _service.BuscarTodosUsuarios();
                 return Ok(usuarios);
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("/Usuario/DadosVendedorAtual")]
+        public IActionResult DadosVendedorAtual()
+        {
+            try
+            {
+                var usuario = GetUser();
+                var usuarios = (List<UsuarioDto>)_service.BuscarTodosUsuarios();
+                var vendedor = usuarios.FirstOrDefault(x => x.UsuarioId == usuario.Usuario_id);
+                return Ok(vendedor);
             }
             catch (System.Exception ex)
             {

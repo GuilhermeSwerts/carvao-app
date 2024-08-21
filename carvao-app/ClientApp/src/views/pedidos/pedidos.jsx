@@ -35,6 +35,23 @@ function TelaPedido() {
     const [showModalHistorico, setShowModalHistorico] = useState(false);
     const [historico, setHistorico] = useState([]);
     const [status, setStatus] = useState([]);
+    const [vendedor, SetVendedor] = useState({
+        senha: "",
+        usuarioId: 0,
+        tipoUsuario: 1,
+        nome: "",
+        email: "",
+        dataCadastro: "",
+        habilitado: 1,
+        cpf: "",
+        percentualComissao: 0,
+    })
+
+    const BuscarDadosVendedorAtual = () => {
+        api.get("Usuario/DadosVendedorAtual", res => {
+            SetVendedor(res.data); 
+        }, err => console.log(err))
+    }
 
     const fetchClientes = (query, dtInicio, dtFim) => {
         try {
@@ -65,6 +82,7 @@ function TelaPedido() {
         // setUserData(dataUser);
         BuscarTodosProdutos();
         fetchClientes();
+        BuscarDadosVendedorAtual();
     }, []);
 
     const handleAbrirModal = (cliente) => {
@@ -183,7 +201,7 @@ function TelaPedido() {
     const handleQuantidadeChange = (event) => {
         const newQuantidade = parseInt(event.target.value);
 
-        if (isNaN(newQuantidade)){
+        if (isNaN(newQuantidade)) {
             setQuantidade('');
         };
 
@@ -409,6 +427,7 @@ function TelaPedido() {
                 setObservacao={setObservacao}
                 handleEnviarPedido={handleEnviarPedido}
                 mensagem={mensagem}
+                vendedorComissao={vendedor.percentualComissao}
             />
             <ModalPedidosCliente
                 clienteSelecionado={clienteSelecionado}

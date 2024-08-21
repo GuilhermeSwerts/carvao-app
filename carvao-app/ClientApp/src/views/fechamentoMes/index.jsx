@@ -27,7 +27,7 @@ function FechamentoMes() {
 
         api.get(`Usuario/FechamentoMes?dataInicio=${dtIni}&dataFim=${dtFim}`, res => {
             setVendedores(res.data);
-        }, err => console.log(res));
+        }, err => console.log(err));
     }
 
     useEffect(() => BuscarFechamentoMes(GetPrimeiroDiaDoMes(), GetUltimoDiaDoMes()), [])
