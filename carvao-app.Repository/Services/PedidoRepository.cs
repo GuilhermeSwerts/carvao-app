@@ -124,7 +124,7 @@ namespace carvao_app.Repository.Services
             };
         }
 
-        public List<PedidoMap> BuscarTodosPedidos(string q, string dtInicio, string dtFim,UsuarioMap usuarioMap)
+        public List<PedidoMap> BuscarTodosPedidos(string q, string dtInicio, string dtFim,UsuarioMap usuarioMap, int? nPedido)
         {
             var parameters = new DynamicParameters();
             parameters.Add("@Nome", $"%{q}%");
@@ -160,6 +160,12 @@ namespace carvao_app.Repository.Services
                 query += " AND p.data_pedido BETWEEN @DataInicio AND @DataFim";
                 parameters.Add("@DataInicio", dtInicio + " 00:00:00");
                 parameters.Add("@DataFim", dtFim + " 23:59:59");
+            }
+
+            if(nPedido.HasValue)
+            {
+                query += " AND p.pedido_id = @PedidoId";
+                parameters.Add("@PedidoId", nPedido.Value);
             }
 
             if ((int)ETipoUsuario.Vendedor == usuarioMap.Tipo_usuario_id)

@@ -3,6 +3,7 @@ import { FaDownload, FaPlus } from 'react-icons/fa'
 import { api } from '../api/api';
 import { eTipoDownload } from '../../enum/eTipoDownload';
 import { Alert } from '../../util/Alertas';
+import ReactInputMask from 'react-input-mask';
 
 function ClienteListHeader({
     filtroNome,
@@ -19,11 +20,14 @@ function ClienteListHeader({
     statusPedido = [],
     onChangeFiltroStatusPedido = () => { },
     extrairDados = false,
-    tipoDownload = 0
+    tipoDownload = 0,
+    nPedido = null,
+    setNPedido = () => { },
+    showNPedido = false
 }) {
 
     const DonwloadArquivo = async () => {
-        const url = `${api.urlBase}api/DownloadFiltro?filtro=${filtroNome ? filtroNome : ''}&dtInicio=${dataInicio}&dtFim=${dataFim}&tipoDownload=${tipoDownload}`;
+        const url = `${api.urlBase}api/DownloadFiltro?filtro=${filtroNome ? filtroNome : ''}&dtInicio=${dataInicio}&dtFim=${dataFim}&nPedido=${nPedido.replaceAll("_", "")}&tipoDownload=${tipoDownload}`;
         const token = api.access_token;
         try {
 
@@ -96,12 +100,29 @@ function ClienteListHeader({
                 <form className="row" onSubmit={e => { e.preventDefault(); fetchClientes(filtroNome, dataInicio, dataFim) }}>
                     <div className="col-md-3">
                         <label>De:</label>
-                        <input value={dataInicio} onChange={e => setDataInicio(e.target.value)} type="date" required className='form-control' />
+                        <input value={dataInicio} onChange={e => setDataInicio(e.target.value)} type="date" className='form-control' />
                     </div>
                     <div className="col-md-3">
                         <label>Até:</label>
-                        <input value={dataFim} onChange={e => setDataFim(e.target.value)} type="date" required className='form-control' />
+                        <input value={dataFim} onChange={e => setDataFim(e.target.value)} type="date" className='form-control' />
                     </div>
+                    {showNPedido && <div className="col-md-3">
+                        <label>N° Pedido</label>
+                        {/* <input
+                            value={nPedido}
+                            onChange={e => setNPedido(e.target.value)}
+                            type="text"
+                            className='form-control'
+                        /> */}
+                        <ReactInputMask
+                            className='form-control'
+                            mask={"9999999999"}
+                            style={{ borderColor: '#bbb' }}
+                            value={nPedido}
+                            onChange={(e) => setNPedido(e.target.value)}
+                            placeholder={"N° Pedido"}
+                        />
+                    </div>}
                     <div className="col-md-3" style={{ marginTop: 24 }}>
                         <button className='btn btn-white'>Buscar</button>
                     </div>
@@ -115,7 +136,7 @@ function ClienteListHeader({
                             ))}
                         </select>
                     </div>}
-                    {extrairDados && <div className="col-md-12" style={{ width: '100%', display: 'flex', justifyContent: 'end',marginTop:'20px' }}>
+                    {extrairDados && <div className="col-md-12" style={{ width: '100%', display: 'flex', justifyContent: 'end', marginTop: '20px' }}>
                         <label></label>
                         <button type='button' onClick={DonwloadArquivo} className='btn btn-white'>Extrair Dados <FaDownload size={25} /></button>
                     </div>}

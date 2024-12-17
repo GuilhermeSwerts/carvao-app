@@ -27,9 +27,9 @@ namespace carvao_app.Business.Services
             return pedido;
         }
 
-        public PedidoDto BuscarTodosPedidos(string q, string dtInicio, string dtFim, Repository.Maps.UsuarioMap usuarioMap)
+        public PedidoDto BuscarTodosPedidos(string q, string dtInicio, string dtFim, Repository.Maps.UsuarioMap usuarioMap, int? nPedido)
         {
-            var pedidos = _repository.BuscarTodosPedidos(q, dtInicio, dtFim, usuarioMap);
+            var pedidos = _repository.BuscarTodosPedidos(q, dtInicio, dtFim, usuarioMap, nPedido);
             var stPagamento = _repository.BuscarTodosStatusPagamento();
             var stPedido = _repository.BuscarTodosStatusPedido();
             return new PedidoDto().ToDto(pedidos, stPagamento, stPedido);

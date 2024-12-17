@@ -19,11 +19,11 @@ namespace carvao_app.Business.Services
             _serviceClientes = serviceClientes;
         }
 
-        public byte[] DownloadFiltro(string filtro, string dtInicio, string dtFim, ETipoDownload tipoDownload, UsuarioMap usuarioMap)
+        public byte[] DownloadFiltro(string filtro, string dtInicio, string dtFim, ETipoDownload tipoDownload, UsuarioMap usuarioMap, int? nPedido)
         {
             if (tipoDownload == ETipoDownload.GestaoPedidos)
             {
-                return GetByteGestaoPedidos(filtro, dtInicio, dtFim, usuarioMap);
+                return GetByteGestaoPedidos(filtro, dtInicio, dtFim, usuarioMap, nPedido);
             }
 
             if (tipoDownload == ETipoDownload.Clientes)
@@ -51,23 +51,23 @@ namespace carvao_app.Business.Services
             return fileBytes;
         }
 
-        private byte[] GetByteGestaoPedidos(string filtro, string dtInicio, string dtFim, UsuarioMap usuarioMap)
+        private byte[] GetByteGestaoPedidos(string filtro, string dtInicio, string dtFim, UsuarioMap usuarioMap, int? nPedido)
         {
-            var dados = _servicePedidos.BuscarTodosPedidos(filtro, dtInicio, dtFim, usuarioMap);
-            var cblc = "Nome Cliente;Nome Vendedor;Localidade;Data Do Pedid;Valor Total Pedidos(R$;Saldo Devedor(R$);Status Pedido;Status Pagameto\n";
+            var dados = _servicePedidos.BuscarTodosPedidos(filtro, dtInicio, dtFim, usuarioMap, nPedido);
+            var cblc = "Numero Pedido;Nome Cliente;Nome Vendedor;Localidade;Data Do Pedid;Valor Total Pedidos(R$;Saldo Devedor(R$);Status Pedido;Status Pagameto";
 
-            string texto = cblc;
+            StringBuilder texto = new();
+            texto.AppendLine(cblc);
             for (int i = 0; i < dados.Pedidos.Count; i++)
             {
                 var produto = dados.Pedidos[i];
                 var statusPedido = dados.StatusPedido.FirstOrDefault(x => x.Status_pedido_id == produto.Status_pedido_id) ?? new();
                 var statusPagamento = dados.StatusPagamento.FirstOrDefault(x => x.Status_pagamento_id == produto.Status_pagamento_id) ?? new();
 
-                texto += $"{produto.NomeCliente};{produto.NomeVendedor};{produto.Localidade};{produto.Data_pedido};{produto.Valor_total};{produto.Saldo_devedor};{statusPedido.Nome};{statusPagamento.Nome}";
-                texto += "\n";
+                texto.AppendLine($"{produto.Pedido_id};{produto.NomeCliente};{produto.NomeVendedor};{produto.Localidade};{produto.Data_pedido};{produto.Valor_total};{produto.Saldo_devedor};{statusPedido.Nome};{statusPagamento.Nome}");
             }
 
-            byte[] fileBytes = Encoding.Latin1.GetBytes(texto);
+            byte[] fileBytes = Encoding.Latin1.GetBytes(texto.ToString());
             return fileBytes;
         }
 

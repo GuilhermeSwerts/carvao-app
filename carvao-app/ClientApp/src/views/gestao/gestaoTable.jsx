@@ -69,7 +69,8 @@ function GestaoTable(props) {
                 <table className="table table-striped">
                     <thead>
                         <tr>
-                            <th>Id</th>
+                            <th>#</th>
+                            <th>N° Pedido</th>
                             <th>Nome Cliente</th>
                             <th>Nome Vendedor</th>
                             <th>Localidade</th>
@@ -84,7 +85,8 @@ function GestaoTable(props) {
                     <tbody>
                         {pedidos.map((produto, index) => (
                             <tr key={produto.pedido_id}>
-                                <td data-label="Id">{index + 1}</td>
+                                <td data-label="#">{index + 1}</td>
+                                <td data-label="N° Pedido">{produto.pedido_id}</td>
                                 <td data-label="Nome Cliente">{produto.nomeCliente}</td>
                                 <td data-label="Nome Vendedor">{produto.nomeVendedor}</td>
                                 <td data-label="Localidade">{produto.localidade}</td>

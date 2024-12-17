@@ -16,9 +16,10 @@ function Gestao() {
     const [dtFim, setDtFim] = useState('');
     const [produtos, setProdutos] = useState([]);
     const [nome, setNome] = useState('');
+    const [nPedido, setNPedido] = useState('');
 
     const BuscarTodosPedidos = () => {
-        api.get(`api/Pedidos/BuscarTodos?q=${nome}&dtInicio=${dtInicio}&dtFim=${dtFim}`, res => {
+        api.get(`api/Pedidos/BuscarTodos?q=${nome}&dtInicio=${dtInicio}&dtFim=${dtFim}&nPedido=${nPedido.replaceAll("_", "")}`, res => {
             setStatusPagamento(res.data.statusPagamento);
             setStatusPedido(res.data.statusPedido);
             setPedidos(res.data.pedidos);
@@ -68,6 +69,9 @@ function Gestao() {
                     handleInputChange={e => { setNome(e.target.value); BuscarTodosPedidos() }}
                     extrairDados={true}
                     tipoDownload={eTipoDownload.GestaoPedidos}
+                    nPedido={nPedido}
+                    setNPedido={setNPedido}
+                    showNPedido={true}
                 />
                 <GestaoTable
                     ReloadPage={BuscarTodosPedidos}

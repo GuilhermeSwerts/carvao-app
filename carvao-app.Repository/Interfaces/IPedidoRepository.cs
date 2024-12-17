@@ -11,7 +11,7 @@ namespace carvao_app.Repository.Interfaces
     public interface IPedidoRepository
     {
         BuscarPedidoMap BuscarPedidoId(int pedidoId);
-        List<PedidoMap> BuscarTodosPedidos(string q, string dtInicio, string dtFim, UsuarioMap usuarioMap);
+        List<PedidoMap> BuscarTodosPedidos(string q, string dtInicio, string dtFim, UsuarioMap usuarioMap, int? nPedido);
         List<StatusPagamentoMap> BuscarTodosStatusPagamento();
         List<StatusPedidoMap> BuscarTodosStatusPedido();
         void EditarPedido(EditarPedidoRequestDb map);

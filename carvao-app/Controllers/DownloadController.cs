@@ -29,11 +29,11 @@ namespace carvao_app.Controllers
         [AllowAnonymous]
         [HttpGet]
         [Route("/api/DownloadFiltro")]
-        public ActionResult BuscarTodosPedidos([FromQuery] string filtro,string dtInicio, string dtFim,ETipoDownload tipoDownload)
+        public ActionResult BuscarTodosPedidos([FromQuery] string filtro,string dtInicio, string dtFim, ETipoDownload tipoDownload, int? nPedido = null)
         {
             try
             {
-                byte[] data = _service.DownloadFiltro(filtro, dtInicio, dtFim, tipoDownload, GetUser());
+                byte[] data = _service.DownloadFiltro(filtro, dtInicio, dtFim, tipoDownload, GetUser(), nPedido);
                 string nomeArquivo = tipoDownload == ETipoDownload.GestaoPedidos ? "GestaoPedidos.csv" : "";
                 return File(data, "application/csv;charset=utf-8", "FiltroClientes.csv");
             }
@@ -47,7 +47,7 @@ namespace carvao_app.Controllers
         [Route("/api/Download/Pdf/DetalhesPedido/{pedidoId}")]
         public IActionResult ExportToPDF([FromRoute] int pedidoId)
         {
-            var dados = _servicePedido.BuscarTodosPedidos("","","",GetUser());
+            var dados = _servicePedido.BuscarTodosPedidos("","","",GetUser(), pedidoId);
             var Pedido = dados.Pedidos.First(x => x.Pedido_id == pedidoId); 
             var produtos = (List<ProdutoDto>)_serviceProdutos.BuscarTodosProdutos();
 
