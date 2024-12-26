@@ -198,10 +198,10 @@ namespace carvao_app.Repository.Services
         public void EditarPedido(EditarPedidoRequestDb map)
         {
             decimal valorPago = DataBase.Execute<decimal>(_configuration, "select COALESCE(SUM(valor_pago), 0) from recibo where pedido_id = @Id", new { Id = map.PedidoId }).FirstOrDefault();
-            var valorTotal = RecuperarValorCom2CasaDecimais(map.ValorTotal);
+            var valorTotal = decimal.Parse(map.ValorTotal, CultureInfo.InvariantCulture);
             decimal novoSaldoDevedor = valorTotal - valorPago;
 
-            var valorDesconto = RecuperarValorCom2CasaDecimais(map.ValorDesconto);
+            var valorDesconto = decimal.Parse(map.ValorDesconto, CultureInfo.InvariantCulture);
 
             var param = new DynamicParameters();
             param.Add("@Id", map.PedidoId);
@@ -309,20 +309,6 @@ namespace carvao_app.Repository.Services
                 DataBase.Execute(_configuration, query, newParam);
             }
 
-        }
-
-        private decimal RecuperarValorCom2CasaDecimais(string valor)
-        {
-            if (valor.Contains('.')) valor = valor.Replace(".", ",");
-            else if (!valor.Contains(".") && !valor.Contains(",")) valor = valor + ",00";
-
-
-            var numerosDepois = valor.Split(',')[0];
-            var numerosAntes = valor.Split(',')[1];
-
-            var novoValor = numerosDepois + "," + numerosAntes[..2];
-
-            return decimal.Parse(novoValor);
         }
 
         public List<PedidoMap> BuscarPedidosVinculadoVendedor(int usuario_id, DateTime? dataInicio = null, DateTime? dataFim = null)
