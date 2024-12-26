@@ -13,6 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using System.Globalization;
 
 namespace carvao_app.Repository.Services
 {
@@ -131,6 +132,7 @@ namespace carvao_app.Repository.Services
 
             var query = @"
                         SELECT 
+                            c.Cnpj as Cnpj,
                             c.nome AS NomeCliente, 
                             u.nome AS NomeVendedor, 
                             p.pedido_id, 
@@ -274,8 +276,8 @@ namespace carvao_app.Repository.Services
 
             param.Add("@VendedorId", map.VendedorUsuarioId);
             param.Add("@ClienteId", map.ClienteId);
-            param.Add("@ValorTotal", map.ValorTotal);
-            param.Add("@ValorDesconto", map.ValorDesconto);
+            param.Add("@ValorTotal", decimal.Parse(map.ValorTotal,CultureInfo.InvariantCulture));
+            param.Add("@ValorDesconto", decimal.Parse(map.ValorDesconto, CultureInfo.InvariantCulture));
             param.Add("@PercentualDesconto", map.PercentualDesconto);
             param.Add("@StatusPedido", map.StatusPedidoId);
             param.Add("@StatusPagamento", map.StatusPagamentoId);
@@ -296,8 +298,8 @@ namespace carvao_app.Repository.Services
                 newParam.Add("@ProdutoId", item.Produto_id);
                 newParam.Add("@Quantidade", item.Quantidade);
                 newParam.Add("@ValorUnitario", item.Valor);
-                newParam.Add("@ValorTotal", map.ValorTotal);
-                newParam.Add("@ValorDesconto", map.ValorDesconto);
+                newParam.Add("@ValorTotal", decimal.Parse(map.ValorTotal,CultureInfo.InvariantCulture));
+                newParam.Add("@ValorDesconto", decimal.Parse(map.ValorDesconto, CultureInfo.InvariantCulture));
                 newParam.Add("@DescontoUn", item.desconto_unitario);
 
                 query = @"INSERT INTO pedido_produto

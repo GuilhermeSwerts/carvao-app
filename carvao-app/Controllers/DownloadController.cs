@@ -29,7 +29,7 @@ namespace carvao_app.Controllers
         [AllowAnonymous]
         [HttpGet]
         [Route("/api/DownloadFiltro")]
-        public ActionResult BuscarTodosPedidos([FromQuery] string filtro,string dtInicio, string dtFim, ETipoDownload tipoDownload, int? nPedido = null)
+        public ActionResult BuscarTodosPedidos([FromQuery] string filtro, string dtInicio, string dtFim, ETipoDownload tipoDownload, int? nPedido = null)
         {
             try
             {
@@ -47,8 +47,8 @@ namespace carvao_app.Controllers
         [Route("/api/Download/Pdf/DetalhesPedido/{pedidoId}")]
         public IActionResult ExportToPDF([FromRoute] int pedidoId)
         {
-            var dados = _servicePedido.BuscarTodosPedidos("","","",GetUser(), pedidoId);
-            var Pedido = dados.Pedidos.First(x => x.Pedido_id == pedidoId); 
+            var dados = _servicePedido.BuscarTodosPedidos("", "", "", GetUser(), pedidoId);
+            var Pedido = dados.Pedidos.First(x => x.Pedido_id == pedidoId);
             var produtos = (List<ProdutoDto>)_serviceProdutos.BuscarTodosProdutos();
 
             using (MemoryStream memoryStream = new MemoryStream())
@@ -63,32 +63,42 @@ namespace carvao_app.Controllers
 
                 XImage image = XImage.FromFile("images/icone.jpg");
 
-                double width = 250; 
-                double height = image.PixelHeight * (width / image.PixelWidth); 
+                double width = 250;
+                double height = image.PixelHeight * (width / image.PixelWidth);
                 double xPosition = page.Width - width + 50;
-                double yPosition = 35; 
+                double yPosition = 35;
 
                 gfx.DrawImage(image, xPosition, yPosition, width, height);
-
 
                 XRect rect = new XRect(0, 0, page.Width, 40);
                 XColor backgroundColor = XColor.FromArgb(207, 42, 59);
                 gfx.DrawRectangle(new XSolidBrush(backgroundColor), rect);
 
                 gfx.DrawString("DETALHES DO PEDIDO", titleFont, XBrushes.White, rect, XStringFormats.Center);
-                gfx.DrawString("\n", normalFont, XBrushes.Black, new XRect(0, 40, page.Width, 20), XStringFormats.Center);
 
-                gfx.DrawString("DADOS GERAIS", sectionFont, XBrushes.Black, new XRect(20, 60, page.Width, 20), XStringFormats.CenterLeft);
-                gfx.DrawString($"Nº DO PEDIDO: {Pedido.Pedido_id}", normalFont, XBrushes.Black, new XRect(20, 80, page.Width, 20), XStringFormats.CenterLeft);
-                gfx.DrawString($"DATA DO PEDIDO: {DateTime.Parse(Pedido.Data_pedido.ToString()).ToString("dd/MM/yyyy HH:mm:ss")}", normalFont, XBrushes.Black, new XRect(20, 100, page.Width, 20), XStringFormats.CenterLeft);
-                gfx.DrawString($"NOME DO VENDEDOR: {Pedido.NomeVendedor}", normalFont, XBrushes.Black, new XRect(20, 120, page.Width, 20), XStringFormats.CenterLeft);
-                gfx.DrawString($"NOME DO CLIENTE: {Pedido.NomeCliente}", normalFont, XBrushes.Black, new XRect(20, 140, page.Width, 20), XStringFormats.CenterLeft);
-                gfx.DrawString($"ENDEREÇO: {Pedido.Endereco}", normalFont, XBrushes.Black, new XRect(20, 160, page.Width, 20), XStringFormats.CenterLeft);
+                double yPoint = 60;
 
-                gfx.DrawString("\n", normalFont, XBrushes.Black, new XRect(0, 180, page.Width, 20), XStringFormats.CenterLeft);
-                gfx.DrawString("DADOS DO PEDIDO", sectionFont, XBrushes.Black, new XRect(20, 200, page.Width, 20), XStringFormats.CenterLeft);
+                // DADOS GERAIS
+                gfx.DrawString("DADOS GERAIS", sectionFont, XBrushes.Black, new XRect(20, yPoint, page.Width, 20), XStringFormats.CenterLeft);
+                yPoint += 20;
 
-                int yPoint = 225;
+                gfx.DrawString($"Nº DO PEDIDO: {Pedido.Pedido_id}", normalFont, XBrushes.Black, new XRect(20, yPoint, page.Width, 20), XStringFormats.CenterLeft);
+                yPoint += 20;
+                gfx.DrawString($"CNPJ: {Pedido.Cnpj}", normalFont, XBrushes.Black, new XRect(20, yPoint, page.Width, 20), XStringFormats.CenterLeft);
+                yPoint += 20;
+                gfx.DrawString($"DATA DO PEDIDO: {DateTime.Parse(Pedido.Data_pedido.ToString()).ToString("dd/MM/yyyy HH:mm:ss")}", normalFont, XBrushes.Black, new XRect(20, yPoint, page.Width, 20), XStringFormats.CenterLeft);
+                yPoint += 20;
+                gfx.DrawString($"NOME DO VENDEDOR: {Pedido.NomeVendedor}", normalFont, XBrushes.Black, new XRect(20, yPoint, page.Width, 20), XStringFormats.CenterLeft);
+                yPoint += 20;
+                gfx.DrawString($"NOME DO CLIENTE: {Pedido.NomeCliente}", normalFont, XBrushes.Black, new XRect(20, yPoint, page.Width, 20), XStringFormats.CenterLeft);
+                yPoint += 20;
+                gfx.DrawString($"ENDEREÇO: {Pedido.Endereco}", normalFont, XBrushes.Black, new XRect(20, yPoint, page.Width, 20), XStringFormats.CenterLeft);
+                yPoint += 40;
+
+                // TABELA DE ITENS
+                gfx.DrawString("DADOS DO PEDIDO", sectionFont, XBrushes.Black, new XRect(20, yPoint, page.Width, 20), XStringFormats.CenterLeft);
+                yPoint += 25;
+
                 double tableStartY = yPoint;
                 double tableStartX = 25;
                 double tableWidth = page.Width - 100;
@@ -112,7 +122,7 @@ namespace carvao_app.Controllers
                     gfx.DrawString($"{item.Quantidade}", normalFont, XBrushes.Black, new XRect(tableStartX, yPoint, columnWidths[0], tableHeight), XStringFormats.Center);
 
                     gfx.DrawRectangle(XPens.Black, tableStartX + columnWidths[0], yPoint, columnWidths[1], tableHeight);
-                    gfx.DrawString($"{produto.Nome}", normalFont, XBrushes.Black, new XRect(tableStartX + columnWidths[0], yPoint, columnWidths[1], tableHeight), XStringFormats.CenterLeft);
+                    gfx.DrawString($"{produto.Nome}", normalFont, XBrushes.Black, new XRect(tableStartX + columnWidths[0], yPoint, columnWidths[1], tableHeight), XStringFormats.Center);
 
                     gfx.DrawRectangle(XPens.Black, tableStartX + columnWidths.Take(2).Sum(), yPoint, columnWidths[2], tableHeight);
                     gfx.DrawString($"R$ {item.Valor_unitario:F2}", normalFont, XBrushes.Black, new XRect(tableStartX + columnWidths.Take(2).Sum(), yPoint, columnWidths[2], tableHeight), XStringFormats.Center);
@@ -126,24 +136,41 @@ namespace carvao_app.Controllers
                     yPoint += Convert.ToInt32(tableHeight);
                 }
 
-                gfx.DrawString("\n", normalFont, XBrushes.Black, new XRect(0, yPoint, page.Width, 20), XStringFormats.CenterLeft);
-                yPoint += 20;
-                gfx.DrawString("OBSERVAÇÃO", sectionFont, XBrushes.Black, new XRect(20, yPoint, page.Width, 20), XStringFormats.CenterLeft);
-                yPoint += 20;
-                gfx.DrawString(Pedido.Observacao, normalFont, XBrushes.Black, new XRect(20, yPoint, page.Width, 20), XStringFormats.CenterLeft);
+                yPoint += 25;
 
-                yPoint += 40;
-                gfx.DrawString($"PORCENTAGEM DE DESCONTO: {Pedido.Percentual_desconto}%", normalFont, XBrushes.Black, new XRect(20, yPoint, page.Width, 20), XStringFormats.CenterLeft);
-                yPoint += 20;
-                gfx.DrawString($"VALOR DESCONTO DO PEDIDO: R$ {Pedido.Valor_desconto:F2}", normalFont, XBrushes.Black, new XRect(20, yPoint, page.Width, 20), XStringFormats.CenterLeft);
-                yPoint += 20;
-                gfx.DrawString($"VALOR TOTAL DO PEDIDO: R$ {Pedido.Valor_total:F2}", normalFont, XBrushes.Black, new XRect(20, yPoint, page.Width, 20), XStringFormats.CenterLeft);
+                gfx.DrawString("TOTAL DO PEDIDO", sectionFont, XBrushes.Black, new XRect(20, yPoint, page.Width, 20), XStringFormats.CenterLeft);
+                yPoint += 25;
+
+                double totalTableStartY = yPoint;
+                double[] columnWidthsTotal = { 100, 150, 150, 150 };
+
+                string[] headersTotal = { "Valor Total", "Porcentagem de desconto", "Total Descontos", "Valor Líquido" };
+                for (int i = 0; i < headersTotal.Length; i++)
+                {
+                    gfx.DrawRectangle(XPens.Black, tableStartX + columnWidthsTotal.Take(i).Sum(), totalTableStartY, columnWidthsTotal[i], tableHeight);
+                    gfx.DrawString(headersTotal[i], normalFont, XBrushes.Black, new XRect(tableStartX + columnWidthsTotal.Take(i).Sum(), totalTableStartY, columnWidthsTotal[i], tableHeight), XStringFormats.Center);
+                }
+
+                yPoint += Convert.ToInt32(tableHeight);
+
+                gfx.DrawRectangle(XPens.Black, tableStartX, yPoint, columnWidthsTotal[0], tableHeight);
+                gfx.DrawString($"R$ {(Pedido.Valor_total + Pedido.Valor_desconto):F2}", normalFont, XBrushes.Black, new XRect(tableStartX, yPoint, columnWidthsTotal[0], tableHeight), XStringFormats.Center);
+
+                gfx.DrawRectangle(XPens.Black, tableStartX + columnWidthsTotal[0], yPoint, columnWidthsTotal[1], tableHeight);
+                gfx.DrawString($"{Pedido.Percentual_desconto}%", normalFont, XBrushes.Black, new XRect(tableStartX + columnWidthsTotal[0], yPoint, columnWidthsTotal[1], tableHeight), XStringFormats.Center);
+
+                gfx.DrawRectangle(XPens.Black, tableStartX + columnWidthsTotal.Take(2).Sum(), yPoint, columnWidthsTotal[2], tableHeight);
+                gfx.DrawString($"R$ {Pedido.Produtos.Sum(x=> x.Desconto_unitario):F2}", normalFont, XBrushes.Black, new XRect(tableStartX + columnWidthsTotal.Take(2).Sum(), yPoint, columnWidthsTotal[2], tableHeight), XStringFormats.Center);
+
+                gfx.DrawRectangle(XPens.Black, tableStartX + columnWidthsTotal.Take(3).Sum(), yPoint, columnWidthsTotal[3], tableHeight);
+                gfx.DrawString($"R$ {Pedido.Valor_total:F2}", normalFont, XBrushes.Black, new XRect(tableStartX + columnWidthsTotal.Take(3).Sum(), yPoint, columnWidthsTotal[3], tableHeight), XStringFormats.Center);
 
                 document.Save(memoryStream, false);
 
                 byte[] bytes = memoryStream.ToArray();
                 return File(bytes, "application/pdf", $"pedido_{Pedido.NomeCliente}_{Pedido.Pedido_id}.pdf");
             }
+
         }
 
     }
