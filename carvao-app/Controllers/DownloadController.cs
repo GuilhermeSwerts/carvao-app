@@ -160,7 +160,7 @@ namespace carvao_app.Controllers
                 gfx.DrawString($"{Pedido.Percentual_desconto}%", normalFont, XBrushes.Black, new XRect(tableStartX + columnWidthsTotal[0], yPoint, columnWidthsTotal[1], tableHeight), XStringFormats.Center);
 
                 gfx.DrawRectangle(XPens.Black, tableStartX + columnWidthsTotal.Take(2).Sum(), yPoint, columnWidthsTotal[2], tableHeight);
-                gfx.DrawString($"R$ {Pedido.Produtos.Sum(x=> x.Desconto_unitario):F2}", normalFont, XBrushes.Black, new XRect(tableStartX + columnWidthsTotal.Take(2).Sum(), yPoint, columnWidthsTotal[2], tableHeight), XStringFormats.Center);
+                gfx.DrawString($"R$ {Pedido.Valor_desconto:F2}", normalFont, XBrushes.Black, new XRect(tableStartX + columnWidthsTotal.Take(2).Sum(), yPoint, columnWidthsTotal[2], tableHeight), XStringFormats.Center);
 
                 gfx.DrawRectangle(XPens.Black, tableStartX + columnWidthsTotal.Take(3).Sum(), yPoint, columnWidthsTotal[3], tableHeight);
                 gfx.DrawString($"R$ {Pedido.Valor_total:F2}", normalFont, XBrushes.Black, new XRect(tableStartX + columnWidthsTotal.Take(3).Sum(), yPoint, columnWidthsTotal[3], tableHeight), XStringFormats.Center);
