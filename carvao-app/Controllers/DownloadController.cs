@@ -165,6 +165,10 @@ namespace carvao_app.Controllers
                 gfx.DrawRectangle(XPens.Black, tableStartX + columnWidthsTotal.Take(3).Sum(), yPoint, columnWidthsTotal[3], tableHeight);
                 gfx.DrawString($"R$ {Pedido.Valor_total:F2}", normalFont, XBrushes.Black, new XRect(tableStartX + columnWidthsTotal.Take(3).Sum(), yPoint, columnWidthsTotal[3], tableHeight), XStringFormats.Center);
 
+                yPoint += 50;
+                gfx.DrawString("DESCRIÇÃO DO PEDIDO", sectionFont, XBrushes.Black, new XRect(20, yPoint, page.Width, 20), XStringFormats.CenterLeft);
+                yPoint += 25;
+                gfx.DrawString(Pedido.Observacao, normalFont, XBrushes.Black, new XRect(20, yPoint, page.Width, 20), XStringFormats.CenterLeft);
                 document.Save(memoryStream, false);
 
                 byte[] bytes = memoryStream.ToArray();
