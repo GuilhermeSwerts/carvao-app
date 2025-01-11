@@ -58,7 +58,7 @@ function Produtos() {
     }
 
     const EditarProduto = (produto) => {
-        if (produto.valor < produto.valorMinimo) {
+        if (parseFloat(produto.valor) < parseFloat(produto.valorMinimo)) {
             Alert("Valor do produto deve ser maior que o valor minimo", false, true)
             return;
         }
