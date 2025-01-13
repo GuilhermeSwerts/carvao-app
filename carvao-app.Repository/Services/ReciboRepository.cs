@@ -52,7 +52,9 @@ namespace carvao_app.Repository.Services
             {
                 param = new DynamicParameters();
                 param.Add("@Saldo", recibo.valor_pago);
-                DataBase.Execute(_configuration, "UPDATE pedido set saldo_devedor = saldo_devedor + @Saldo", param);
+                param.Add("@status_pagamento_id", recibo.valor_pago == pedido.Valor_total ? StatusPagamentoEnum.Pendente : StatusPagamentoEnum.Parcial);
+                
+                DataBase.Execute(_configuration, "UPDATE pedido set saldo_devedor = saldo_devedor + @Saldo, status_pagamento_id = @status_pagamento_id", param);
             }
 
             return 0;

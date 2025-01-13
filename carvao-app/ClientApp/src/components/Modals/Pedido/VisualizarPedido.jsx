@@ -73,7 +73,9 @@ class VisualizarPedido extends React.Component {
                         </div>
                         <br />
                         <div className="row">
-
+                            <div className="col-sm-4">
+                                <span><b>Cnpj:</b> {Pedido.cnpj}</span>
+                            </div>
                             <div className="col-sm-2">
                                 <span><b>N° DO PEDIDO:</b> {Pedido.pedido_id}</span>
                             </div>

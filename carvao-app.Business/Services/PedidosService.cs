@@ -92,7 +92,7 @@ namespace carvao_app.Business.Services
                     Valor = item.Valor,
                     Valor_desconto_maximo = item.ValorMinimo,
                     Quantidade = item.Quantidade,
-                    desconto_unitario = item.ValorDescontoUnitario,
+                    desconto_unitario = item.ValorDesconto,
                 });
             }
             return retorno;

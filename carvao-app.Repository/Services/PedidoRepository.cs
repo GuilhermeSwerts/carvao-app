@@ -13,6 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using System.Globalization;
 
 namespace carvao_app.Repository.Services
 {
@@ -131,6 +132,7 @@ namespace carvao_app.Repository.Services
 
             var query = @"
                         SELECT 
+                            c.Cnpj as Cnpj,
                             c.nome AS NomeCliente, 
                             u.nome AS NomeVendedor, 
                             p.pedido_id, 
@@ -196,10 +198,10 @@ namespace carvao_app.Repository.Services
         public void EditarPedido(EditarPedidoRequestDb map)
         {
             decimal valorPago = DataBase.Execute<decimal>(_configuration, "select COALESCE(SUM(valor_pago), 0) from recibo where pedido_id = @Id", new { Id = map.PedidoId }).FirstOrDefault();
-            var valorTotal = RecuperarValorCom2CasaDecimais(map.ValorTotal);
+            var valorTotal = decimal.Parse(map.ValorTotal, CultureInfo.InvariantCulture);
             decimal novoSaldoDevedor = valorTotal - valorPago;
 
-            var valorDesconto = RecuperarValorCom2CasaDecimais(map.ValorDesconto);
+            var valorDesconto = decimal.Parse(map.ValorDesconto, CultureInfo.InvariantCulture);
 
             var param = new DynamicParameters();
             param.Add("@Id", map.PedidoId);
@@ -274,8 +276,8 @@ namespace carvao_app.Repository.Services
 
             param.Add("@VendedorId", map.VendedorUsuarioId);
             param.Add("@ClienteId", map.ClienteId);
-            param.Add("@ValorTotal", map.ValorTotal);
-            param.Add("@ValorDesconto", map.ValorDesconto);
+            param.Add("@ValorTotal", decimal.Parse(map.ValorTotal,CultureInfo.InvariantCulture));
+            param.Add("@ValorDesconto", decimal.Parse(map.ValorDesconto, CultureInfo.InvariantCulture));
             param.Add("@PercentualDesconto", map.PercentualDesconto);
             param.Add("@StatusPedido", map.StatusPedidoId);
             param.Add("@StatusPagamento", map.StatusPagamentoId);
@@ -296,8 +298,8 @@ namespace carvao_app.Repository.Services
                 newParam.Add("@ProdutoId", item.Produto_id);
                 newParam.Add("@Quantidade", item.Quantidade);
                 newParam.Add("@ValorUnitario", item.Valor);
-                newParam.Add("@ValorTotal", map.ValorTotal);
-                newParam.Add("@ValorDesconto", map.ValorDesconto);
+                newParam.Add("@ValorTotal", decimal.Parse(map.ValorTotal,CultureInfo.InvariantCulture));
+                newParam.Add("@ValorDesconto", decimal.Parse(map.ValorDesconto, CultureInfo.InvariantCulture));
                 newParam.Add("@DescontoUn", item.desconto_unitario);
 
                 query = @"INSERT INTO pedido_produto
@@ -307,20 +309,6 @@ namespace carvao_app.Repository.Services
                 DataBase.Execute(_configuration, query, newParam);
             }
 
-        }
-
-        private decimal RecuperarValorCom2CasaDecimais(string valor)
-        {
-            if (valor.Contains('.')) valor = valor.Replace(".", ",");
-            else if (!valor.Contains(".") && !valor.Contains(",")) valor = valor + ",00";
-
-
-            var numerosDepois = valor.Split(',')[0];
-            var numerosAntes = valor.Split(',')[1];
-
-            var novoValor = numerosDepois + "," + numerosAntes[..2];
-
-            return decimal.Parse(novoValor);
         }
 
         public List<PedidoMap> BuscarPedidosVinculadoVendedor(int usuario_id, DateTime? dataInicio = null, DateTime? dataFim = null)

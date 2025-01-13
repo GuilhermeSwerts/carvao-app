@@ -69,7 +69,6 @@ function GestaoTable(props) {
                 <table className="table table-striped">
                     <thead>
                         <tr>
-                            <th>#</th>
                             <th>N° Pedido</th>
                             <th>Nome Cliente</th>
                             <th>Nome Vendedor</th>
@@ -83,9 +82,12 @@ function GestaoTable(props) {
                         </tr>
                     </thead>
                     <tbody>
-                        {pedidos.map((produto, index) => (
+                        {pedidos.sort((a,b)=> {
+                            const dataA = new Date(a.data_pedido);
+                            const dataB = new Date(b.data_pedido);
+                            return dataA - dataB;
+                        }).map((produto, index) => (
                             <tr key={produto.pedido_id}>
-                                <td data-label="#">{index + 1}</td>
                                 <td data-label="N° Pedido">{produto.pedido_id}</td>
                                 <td data-label="Nome Cliente">{produto.nomeCliente}</td>
                                 <td data-label="Nome Vendedor">{produto.nomeVendedor}</td>
