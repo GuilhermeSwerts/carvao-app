@@ -23,11 +23,15 @@ function ClienteListHeader({
     tipoDownload = 0,
     nPedido = null,
     setNPedido = () => { },
-    showNPedido = false
+    showNPedido = false,
+    filtroVendedor = false,
+    vededores = [],
+    setVendedorSelecionado = () => { },
+    vendedorSelecionado = null
 }) {
 
     const DonwloadArquivo = async () => {
-        const url = `${api.urlBase}api/DownloadFiltro?filtro=${filtroNome ? filtroNome : ''}&dtInicio=${dataInicio}&dtFim=${dataFim}&nPedido=${nPedido.replaceAll("_", "")}&tipoDownload=${tipoDownload}`;
+        const url = `${api.urlBase}api/DownloadFiltro?filtro=${filtroNome ? filtroNome : ''}&dtInicio=${dataInicio}&dtFim=${dataFim}&nPedido=${nPedido.replaceAll("_", "")}&tipoDownload=${tipoDownload}&vendedor=${vendedorSelecionado}`;
         const token = api.access_token;
         try {
 
@@ -59,7 +63,7 @@ function ClienteListHeader({
     const GetNomeArquivo = () => {
         switch (tipoDownload) {
             case eTipoDownload.GestaoPedidos:
-                return "GestaoPedidos.csv";
+                return "GestaoPedidos.xlsx";
             case eTipoDownload.Clientes:
                 return "Clientes.csv";
             default:
@@ -136,6 +140,16 @@ function ClienteListHeader({
                             ))}
                         </select>
                     </div>}
+                    {filtroVendedor && <div className='col-12 col-md-3'>
+                        <label>Vendedor:</label>
+                        <select value={vendedorSelecionado} onChange={e => setVendedorSelecionado(e.target.value)} className='form-control'>
+                            <option value={null}>Todos</option>
+                            {vededores.map(item => (
+                                <option value={item.id}>{item.nome}</option>
+                            ))}
+                        </select>
+                    </div>}
+
                     {extrairDados && <div className="col-md-12" style={{ width: '100%', display: 'flex', justifyContent: 'end', marginTop: '20px' }}>
                         <label></label>
                         <button type='button' onClick={DonwloadArquivo} className='btn btn-white'>Extrair Dados <FaDownload size={25} /></button>

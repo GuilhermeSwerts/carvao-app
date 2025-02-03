@@ -17,9 +17,11 @@ function Gestao() {
     const [produtos, setProdutos] = useState([]);
     const [nome, setNome] = useState('');
     const [nPedido, setNPedido] = useState('');
+    const [vendedores, setVendedores] = useState([]);
+    const [vendedorSelecionado, setVendedorSelecionado] = useState(null);
 
     const BuscarTodosPedidos = () => {
-        api.get(`api/Pedidos/BuscarTodos?q=${nome}&dtInicio=${dtInicio}&dtFim=${dtFim}&nPedido=${nPedido.replaceAll("_", "")}`, res => {
+        api.get(`api/Pedidos/BuscarTodos?q=${nome}&dtInicio=${dtInicio}&dtFim=${dtFim}&nPedido=${nPedido.replaceAll("_", "")}&vendedor=${vendedorSelecionado}`, res => {
             setStatusPagamento(res.data.statusPagamento);
             setStatusPedido(res.data.statusPedido);
             setPedidos(res.data.pedidos);
@@ -29,6 +31,13 @@ function Gestao() {
         })
     }
 
+    const BuscarTodosVendedores = () => {
+        api.get("/Usuario/Vendedores", res => {
+            setVendedores(res.data);
+        }, erro => {
+            Alert(erro.mensage, false)
+        })
+    }
 
     const BuscarTodosProdutos = () => {
         api.get("/api/Produto/BuscarTodos", res => {
@@ -38,7 +47,7 @@ function Gestao() {
         })
     }
 
-    useEffect(() => { BuscarTodosPedidos(); BuscarTodosProdutos(); }, []);
+    useEffect(() => { BuscarTodosPedidos(); BuscarTodosProdutos(); BuscarTodosVendedores(); }, []);
 
     const onChangeFiltroStatusPedido = e => {
         const value = e.target.value;
@@ -72,6 +81,10 @@ function Gestao() {
                     nPedido={nPedido}
                     setNPedido={setNPedido}
                     showNPedido={true}
+                    vededores={vendedores}
+                    filtroVendedor={vendedores.length > 0}
+                    setVendedorSelecionado={setVendedorSelecionado}
+                    vendedorSelecionado={vendedorSelecionado}
                 />
                 <GestaoTable
                     ReloadPage={BuscarTodosPedidos}

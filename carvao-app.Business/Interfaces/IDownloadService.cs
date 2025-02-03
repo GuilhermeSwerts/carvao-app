@@ -10,6 +10,6 @@ namespace carvao_app.Business.Interfaces
 {
     public interface IDownloadService
     {
-        byte[] DownloadFiltro(string filtro, string dtInicio, string dtFim, ETipoDownload tipoDownload, UsuarioMap usuarioMap, int? nPedido);
+        byte[] DownloadFiltro(string filtro, string dtInicio, string dtFim, ETipoDownload tipoDownload, UsuarioMap usuarioMap, int? nPedido, int? vendedor);
     }
 }

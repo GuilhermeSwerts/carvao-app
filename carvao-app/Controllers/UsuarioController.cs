@@ -1,6 +1,7 @@
 ﻿using carvao_app.Business.Interfaces;
 using carvao_app.Helper;
 using carvao_app.Models.Dtos;
+using carvao_app.Models.Enum;
 using carvao_app.Models.Requests;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -42,6 +43,22 @@ namespace carvao_app.Controllers
                 Response.Headers.Add("access_token", user.Token);
 
                 return Ok(user);
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("/Usuario/Vendedores")]
+        public async Task<IActionResult> GetAllVendedores()
+        {
+            try
+            {
+                var vendedores = _service.GetAllVendedores(GetUser());
+
+                return Ok(vendedores);
             }
             catch (System.Exception ex)
             {

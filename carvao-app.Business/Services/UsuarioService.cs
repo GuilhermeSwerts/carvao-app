@@ -1,6 +1,7 @@
 ﻿using carvao_app.Business.Interfaces;
 using carvao_app.Helper;
 using carvao_app.Models.Dtos;
+using carvao_app.Models.Enum;
 using carvao_app.Models.Modelos;
 using carvao_app.Models.Requests;
 using carvao_app.Repository.Interfaces;
@@ -10,11 +11,6 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
-
 namespace carvao_app.Business.Services
 {
     public class UsuarioService : IUsuario
@@ -275,6 +271,32 @@ namespace carvao_app.Business.Services
             }
                 
             return vendedores.OrderByDescending(x=> x.ValorTotalComissao);
+        }
+
+        public object GetAllVendedores(UsuarioMap usuarioMap)
+        {
+            try
+            {
+                var vededoresDb = _repository.BuscarVendedores();
+
+               
+                var data = vededoresDb.Select(x => new
+                {
+                    Id = x.Usuario_id,
+                    x.Nome
+                }).ToList();
+
+                if (usuarioMap.Tipo_usuario_id == 1) //Vendedor
+                {
+                    data = data.Where(c => c.Id == usuarioMap.Usuario_id).ToList();
+                }
+
+                return data;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public class ComissaoVendedor
